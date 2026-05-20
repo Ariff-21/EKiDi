@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_splash_gradient">
+
+    <!-- Dekorasi lingkaran atas kiri -->
+    <View
+        android:id="@+id/circleTopLeft"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/circle_decoration"
+        android:alpha="0.15"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="-60dp"
+        android:layout_marginTop="-60dp"/>
+
+    <!-- Dekorasi lingkaran bawah kanan -->
+    <View
+        android:id="@+id/circleBottomRight"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:background="@drawable/circle_decoration"
+        android:alpha="0.15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="-80dp"
+        android:layout_marginBottom="-80dp"/>
+
+    <!-- Bintang dekorasi kiri atas -->
+    <TextView
+        android:id="@+id/starTopLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⭐"
+        android:textSize="24sp"
+        android:alpha="0.7"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="80dp"
+        android:layout_marginStart="30dp"/>
+
+    <!-- Bintang dekorasi kanan atas -->
+    <TextView
+        android:id="@+id/starTopRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="✨"
+        android:textSize="20sp"
+        android:alpha="0.7"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="40dp"/>
+
+    <!-- Hati dekorasi kiri bawah -->
+    <TextView
+        android:id="@+id/heartLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="💚"
+        android:textSize="22sp"
+        android:alpha="0.7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="120dp"
+        android:layout_marginStart="40dp"/>
+
+    <!-- Container utama tengah -->
+    <LinearLayout
+        android:id="@+id/containerMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Ikon topi wisuda / logo -->
+        <TextView
+            android:id="@+id/iconLogo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:text="🎓"
+            android:textSize="64sp"
+            android:gravity="center"
+            android:background="@drawable/circle_logo_bg"
+            android:elevation="8dp"/>
+
+        <Space android:layout_width="0dp" android:layout_height="24dp"/>
+
+        <!-- Nama aplikasi -->
+        <TextView
+            android:id="@+id/tvAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EduKids Digital"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/nunito_bold"
+            android:letterSpacing="0.02"
+            android:gravity="center"/>
+
+        <Space android:layout_width="0dp" android:layout_height="8dp"/>
+
+        <!-- Slogan -->
+        <TextView
+            android:id="@+id/tvSlogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Belajar Digital Menyenangkan! 🌟"
+            android:textSize="15sp"
+            android:textColor="#E8D5FF"
+            android:fontFamily="@font/nunito_regular"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <!-- Loading dots bawah -->
+    <LinearLayout
+        android:id="@+id/loadingDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="60dp">
+
+        <View
+            android:id="@+id/dot1"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/dot_active"
+            android:layout_marginHorizontal="5dp"/>
+
+        <View
+            android:id="@+id/dot2"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/dot_inactive"
+            android:layout_marginHorizontal="5dp"/>
+
+        <View
+            android:id="@+id/dot3"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/dot_inactive"
+            android:layout_marginHorizontal="5dp"/>
+
+    </LinearLayout>
+
+    <!-- Versi aplikasi -->
+    <TextView
+        android:id="@+id/tvVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="v1.0.0"
+        android:textSize="12sp"
+        android:textColor="#C9A8E8"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

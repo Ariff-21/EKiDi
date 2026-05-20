@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EKiDi</string>
+    <string name="app_slogan">Belajar Digital Menyenangkan!</string>
+    <string name="loading">Memuat…</string>
+    <string name="login">Masuk</string>
+    <string name="register">Daftar</string>
+    <string name="greeting">Halo, %s!</string>
+    <string name="level_format">Level %d</string>
+    <string name="poin_format">%d poin dari %d poin</string>
+    <string name="menu_literasi">Literasi Digital</string>
+    <string name="menu_game">Game Edukatif</string>
+    <string name="menu_misi">Jelajahi Misi</string>
+    <string name="menu_pencapaian">Pencapaian Saya</string>
+    <string name="rekomendasi_hari_ini">Rekomendasi Hari Ini</string>
+    <string name="mulai_sekarang">Mulai Sekarang 🚀</string>
+    <string name="error_network">Gagal terhubung. Periksa koneksi internet.</string>
+    <string name="retry">Coba Lagi</string>
+</resources>

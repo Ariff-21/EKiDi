@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="Beranda"/>
+
+    <item
+        android:id="@+id/nav_literasi"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Literasi"/>
+
+    <item
+        android:id="@+id/nav_game"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Game"/>
+
+    <item
+        android:id="@+id/nav_misi"
+        android:icon="@android:drawable/ic_menu_directions"
+        android:title="Misi"/>
+
+    <item
+        android:id="@+id/nav_profil"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Profil"/>
+
+</menu>

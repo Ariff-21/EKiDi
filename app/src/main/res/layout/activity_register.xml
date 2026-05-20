@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_main"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <!-- Judul -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buat Akun Baru 🎉"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/purple_primary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="40dp"/>
+
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Isi data diri kamu untuk mulai belajar"
+            android:textSize="13sp"
+            android:textColor="@color/text_secondary"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="4dp"/>
+
+        <!-- Card Form Register -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/bg_card"
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Pilih Peran -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Saya adalah:"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="10dp"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutRole"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/btnRoleAnak"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="👦 Anak"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_role_selected"
+                        android:textColor="@color/purple_primary"
+                        android:layout_marginEnd="6dp"/>
+
+                    <TextView
+                        android:id="@+id/btnRoleOrtu"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="👨 Ortu"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_role_unselected"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginHorizontal="3dp"/>
+
+                    <TextView
+                        android:id="@+id/btnRoleGuru"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="👩‍🏫 Guru"
+                        android:gravity="center"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_role_unselected"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginStart="6dp"/>
+
+                </LinearLayout>
+
+                <!-- Input Nama -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nama Lengkap"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="6dp"/>
+
+                <EditText
+                    android:id="@+id/etNama"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Masukkan nama lengkap"
+                    android:textSize="14sp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingHorizontal="16dp"
+                    android:inputType="textPersonName"
+                    android:singleLine="true"/>
+
+                <Space android:layout_width="0dp" android:layout_height="14dp"/>
+
+                <!-- Input Username -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="6dp"/>
+
+                <EditText
+                    android:id="@+id/etUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Buat username unik"
+                    android:textSize="14sp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingHorizontal="16dp"
+                    android:inputType="text"
+                    android:singleLine="true"/>
+
+                <Space android:layout_width="0dp" android:layout_height="14dp"/>
+
+                <!-- Input Umur (khusus role Anak) -->
+                <TextView
+                    android:id="@+id/labelUmur"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Umur"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="6dp"
+                    android:visibility="visible"/>
+
+                <EditText
+                    android:id="@+id/etUmur"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Umur kamu"
+                    android:textSize="14sp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingHorizontal="16dp"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:visibility="visible"/>
+
+                <Space android:id="@+id/spaceUmur" android:layout_width="0dp"
+                    android:layout_height="14dp" android:visibility="visible"/>
+
+                <!-- Input Password -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Password"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="6dp"/>
+
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Buat password"
+                    android:textSize="14sp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingHorizontal="16dp"
+                    android:inputType="textPassword"
+                    android:singleLine="true"/>
+
+                <Space android:layout_width="0dp" android:layout_height="14dp"/>
+
+                <!-- Konfirmasi Password -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Konfirmasi Password"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="6dp"/>
+
+                <EditText
+                    android:id="@+id/etConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Ulangi password"
+                    android:textSize="14sp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingHorizontal="16dp"
+                    android:inputType="textPassword"
+                    android:singleLine="true"/>
+
+                <Space android:layout_width="0dp" android:layout_height="20dp"/>
+
+                <!-- Tombol Daftar -->
+                <Button
+                    android:id="@+id/btnRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="Daftar Sekarang"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_primary"
+                    android:stateListAnimator="@null"/>
+
+                <Space android:layout_width="0dp" android:layout_height="16dp"/>
+
+                <!-- Link ke Login -->
+                <TextView
+                    android:id="@+id/tvGoToLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sudah punya akun? Masuk di sini"
+                    android:textSize="13sp"
+                    android:textColor="@color/purple_primary"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Error message -->
+        <TextView
+            android:id="@+id/tvError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="13sp"
+            android:textColor="@color/error"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/cardRegister"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="12dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

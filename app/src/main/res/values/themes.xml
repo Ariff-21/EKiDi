@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.EKiDi" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/purple_primary</item>
+        <item name="colorPrimaryVariant">@color/purple_dark</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorSecondary">@color/pink_accent</item>
+        <item name="android:windowBackground">@color/bg_main</item>
+        <item name="android:statusBarColor">@color/purple_primary</item>
+    </style>
+
+    <!-- Theme khusus Splash: full screen tanpa status bar -->
+    <style name="Theme.EKiDi.Splash" parent="Theme.EKiDi">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+</resources>
