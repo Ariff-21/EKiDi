@@ -11,6 +11,7 @@ import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivitySplashBinding
 import com.example.ekidi.ui.auth.LoginActivity
 import com.example.ekidi.ui.home.HomeActivity
+import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
 
 @SuppressLint("CustomSplashScreen")
@@ -120,7 +121,7 @@ class SplashActivity : AppCompatActivity() {
             .alpha(0f)
             .setDuration(400)
             .withEndAction {
-                val intent = if (sessionManager.isLoggedIn()) {
+                val intent = if (FirebaseHelper.isLoggedIn()) {
                     Intent(this, HomeActivity::class.java)
                 } else {
                     Intent(this, LoginActivity::class.java)

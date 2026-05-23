@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    // ⚠️ compose plugin dihapus karena kita pakai Views bukan Compose
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -38,7 +38,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-        // ⚠️ compose = true dihapus karena kita pakai Views
     }
 }
 
@@ -49,26 +48,31 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
 
-    // Material Design (BottomNavigationView, CardView, dll)
+    // Material Design
     implementation("com.google.android.material:material:1.11.0")
 
-    // Retrofit — koneksi ke API/MySQL
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    // OkHttp logging — debug request API
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-
-    // Coroutines — async/background task
+    // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 
-    // ViewModel & LiveData — arsitektur MVVM
+    // ViewModel & LiveData
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.activity:activity-ktx:1.8.2")
 
-    // Glide — load gambar/avatar
+    // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+
+    // ── Firebase ──
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Testing
     testImplementation(libs.junit)

@@ -92,7 +92,7 @@
                     android:id="@+id/etUsername"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:hint="Masukkan username"
+                    android:hint="Masukkan Email"
                     android:textSize="14sp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"

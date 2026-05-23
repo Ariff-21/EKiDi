@@ -6,9 +6,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.databinding.ActivityLoginBinding
-import com.example.ekidi.data.api.RetrofitClient
-import com.example.ekidi.data.model.LoginRequest
+import kotlinx.coroutines.tasks.await
 import com.example.ekidi.ui.home.HomeActivity
+import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
 import kotlinx.coroutines.launch
 
@@ -25,54 +25,83 @@ class LoginActivity : AppCompatActivity() {
 
         sessionManager = SessionManager(this)
 
-        binding.btnLogin.setOnClickListener { doLogin() }
+        // Cek jika sudah login
+        if (FirebaseHelper.isLoggedIn()) {
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+            return
+        }
 
+        binding.btnLogin.setOnClickListener { doLogin() }
         binding.tvGoToRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 
     private fun doLogin() {
-        val username = binding.etUsername.text.toString().trim()
+        val email = binding.etUsername.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
 
-        if (username.isEmpty()) {
-            showError("Username tidak boleh kosong")
-            return
-        }
-        if (password.isEmpty()) {
-            showError("Password tidak boleh kosong")
-            return
-        }
+        if (email.isEmpty()) { showError("Email tidak boleh kosong"); return }
+        if (password.isEmpty()) { showError("Password tidak boleh kosong"); return }
+        if (password.length < 6) { showError("Password minimal 6 karakter"); return }
 
         setLoading(true)
 
         lifecycleScope.launch {
-            try {
-                val response = RetrofitClient.instance.login(
-                    LoginRequest(username, password)
-                )
+            val result = FirebaseHelper.login(email, password)
 
-                if (response.isSuccessful && response.body()?.success == true) {
-                    val userData = response.body()!!.data!!
-                    sessionManager.saveLoginSession(
-                        userId = userData.id,
-                        userName = userData.nama,
-                        userRole = userData.role,
-                        authToken = userData.token,
-                        level = userData.level,
-                        points = userData.poin
-                    )
-                    startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
-                    finish()
-                } else {
-                    showError(response.body()?.message ?: "Login gagal, coba lagi")
+            if (result.isSuccess) {
+                val currentUser = FirebaseHelper.auth.currentUser
+
+                // ✅ Cek apakah email sudah diverifikasi
+                if (currentUser != null && !currentUser.isEmailVerified) {
+                    // Email belum diverifikasi
+                    FirebaseHelper.logout()
+                    runOnUiThread {
+                        androidx.appcompat.app.AlertDialog.Builder(this@LoginActivity)
+                            .setTitle("⚠️ Email Belum Diverifikasi")
+                            .setMessage("Silakan cek email kamu dan klik link verifikasi terlebih dahulu.\n\nTidak menerima email?")
+                            .setPositiveButton("Kirim Ulang") { _, _ ->
+                                lifecycleScope.launch {
+                                    // Login lagi sementara untuk kirim ulang
+                                    FirebaseHelper.login(email, password)
+                                    FirebaseHelper.auth.currentUser
+                                        ?.sendEmailVerification()
+                                        ?.await()
+                                    FirebaseHelper.logout()
+                                    showError("Email verifikasi sudah dikirim ulang!")
+                                }
+                            }
+                            .setNegativeButton("Tutup", null)
+                            .show()
+                    }
+                    setLoading(false)
+                    return@launch
                 }
-            } catch (e: Exception) {
-                showError("Gagal terhubung ke server. Periksa koneksi internet.")
-            } finally {
-                setLoading(false)
+
+                // ✅ Email sudah diverifikasi, lanjut ke Beranda
+                val uid = result.getOrNull()!!
+                val userData = FirebaseHelper.getUserData(uid)
+
+                if (userData.isSuccess) {
+                    val data = userData.getOrNull()!!
+                    sessionManager.saveLoginSession(
+                        userId = uid.hashCode(),
+                        userName = data["nama"] as? String ?: "Pengguna",
+                        userRole = data["role"] as? String ?: "anak",
+                        authToken = uid,
+                        level = (data["level"] as? Long)?.toInt() ?: 1,
+                        points = (data["poin"] as? Long)?.toInt() ?: 0
+                    )
+                }
+                startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+                finish()
+
+            } else {
+                showError("Email atau password salah")
             }
+            setLoading(false)
         }
     }
 

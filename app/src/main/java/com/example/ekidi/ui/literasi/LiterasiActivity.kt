@@ -53,6 +53,21 @@ class LiterasiActivity : AppCompatActivity() {
                 R.id.nav_literasi -> true
                 else -> false
             }
+            when (item.itemId) {
+                R.id.nav_game -> { finish(); true }
+                R.id.nav_literasi -> true
+                else -> false
+            }
+            when (item.itemId) {
+                R.id.nav_misi -> { finish(); true }
+                R.id.nav_literasi -> true
+                else -> false
+            }
+            when (item.itemId) {
+                R.id.nav_game -> { finish(); true }
+                R.id.nav_literasi -> true
+                else -> false
+            }
         }
     }
 }
