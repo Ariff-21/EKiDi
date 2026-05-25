@@ -12,15 +12,47 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
+        <!-- Dekorasi Background -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✨"
+            android:textSize="24sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="20dp"
+            android:alpha="0.5"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🌟"
+            android:textSize="32sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="20dp"
+            android:alpha="0.5"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎈"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="40dp"
+            android:alpha="0.3"/>
+
         <!-- Logo & Nama App -->
         <TextView
             android:id="@+id/tvLogo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:text="🎓"
-            android:textSize="48sp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:text="🐶"
+            android:textSize="60sp"
             android:gravity="center"
-            android:background="@drawable/circle_logo_bg_purple"
+            android:background="@drawable/circle_avatar_bg"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -68,76 +100,84 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="24dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Masuk ke Akun"
-                    android:textSize="18sp"
+                    android:text="Ayo Masuk! 👋"
+                    android:textSize="22sp"
                     android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:layout_marginBottom="20dp"/>
+                    android:textColor="@color/purple_primary"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="24dp"/>
 
                 <!-- Input Username -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Username"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="6dp"/>
+                    android:text="📧 Email Kamu"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"/>
 
                 <EditText
                     android:id="@+id/etUsername"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:hint="Masukkan Email"
-                    android:textSize="14sp"
+                    android:layout_height="56dp"
+                    android:hint="contoh@email.com"
+                    android:textSize="15sp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:background="@drawable/bg_input_field"
-                    android:paddingHorizontal="16dp"
-                    android:inputType="text"
-                    android:singleLine="true"/>
+                    android:paddingHorizontal="20dp"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:elevation="2dp"/>
 
-                <Space android:layout_width="0dp" android:layout_height="14dp"/>
+                <Space android:layout_width="0dp" android:layout_height="18dp"/>
 
                 <!-- Input Password -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Password"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="6dp"/>
+                    android:text="🔑 Kata Sandi"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"/>
 
                 <EditText
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:hint="Masukkan password"
-                    android:textSize="14sp"
+                    android:layout_height="56dp"
+                    android:hint="Masukkan kata sandi"
+                    android:textSize="15sp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_hint"
                     android:background="@drawable/bg_input_field"
-                    android:paddingHorizontal="16dp"
+                    android:paddingHorizontal="20dp"
                     android:inputType="textPassword"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    android:elevation="2dp"/>
 
-                <Space android:layout_width="0dp" android:layout_height="20dp"/>
+                <Space android:layout_width="0dp" android:layout_height="28dp"/>
 
                 <!-- Tombol Login -->
                 <Button
                     android:id="@+id/btnLogin"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:text="Masuk"
-                    android:textSize="15sp"
+                    android:layout_height="58dp"
+                    android:text="Ayo Mulai! 🚀"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF"
                     android:background="@drawable/bg_button_primary"
-                    android:stateListAnimator="@null"/>
+                    android:stateListAnimator="@null"
+                    android:elevation="4dp"/>
 
                 <Space android:layout_width="0dp" android:layout_height="16dp"/>
 

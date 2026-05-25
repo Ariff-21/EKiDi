@@ -46,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
         if (password.isEmpty()) { showError("Password tidak boleh kosong"); return }
         if (password.length < 6) { showError("Password minimal 6 karakter"); return }
 
-        setLoading(true)
+        setLoading(isLoading = true)
 
         lifecycleScope.launch {
             val result = FirebaseHelper.login(email, password)
@@ -92,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
                         userRole = data["role"] as? String ?: "anak",
                         authToken = uid,
                         level = (data["level"] as? Long)?.toInt() ?: 1,
-                        points = (data["poin"] as? Long)?.toInt() ?: 0
+                        points = (data["poin"] as? Long)?.toInt() ?: 0,
                     )
                 }
                 startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
@@ -101,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 showError("Email atau password salah")
             }
-            setLoading(false)
+            setLoading(isLoading = false)
         }
     }
 

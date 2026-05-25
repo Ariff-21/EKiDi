@@ -5,6 +5,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivityLiterasiBinding
+import com.example.ekidi.ui.home.HomeActivity
+import com.example.ekidi.ui.game.GameActivity
+import com.example.ekidi.ui.misi.MisiActivity
+import com.example.ekidi.ui.profil.ProfilActivity
 
 class LiterasiActivity : AppCompatActivity() {
 
@@ -49,23 +53,27 @@ class LiterasiActivity : AppCompatActivity() {
         binding.bottomNav.selectedItemId = R.id.nav_literasi
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> { finish(); true }
+                R.id.nav_home -> {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    finish()
+                    true
+                }
                 R.id.nav_literasi -> true
-                else -> false
-            }
-            when (item.itemId) {
-                R.id.nav_game -> { finish(); true }
-                R.id.nav_literasi -> true
-                else -> false
-            }
-            when (item.itemId) {
-                R.id.nav_misi -> { finish(); true }
-                R.id.nav_literasi -> true
-                else -> false
-            }
-            when (item.itemId) {
-                R.id.nav_game -> { finish(); true }
-                R.id.nav_literasi -> true
+                R.id.nav_game -> {
+                    startActivity(Intent(this, GameActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_misi -> {
+                    startActivity(Intent(this, MisiActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_profil -> {
+                    startActivity(Intent(this, ProfilActivity::class.java))
+                    finish()
+                    true
+                }
                 else -> false
             }
         }

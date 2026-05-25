@@ -12,29 +12,50 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
+        <!-- Dekorasi Background -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎈"
+            android:textSize="32sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="20dp"
+            android:alpha="0.4"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎨"
+            android:textSize="28sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="20dp"
+            android:alpha="0.3"/>
+
         <!-- Judul -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Buat Akun Baru 🎉"
-            android:textSize="24sp"
+            android:text="Daftar Akun Baru 🌈"
+            android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="@color/purple_primary"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="40dp"/>
+            android:layout_marginTop="32dp"/>
 
         <TextView
             android:id="@+id/tvSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Isi data diri kamu untuk mulai belajar"
-            android:textSize="13sp"
+            android:text="Ayo bergabung dan belajar bersama! ✨"
+            android:textSize="14sp"
             android:textColor="@color/text_secondary"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="6dp"/>
 
         <!-- Card Form Register -->
         <androidx.cardview.widget.CardView
@@ -59,56 +80,61 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Saya adalah:"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="10dp"/>
+                    android:text="Aku adalah seorang:"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginStart="4dp"/>
 
                 <LinearLayout
                     android:id="@+id/layoutRole"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="24dp">
 
                     <TextView
                         android:id="@+id/btnRoleAnak"
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="64dp"
                         android:layout_weight="1"
-                        android:text="👦 Anak"
+                        android:text="👦\nAnak"
                         android:gravity="center"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:background="@drawable/bg_role_selected"
                         android:textColor="@color/purple_primary"
-                        android:layout_marginEnd="6dp"/>
+                        android:layout_marginEnd="6dp"
+                        android:lineSpacingExtra="4dp"/>
 
                     <TextView
                         android:id="@+id/btnRoleOrtu"
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="64dp"
                         android:layout_weight="1"
-                        android:text="👨 Ortu"
+                        android:text="👨\nOrtu"
                         android:gravity="center"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:background="@drawable/bg_role_unselected"
                         android:textColor="@color/text_secondary"
-                        android:layout_marginHorizontal="3dp"/>
+                        android:layout_marginHorizontal="3dp"
+                        android:lineSpacingExtra="4dp"/>
 
                     <TextView
                         android:id="@+id/btnRoleGuru"
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="64dp"
                         android:layout_weight="1"
-                        android:text="👩‍🏫 Guru"
+                        android:text="👩‍🏫\nGuru"
                         android:gravity="center"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:background="@drawable/bg_role_unselected"
                         android:textColor="@color/text_secondary"
-                        android:layout_marginStart="6dp"/>
+                        android:layout_marginStart="6dp"
+                        android:lineSpacingExtra="4dp"/>
 
                 </LinearLayout>
 
@@ -116,127 +142,143 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nama Lengkap"
+                    android:text="👤 Nama Lengkap"
                     android:textSize="13sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="6dp"/>
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"/>
 
                 <EditText
                     android:id="@+id/etNama"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:hint="Masukkan nama lengkap"
+                    android:layout_height="54dp"
+                    android:hint="Siapa namamu?"
                     android:textSize="14sp"
                     android:background="@drawable/bg_input_field"
-                    android:paddingHorizontal="16dp"
+                    android:paddingHorizontal="18dp"
                     android:inputType="textPersonName"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    android:elevation="2dp"/>
 
-                <Space android:layout_width="0dp" android:layout_height="14dp"/>
+                <Space android:layout_width="0dp" android:layout_height="16dp"/>
 
                 <!-- Input Username -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email"
+                    android:text="📧 Email"
                     android:textSize="13sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="6dp"/>
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"/>
 
                 <EditText
                     android:id="@+id/etUsername"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:hint="Buat username unik"
+                    android:layout_height="54dp"
+                    android:hint="Email kamu"
                     android:textSize="14sp"
                     android:background="@drawable/bg_input_field"
-                    android:paddingHorizontal="16dp"
-                    android:inputType="text"
-                    android:singleLine="true"/>
+                    android:paddingHorizontal="18dp"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:elevation="2dp"/>
 
-                <Space android:layout_width="0dp" android:layout_height="14dp"/>
+                <Space android:layout_width="0dp" android:layout_height="16dp"/>
 
                 <!-- Input Umur (khusus role Anak) -->
                 <TextView
                     android:id="@+id/labelUmur"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Umur"
+                    android:text="🎂 Umur"
                     android:textSize="13sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="6dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"
                     android:visibility="visible"/>
 
                 <EditText
                     android:id="@+id/etUmur"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:hint="Umur kamu"
+                    android:layout_height="54dp"
+                    android:hint="Berapa umurmu?"
                     android:textSize="14sp"
                     android:background="@drawable/bg_input_field"
-                    android:paddingHorizontal="16dp"
+                    android:paddingHorizontal="18dp"
                     android:inputType="number"
                     android:singleLine="true"
-                    android:visibility="visible"/>
+                    android:visibility="visible"
+                    android:elevation="2dp"/>
 
                 <Space android:id="@+id/spaceUmur" android:layout_width="0dp"
-                    android:layout_height="14dp" android:visibility="visible"/>
+                    android:layout_height="16dp" android:visibility="visible"/>
 
                 <!-- Input Password -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Password"
+                    android:text="🔑 Password"
                     android:textSize="13sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="6dp"/>
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"/>
 
                 <EditText
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:hint="Buat password"
+                    android:layout_height="54dp"
+                    android:hint="Buat password aman"
                     android:textSize="14sp"
                     android:background="@drawable/bg_input_field"
-                    android:paddingHorizontal="16dp"
+                    android:paddingHorizontal="18dp"
                     android:inputType="textPassword"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    android:elevation="2dp"/>
 
-                <Space android:layout_width="0dp" android:layout_height="14dp"/>
+                <Space android:layout_width="0dp" android:layout_height="16dp"/>
 
                 <!-- Konfirmasi Password -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Konfirmasi Password"
+                    android:text="🔄 Ulangi Password"
                     android:textSize="13sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="6dp"/>
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"/>
 
                 <EditText
                     android:id="@+id/etConfirmPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:hint="Ulangi password"
+                    android:layout_height="54dp"
+                    android:hint="Tulis ulang password"
                     android:textSize="14sp"
                     android:background="@drawable/bg_input_field"
-                    android:paddingHorizontal="16dp"
+                    android:paddingHorizontal="18dp"
                     android:inputType="textPassword"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    android:elevation="2dp"/>
 
-                <Space android:layout_width="0dp" android:layout_height="20dp"/>
+                <Space android:layout_width="0dp" android:layout_height="28dp"/>
 
                 <!-- Tombol Daftar -->
                 <Button
                     android:id="@+id/btnRegister"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:text="Daftar Sekarang"
-                    android:textSize="15sp"
+                    android:layout_height="58dp"
+                    android:text="Ayo Daftar! ✨"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF"
                     android:background="@drawable/bg_button_primary"
-                    android:stateListAnimator="@null"/>
+                    android:stateListAnimator="@null"
+                    android:elevation="4dp"/>
 
                 <Space android:layout_width="0dp" android:layout_height="16dp"/>
 

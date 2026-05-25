@@ -5,8 +5,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivityMisiBinding
+import com.example.ekidi.ui.home.HomeActivity
 import com.example.ekidi.ui.game.GameActivity
 import com.example.ekidi.ui.literasi.LiterasiActivity
+import com.example.ekidi.ui.profil.ProfilActivity
 import com.example.ekidi.utils.SessionManager
 
 class MisiActivity : AppCompatActivity() {
@@ -65,14 +67,25 @@ class MisiActivity : AppCompatActivity() {
         binding.bottomNav.selectedItemId = R.id.nav_misi
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> { finish(); true }
-                R.id.nav_misi -> true
+                R.id.nav_home -> {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    finish()
+                    true
+                }
                 R.id.nav_literasi -> {
                     startActivity(Intent(this, LiterasiActivity::class.java))
+                    finish()
                     true
                 }
                 R.id.nav_game -> {
                     startActivity(Intent(this, GameActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_misi -> true
+                R.id.nav_profil -> {
+                    startActivity(Intent(this, ProfilActivity::class.java))
+                    finish()
                     true
                 }
                 else -> false

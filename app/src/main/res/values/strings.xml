@@ -16,4 +16,9 @@
     <string name="mulai_sekarang">Mulai Sekarang 🚀</string>
     <string name="error_network">Gagal terhubung. Periksa koneksi internet.</string>
     <string name="retry">Coba Lagi</string>
+    <string name="game_progress_format">Soal %1$d dari %2$d</string>
+    <string name="skor_format">⭐ %d</string>
+    <string name="level_mudah">🎮 Level Mudah</string>
+    <string name="level_sedang">🎮 Level Sedang</string>
+    <string name="level_sulit">🎮 Level Sulit</string>
 </resources>

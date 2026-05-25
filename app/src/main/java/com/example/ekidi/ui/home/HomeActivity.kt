@@ -32,6 +32,11 @@ class HomeActivity : AppCompatActivity() {
         listenProgressRealtime()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Navbar otomatis sesuai karena item dipilih
+    }
+
     private fun setupUI() {
         val nama = sessionManager.getUserName()
         val level = sessionManager.getUserLevel()
@@ -41,9 +46,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun updateTampilan(poin: Int, level: Int, nama: String = sessionManager.getUserName()) {
-        binding.tvGreeting.text = "Halo, $nama!"
-        binding.tvLevel.text = "⭐ Level $level"
-        binding.tvLevelBadge.text = "Level $level"
+        binding.tvGreeting.text = getString(R.string.greeting, nama)
+        binding.tvLevel.text = "⭐ " + getString(R.string.level_format, level)
+        binding.tvLevelBadge.text = getString(R.string.level_format, level)
 
         // Hitung progress bar dalam level saat ini
         val poinAwal = FirebaseHelper.poinAwalLevel(level)
@@ -54,7 +59,7 @@ class HomeActivity : AppCompatActivity() {
             ((poinDiLevel.toFloat() / totalPoinDiLevel) * 100).toInt()
         } else 100
 
-        binding.tvPoin.text = "$poin poin dari $poinTarget poin"
+        binding.tvPoin.text = getString(R.string.poin_format, poin, poinTarget)
         binding.progressBelajar.progress = progress.coerceIn(0, 100)
 
         val levelLabel = when {
@@ -109,18 +114,22 @@ class HomeActivity : AppCompatActivity() {
                 R.id.nav_home -> true
                 R.id.nav_literasi -> {
                     startActivity(Intent(this, LiterasiActivity::class.java))
+                    finish()
                     true
                 }
                 R.id.nav_game -> {
                     startActivity(Intent(this, GameActivity::class.java))
+                    finish()
                     true
                 }
                 R.id.nav_misi -> {
                     startActivity(Intent(this, MisiActivity::class.java))
+                    finish()
                     true
                 }
                 R.id.nav_profil -> {
                     startActivity(Intent(this, ProfilActivity::class.java))
+                    finish()
                     true
                 }
                 else -> false

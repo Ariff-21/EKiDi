@@ -47,6 +47,10 @@ class SplashActivity : AppCompatActivity() {
         val bounceAnim = AnimationUtils.loadAnimation(this, R.anim.bounce)
         Handler(Looper.getMainLooper()).postDelayed({
             binding.iconLogo.startAnimation(bounceAnim)
+            // Tambahkan sedikit rotasi ceria
+            binding.iconLogo.animate().rotation(10f).setDuration(500).withEndAction {
+                binding.iconLogo.animate().rotation(-10f).setDuration(1000).setStartDelay(100).start()
+            }.start()
         }, ANIM_DELAY_LOGO + 300L)
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -108,6 +112,8 @@ class SplashActivity : AppCompatActivity() {
         floatAnim(binding.starTopLeft, 0)
         floatAnim(binding.starTopRight, 300)
         floatAnim(binding.heartLeft, 600)
+        floatAnim(binding.decorRocket, 200)
+        floatAnim(binding.decorRainbow, 400)
     }
 
     private fun scheduleNavigation() {

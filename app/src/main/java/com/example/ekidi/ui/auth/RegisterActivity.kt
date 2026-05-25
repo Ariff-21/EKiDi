@@ -1,6 +1,5 @@
 package com.example.ekidi.ui.auth
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -78,7 +77,7 @@ class RegisterActivity : AppCompatActivity() {
 
         val umur = if (selectedRole == "anak") umurStr.toIntOrNull() else null
 
-        setLoading(true)
+        setLoading(isLoading = true)
 
         lifecycleScope.launch {
             val result = FirebaseHelper.register(
@@ -86,7 +85,7 @@ class RegisterActivity : AppCompatActivity() {
                 password = password,
                 nama = nama,
                 role = selectedRole,
-                umur = umur
+                umur = umur,
             )
 
             if (result.isSuccess) {
@@ -119,7 +118,7 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 )
             }
-            setLoading(false)
+            setLoading(isLoading = false)
         }
     }
 

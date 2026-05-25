@@ -8,7 +8,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivityDragDropGameBinding
@@ -73,9 +72,9 @@ class DragDropGameActivity : AppCompatActivity() {
         }
 
         binding.tvLevelGame.text = when (level) {
-            "SEDANG" -> "🎮 Level Sedang"
-            "SULIT" -> "🎮 Level Sulit"
-            else -> "🎮 Level Mudah"
+            "SEDANG" -> getString(R.string.level_sedang)
+            "SULIT" -> getString(R.string.level_sulit)
+            else -> getString(R.string.level_mudah)
         }
 
         binding.btnBack.setOnClickListener { finish() }
@@ -96,8 +95,8 @@ class DragDropGameActivity : AppCompatActivity() {
 
         val progress = ((soalIndex.toFloat() / soalList.size) * 100).toInt()
         binding.progressSoal.progress = progress
-        binding.tvProgressSoal.text = "Soal ${soalIndex + 1} dari ${soalList.size}"
-        binding.tvSkor.text = "⭐ $skor"
+        binding.tvProgressSoal.text = getString(R.string.game_progress_format, soalIndex + 1, soalList.size)
+        binding.tvSkor.text = getString(R.string.skor_format, skor)
         binding.tvGambarPerangkat.text = soal.emoji
 
         // Reset drop zone
@@ -118,7 +117,9 @@ class DragDropGameActivity : AppCompatActivity() {
                 textSize = 14f
                 setTextColor(getColor(R.color.purple_primary))
                 setBackgroundResource(R.drawable.bg_jawaban_chip)
-                setPadding(50, 24, 50, 24)
+                val dp50 = (50 * resources.displayMetrics.density).toInt()
+                val dp24 = (24 * resources.displayMetrics.density).toInt()
+                setPadding(dp50, dp24, dp50, dp24)
                 gravity = android.view.Gravity.CENTER
 
                 val params = android.widget.LinearLayout.LayoutParams(
@@ -129,8 +130,10 @@ class DragDropGameActivity : AppCompatActivity() {
                 layoutParams = params
 
                 // ✅ Drag aktif saat sentuh pertama kali (bukan long press)
+                @android.annotation.SuppressLint("ClickableViewAccessibility")
                 setOnTouchListener { v, event ->
                     if (event.action == MotionEvent.ACTION_DOWN) {
+                        v.performClick()
                         val chipView = v as TextView
                         val item = ClipData.Item(chipView.text)
                         val dragData = ClipData(
@@ -197,7 +200,7 @@ class DragDropGameActivity : AppCompatActivity() {
 
         if (jawabanDipilih == soal.jawabanBenar) {
             skor += 10
-            binding.tvSkor.text = "⭐ $skor"
+            binding.tvSkor.text = getString(R.string.skor_format, skor)
             binding.dropZone.setBackgroundResource(R.drawable.bg_drop_zone_benar)
             binding.tvDropHint.text = "✅ $jawabanDipilih"
             binding.tvFeedback.text = "✅ Benar! Kamu hebat! 🎉"
@@ -252,7 +255,7 @@ class DragDropGameActivity : AppCompatActivity() {
         binding.tvFeedback.setTextColor(getColor(R.color.purple_primary))
         binding.tvProgressSoal.text = "Selesai!"
         binding.progressSoal.progress = 100
-        binding.tvSkor.text = "⭐ $skor"
+        binding.tvSkor.text = getString(R.string.skor_format, skor)
 
         // Simpan poin ke Firebase
         val uid = FirebaseHelper.getCurrentUid()

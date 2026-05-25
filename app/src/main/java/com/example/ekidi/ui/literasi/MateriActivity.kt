@@ -6,6 +6,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.databinding.ActivityMateriBinding
+import com.example.ekidi.R
+import com.example.ekidi.ui.home.HomeActivity
 import com.example.ekidi.utils.FirebaseHelper
 import kotlinx.coroutines.launch
 
@@ -151,6 +153,22 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
         // ✅ Load dari Firebase HANYA saat pertama buka (onCreate)
         // Tidak di onResume agar tidak override hasil kuis
         loadProgressDanSetup()
+        setupBottomNav()
+    }
+
+    private fun setupBottomNav() {
+        binding.bottomNav.selectedItemId = R.id.nav_literasi
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_literasi -> { finish(); true }
+                else -> false
+            }
+        }
     }
 
     private fun loadProgressDanSetup() {

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivityDetailLiterasiBinding
+import com.example.ekidi.ui.home.HomeActivity
 import com.example.ekidi.utils.FirebaseHelper
 import kotlinx.coroutines.launch
 
@@ -73,7 +74,11 @@ class DetailLiterasiActivity : AppCompatActivity() {
         binding.bottomNav.selectedItemId = R.id.nav_literasi
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> { finish(); true }
+                R.id.nav_home -> {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    finish()
+                    true
+                }
                 R.id.nav_literasi -> { finish(); true }
                 else -> false
             }

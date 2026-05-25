@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivityProfilBinding
+import com.example.ekidi.ui.home.HomeActivity
 import com.example.ekidi.ui.auth.LoginActivity
 import com.example.ekidi.ui.game.GameActivity
 import com.example.ekidi.ui.literasi.LiterasiActivity
@@ -129,17 +130,24 @@ class ProfilActivity : AppCompatActivity() {
         binding.bottomNav.selectedItemId = R.id.nav_profil
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> { finish(); true }
+                R.id.nav_home -> {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    finish()
+                    true
+                }
                 R.id.nav_literasi -> {
                     startActivity(Intent(this, LiterasiActivity::class.java))
+                    finish()
                     true
                 }
                 R.id.nav_game -> {
                     startActivity(Intent(this, GameActivity::class.java))
+                    finish()
                     true
                 }
                 R.id.nav_misi -> {
                     startActivity(Intent(this, MisiActivity::class.java))
+                    finish()
                     true
                 }
                 R.id.nav_profil -> true
