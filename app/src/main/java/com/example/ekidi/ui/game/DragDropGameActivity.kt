@@ -4,22 +4,27 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.os.Bundle
 import android.view.DragEvent
+import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivityDragDropGameBinding
+import com.example.ekidi.utils.FirebaseHelper
+import com.example.ekidi.utils.SessionManager
+import kotlinx.coroutines.launch
 
 class DragDropGameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDragDropGameBinding
+    private lateinit var sessionManager: SessionManager
     private var level = "MUDAH"
     private var soalIndex = 0
     private var skor = 0
     private var jawabBenar = false
 
-    // Data soal per level
     data class Soal(
         val emoji: String,
         val jawabanBenar: String,
@@ -58,6 +63,7 @@ class DragDropGameActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        sessionManager = SessionManager(this)
         level = intent.getStringExtra("LEVEL") ?: "MUDAH"
 
         soalList = when (level) {
@@ -66,12 +72,11 @@ class DragDropGameActivity : AppCompatActivity() {
             else -> soalMudah
         }
 
-        val levelLabel = when (level) {
+        binding.tvLevelGame.text = when (level) {
             "SEDANG" -> "🎮 Level Sedang"
             "SULIT" -> "🎮 Level Sulit"
             else -> "🎮 Level Mudah"
         }
-        binding.tvLevelGame.text = levelLabel
 
         binding.btnBack.setOnClickListener { finish() }
         binding.btnLanjut.setOnClickListener { soalBerikutnya() }
@@ -89,13 +94,10 @@ class DragDropGameActivity : AppCompatActivity() {
         val soal = soalList[soalIndex]
         jawabBenar = false
 
-        // Update progress
-        val progressPersen = ((soalIndex.toFloat() / soalList.size) * 100).toInt()
-        binding.progressSoal.progress = progressPersen
+        val progress = ((soalIndex.toFloat() / soalList.size) * 100).toInt()
+        binding.progressSoal.progress = progress
         binding.tvProgressSoal.text = "Soal ${soalIndex + 1} dari ${soalList.size}"
         binding.tvSkor.text = "⭐ $skor"
-
-        // Tampilkan emoji perangkat
         binding.tvGambarPerangkat.text = soal.emoji
 
         // Reset drop zone
@@ -103,46 +105,46 @@ class DragDropGameActivity : AppCompatActivity() {
         binding.tvDropHint.text = "⬇ Seret jawaban ke sini"
         binding.tvDropHint.visibility = View.VISIBLE
 
-        // Reset feedback
         binding.tvFeedback.visibility = View.GONE
         binding.btnLanjut.visibility = View.GONE
 
-        // Acak urutan jawaban
+        // Generate chip jawaban
+        binding.layoutJawaban.removeAllViews()
         val jawabanAcak = soal.pilihanJawaban.shuffled()
 
-        // Tampilkan pilihan jawaban
-        binding.layoutJawaban.removeAllViews()
         jawabanAcak.forEach { jawaban ->
             val chip = TextView(this).apply {
                 text = jawaban
-                textSize = 13f
+                textSize = 14f
                 setTextColor(getColor(R.color.purple_primary))
                 setBackgroundResource(R.drawable.bg_jawaban_chip)
-                setPadding(40, 0, 40, 0)
+                setPadding(50, 24, 50, 24)
                 gravity = android.view.Gravity.CENTER
-                layoutParams = android.widget.LinearLayout.LayoutParams(
+
+                val params = android.widget.LinearLayout.LayoutParams(
                     android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
-                    120
-                ).apply { setMargins(10, 10, 10, 10) }
+                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                params.setMargins(10, 10, 10, 10)
+                layoutParams = params
 
-                // Setup drag
-                setOnLongClickListener { v ->
-                    val clipText = (v as TextView).text.toString()
-                    val item = ClipData.Item(clipText)
-                    val dragData = ClipData(
-                        clipText,
-                        arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-                        item
-                    )
-                    val shadow = View.DragShadowBuilder(v)
-                    v.startDragAndDrop(dragData, shadow, v, 0)
-                    true
-                }
-
-                // Juga bisa tap untuk jawab langsung (lebih mudah anak kecil)
-                setOnClickListener { v ->
-                    val jawabanDipilih = (v as TextView).text.toString()
-                    periksaJawaban(jawabanDipilih, v)
+                // ✅ Drag aktif saat sentuh pertama kali (bukan long press)
+                setOnTouchListener { v, event ->
+                    if (event.action == MotionEvent.ACTION_DOWN) {
+                        val chipView = v as TextView
+                        val item = ClipData.Item(chipView.text)
+                        val dragData = ClipData(
+                            chipView.text,
+                            arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
+                            item
+                        )
+                        val shadow = View.DragShadowBuilder(v)
+                        v.startDragAndDrop(dragData, shadow, v, 0)
+                        v.visibility = View.INVISIBLE // sembunyikan chip asli saat di-drag
+                        true
+                    } else {
+                        false
+                    }
                 }
             }
             binding.layoutJawaban.addView(chip)
@@ -152,6 +154,10 @@ class DragDropGameActivity : AppCompatActivity() {
     private fun setupDropZone() {
         binding.dropZone.setOnDragListener { v, event ->
             when (event.action) {
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    // Terima semua drag
+                    event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
+                }
                 DragEvent.ACTION_DRAG_ENTERED -> {
                     v.setBackgroundResource(R.drawable.bg_role_selected)
                     true
@@ -166,41 +172,62 @@ class DragDropGameActivity : AppCompatActivity() {
                     periksaJawaban(jawabanDipilih, viewDrag)
                     true
                 }
-                DragEvent.ACTION_DRAG_ENDED -> true
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    // ✅ Kalau drag tidak sampai ke drop zone, tampilkan chip lagi
+                    val viewDrag = event.localState as? View
+                    if (!event.result) {
+                        // Drag dibatalkan / tidak kena drop zone
+                        viewDrag?.visibility = View.VISIBLE
+                    }
+                    true
+                }
                 else -> true
             }
         }
     }
 
     private fun periksaJawaban(jawabanDipilih: String, viewDipilih: View?) {
-        if (jawabBenar) return // Sudah dijawab, abaikan
+        if (jawabBenar) return
 
         val soal = soalList[soalIndex]
         jawabBenar = true
 
+        // Tampilkan chip yang di-drag kembali (dengan warna hasil)
+        viewDipilih?.visibility = View.VISIBLE
+
         if (jawabanDipilih == soal.jawabanBenar) {
-            // ✅ BENAR
             skor += 10
             binding.tvSkor.text = "⭐ $skor"
             binding.dropZone.setBackgroundResource(R.drawable.bg_drop_zone_benar)
-            binding.tvDropHint.text = jawabanDipilih
+            binding.tvDropHint.text = "✅ $jawabanDipilih"
             binding.tvFeedback.text = "✅ Benar! Kamu hebat! 🎉"
             binding.tvFeedback.setTextColor(getColor(R.color.success))
             viewDipilih?.setBackgroundResource(R.drawable.bg_jawaban_benar)
         } else {
-            // ❌ SALAH
-            binding.tvDropHint.text = jawabanDipilih
-            binding.tvFeedback.text = "❌ Belum tepat! Jawabannya: ${soal.jawabanBenar}"
+            binding.dropZone.setBackgroundResource(R.drawable.bg_jawaban_salah)
+            binding.tvDropHint.text = "❌ $jawabanDipilih"
+            binding.tvFeedback.text = "❌ Belum tepat!\nJawabannya: ${soal.jawabanBenar} 💡"
             binding.tvFeedback.setTextColor(getColor(R.color.error))
             viewDipilih?.setBackgroundResource(R.drawable.bg_jawaban_salah)
+
+            // Highlight jawaban yang benar
+            for (i in 0 until binding.layoutJawaban.childCount) {
+                val child = binding.layoutJawaban.getChildAt(i) as? TextView
+                if (child?.text == soal.jawabanBenar) {
+                    child.setBackgroundResource(R.drawable.bg_jawaban_benar)
+                }
+            }
         }
 
         binding.tvFeedback.visibility = View.VISIBLE
-        binding.btnLanjut.visibility = View.VISIBLE
-
-        // Animasi feedback
         binding.tvFeedback.alpha = 0f
         binding.tvFeedback.animate().alpha(1f).setDuration(300).start()
+        binding.btnLanjut.visibility = View.VISIBLE
+
+        // Nonaktifkan semua chip setelah jawab
+        for (i in 0 until binding.layoutJawaban.childCount) {
+            binding.layoutJawaban.getChildAt(i).setOnTouchListener(null)
+        }
     }
 
     private fun soalBerikutnya() {
@@ -209,11 +236,7 @@ class DragDropGameActivity : AppCompatActivity() {
     }
 
     private fun selesai() {
-        // Tampilkan hasil akhir
         binding.tvGambarPerangkat.text = "🏆"
-        binding.tvProgressSoal.text = "Selesai!"
-        binding.progressSoal.progress = 100
-        binding.tvSkor.text = "⭐ $skor"
         binding.dropZone.visibility = View.GONE
         binding.layoutJawaban.removeAllViews()
 
@@ -227,6 +250,21 @@ class DragDropGameActivity : AppCompatActivity() {
         binding.tvFeedback.text = "🎮 Game Selesai!\nSkor kamu: $skor poin\n$pesanHasil"
         binding.tvFeedback.visibility = View.VISIBLE
         binding.tvFeedback.setTextColor(getColor(R.color.purple_primary))
+        binding.tvProgressSoal.text = "Selesai!"
+        binding.progressSoal.progress = 100
+        binding.tvSkor.text = "⭐ $skor"
+
+        // Simpan poin ke Firebase
+        val uid = FirebaseHelper.getCurrentUid()
+        if (uid != null && skor > 0) {
+            lifecycleScope.launch {
+                FirebaseHelper.updatePoin(uid, skor)
+                val poinBaru = sessionManager.getUserPoints() + skor
+                val levelBaru = FirebaseHelper.hitungLevel(poinBaru)
+                sessionManager.updatePoints(poinBaru)
+                sessionManager.updateLevel(levelBaru)
+            }
+        }
 
         binding.btnLanjut.text = "🏠 Kembali ke Menu"
         binding.btnLanjut.visibility = View.VISIBLE

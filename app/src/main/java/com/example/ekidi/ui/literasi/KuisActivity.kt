@@ -170,24 +170,31 @@ class KuisActivity : AppCompatActivity() {
         binding.tvNomorSoal.text = "Selesai!"
 
         val levelTerbukaSekarang = intent.getIntExtra("LEVEL_TERBUKA", 1)
-
-        // ✅ Hitung level terbuka baru dengan benar
-        // Max level adalah 3, nilai 4 berarti topik selesai semua
         val levelTerbukaBaruValue = if (lulus && levelKuis >= levelTerbukaSekarang) {
-            levelKuis + 1  // buka level berikutnya (max nilai 4 = semua selesai)
+            levelKuis + 1
         } else {
-            levelTerbukaSekarang  // tidak berubah jika tidak lulus
+            levelTerbukaSekarang
         }
 
-        // ✅ Simpan poin ke Firebase
+        // ✅ Simpan poin & progress ke Firebase SEKARANG
+        // sebelum tombol Lanjut ditekan
         val uid = FirebaseHelper.getCurrentUid()
-        if (uid != null && skor > 0) {
+        if (uid != null) {
             lifecycleScope.launch {
-                FirebaseHelper.updatePoin(uid, skor)
-                val poinBaru = sessionManager.getUserPoints() + skor
-                val levelBaru = FirebaseHelper.hitungLevel(poinBaru)
-                sessionManager.updatePoints(poinBaru)
-                sessionManager.updateLevel(levelBaru)
+                // Simpan poin
+                if (skor > 0) {
+                    FirebaseHelper.updatePoin(uid, skor)
+                    val poinBaru = sessionManager.getUserPoints() + skor
+                    val levelBaru = FirebaseHelper.hitungLevel(poinBaru)
+                    sessionManager.updatePoints(poinBaru)
+                    sessionManager.updateLevel(levelBaru)
+                }
+
+                // ✅ Simpan progress level LANGSUNG di sini
+                // bukan di MateriActivity
+                if (lulus && levelTerbukaBaruValue > levelTerbukaSekarang) {
+                    FirebaseHelper.simpanProgressKuis(uid, topikId, levelTerbukaBaruValue)
+                }
             }
         }
 
@@ -198,7 +205,6 @@ class KuisActivity : AppCompatActivity() {
         }
         binding.btnLanjut.visibility = View.VISIBLE
         binding.btnLanjut.setOnClickListener {
-            // ✅ Kirim hasil kembali ke MateriActivity
             val resultIntent = Intent()
             resultIntent.putExtra("LEVEL_TERBUKA_BARU", levelTerbukaBaruValue)
             setResult(RESULT_OK, resultIntent)

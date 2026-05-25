@@ -14,7 +14,6 @@ class MateriActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMateriBinding
     private var topikId = 1
     private var levelTerbuka = 1
-    private var sedangSimpan = false
 
     private val dataMateri = mapOf(
         1 to listOf("💻", "Pengenalan Perangkat Digital",
@@ -124,30 +123,18 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
 - Selalu cerita ke orang tua tentang aktivitas online kamu""")
     )
 
-    // ✅ Ganti startActivityForResult dengan ActivityResultLauncher
+    // ✅ Launcher — hanya update tampilan dari hasil kuis
+    // TIDAK perlu simpan ke Firebase lagi karena sudah disimpan di KuisActivity
     private val kuisLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
             val levelBaru = result.data?.getIntExtra("LEVEL_TERBUKA_BARU", levelTerbuka)
                 ?: levelTerbuka
-
             if (levelBaru > levelTerbuka) {
+                // ✅ Update variabel lokal langsung tanpa load Firebase
                 levelTerbuka = levelBaru
-
-                // ✅ Simpan ke Firebase lalu update tampilan
-                val uid = FirebaseHelper.getCurrentUid()
-                if (uid != null) {
-                    sedangSimpan = true
-                    lifecycleScope.launch {
-                        FirebaseHelper.simpanProgressKuis(uid, topikId, levelTerbuka)
-                        sedangSimpan = false
-                        // Update tampilan setelah simpan selesai
-                        runOnUiThread { setupStatusLevel() }
-                    }
-                } else {
-                    setupStatusLevel()
-                }
+                setupStatusLevel()
             }
         }
     }
@@ -161,14 +148,16 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
         topikId = intent.getIntExtra("TOPIK_ID", 1)
         binding.btnBack.setOnClickListener { finish() }
 
-        // Load progress dari Firebase saat pertama buka
-        loadProgress()
+        // ✅ Load dari Firebase HANYA saat pertama buka (onCreate)
+        // Tidak di onResume agar tidak override hasil kuis
+        loadProgressDanSetup()
     }
 
-    private fun loadProgress() {
+    private fun loadProgressDanSetup() {
         val uid = FirebaseHelper.getCurrentUid()
         if (uid != null) {
             lifecycleScope.launch {
+                // Baca dari Firebase
                 levelTerbuka = FirebaseHelper.getProgressKuis(uid, topikId)
                 runOnUiThread {
                     setupUI()
@@ -239,11 +228,5 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
         kuisLauncher.launch(intent)
     }
 
-    // ✅ onResume hanya reload jika tidak sedang simpan
-    override fun onResume() {
-        super.onResume()
-        if (!sedangSimpan) {
-            loadProgress()
-        }
-    }
+    // ✅ onResume DIHAPUS TOTAL — tidak perlu reload Firebase di sini
 }
