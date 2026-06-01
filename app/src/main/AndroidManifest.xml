@@ -32,7 +32,7 @@
         <activity android:name=".ui.profil.ProfilActivity"/>
         <activity android:name=".ui.literasi.MateriActivity"/>
         <activity android:name=".ui.literasi.KuisActivity"/>
-        <activity android:name=".ui.game.DragDropGameActivity"
+        <activity android:name=".ui.game.RunnerGameActivity"
             android:screenOrientation="portrait"/>
 
     </application>

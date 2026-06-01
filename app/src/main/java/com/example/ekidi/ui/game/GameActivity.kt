@@ -5,10 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivityGameBinding
-import com.example.ekidi.ui.home.HomeActivity
-import com.example.ekidi.ui.literasi.LiterasiActivity
-import com.example.ekidi.ui.misi.MisiActivity
-import com.example.ekidi.ui.profil.ProfilActivity
 
 class GameActivity : AppCompatActivity() {
 
@@ -22,21 +18,17 @@ class GameActivity : AppCompatActivity() {
 
         binding.btnBack.setOnClickListener { finish() }
 
-        binding.btnMainMudah.setOnClickListener {
-            bukaGame("MUDAH")
-        }
-        binding.btnMainSedang.setOnClickListener {
-            bukaGame("SEDANG")
-        }
-        binding.btnMainSulit.setOnClickListener {
-            bukaGame("SULIT")
-        }
+        // ✅ Semua level sekarang buka RunnerGameActivity
+        binding.btnMainMudah.setOnClickListener { bukaGame("MUDAH") }
+        binding.btnMainSedang.setOnClickListener { bukaGame("SEDANG") }
+        binding.btnMainSulit.setOnClickListener { bukaGame("SULIT") }
 
         setupBottomNav()
     }
 
     private fun bukaGame(level: String) {
-        val intent = Intent(this, DragDropGameActivity::class.java)
+        // ✅ Ganti dari DragDropGameActivity ke RunnerGameActivity
+        val intent = Intent(this, RunnerGameActivity::class.java)
         intent.putExtra("LEVEL", level)
         startActivity(intent)
     }
@@ -46,23 +38,23 @@ class GameActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
+                    startActivity(Intent(this, com.example.ekidi.ui.home.HomeActivity::class.java))
                     finish()
                     true
                 }
                 R.id.nav_literasi -> {
-                    startActivity(Intent(this, LiterasiActivity::class.java))
+                    startActivity(Intent(this, com.example.ekidi.ui.literasi.LiterasiActivity::class.java))
                     finish()
                     true
                 }
                 R.id.nav_game -> true
                 R.id.nav_misi -> {
-                    startActivity(Intent(this, MisiActivity::class.java))
+                    startActivity(Intent(this, com.example.ekidi.ui.misi.MisiActivity::class.java))
                     finish()
                     true
                 }
                 R.id.nav_profil -> {
-                    startActivity(Intent(this, ProfilActivity::class.java))
+                    startActivity(Intent(this, com.example.ekidi.ui.profil.ProfilActivity::class.java))
                     finish()
                     true
                 }

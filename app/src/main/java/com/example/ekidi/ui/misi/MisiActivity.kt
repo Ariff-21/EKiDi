@@ -30,7 +30,7 @@ class MisiActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        val streak = 0 // nanti dari API
+        val streak = sessionManager.getStreak()
         binding.tvStreak.text = "🔥 $streak Hari"
         binding.tvStreakAngka.text = "$streak"
         binding.tvStreakDesc.text = if (streak == 0)

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1a1a2e">
+
+    <!-- Header HUD -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+        android:background="#16213e">
+
+        <!-- Nyawa -->
+        <TextView
+            android:id="@+id/tvNyawa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="❤️❤️❤️"
+            android:textSize="20sp"/>
+
+        <!-- Level -->
+        <TextView
+            android:id="@+id/tvLevelInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Level Mudah"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/bg_level_badge"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"/>
+
+        <!-- Skor -->
+        <TextView
+            android:id="@+id/tvSkorGame"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="⭐ 0"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#FFD700"
+            android:gravity="end"/>
+
+    </LinearLayout>
+
+    <!-- Progress rintangan -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:gravity="center_vertical"
+        android:background="#16213e">
+
+        <TextView
+            android:id="@+id/tvProgressRintangan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rintangan: 0/5"
+            android:textSize="11sp"
+            android:textColor="#A0A0A0"/>
+
+        <ProgressBar
+            android:id="@+id/progressRintangan"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="6dp"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/bg_progress_drawable"/>
+
+    </LinearLayout>
+
+    <!-- Area Game Canvas -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Game Canvas -->
+        <com.example.ekidi.ui.game.GameCanvasView
+            android:id="@+id/gameCanvas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <!-- Overlay Soal (muncul saat ketemu rintangan) -->
+        <LinearLayout
+            android:id="@+id/layoutSoal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="#CC000000"
+            android:padding="20dp"
+            android:visibility="gone">
+
+            <!-- Timer countdown -->
+            <TextView
+                android:id="@+id/tvTimer"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:text="15"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:background="@drawable/bg_button_primary"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Emoji rintangan -->
+            <TextView
+                android:id="@+id/tvEmojiRintangan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💻"
+                android:textSize="56sp"
+                android:gravity="center"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Pertanyaan -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardElevation="4dp">
+
+                <TextView
+                    android:id="@+id/tvPertanyaanGame"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pertanyaan muncul di sini"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#1F2937"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:lineSpacingExtra="4dp"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Pilihan Jawaban -->
+            <GridLayout
+                android:id="@+id/gridJawaban"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="2"
+                android:useDefaultMargins="false"/>
+
+        </LinearLayout>
+
+        <!-- Overlay Game Over -->
+        <LinearLayout
+            android:id="@+id/layoutGameOver"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="#CC000000"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💀"
+                android:textSize="72sp"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Game Over!"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="#EF4444"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/tvSkorGameOver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Skor: 0"
+                android:textSize="18sp"
+                android:textColor="#FFD700"
+                android:layout_marginTop="8dp"/>
+
+            <Button
+                android:id="@+id/btnMainLagi"
+                android:layout_width="200dp"
+                android:layout_height="52dp"
+                android:text="🔄 Main Lagi"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_button_primary"
+                android:stateListAnimator="@null"
+                android:layout_marginTop="20dp"/>
+
+            <Button
+                android:id="@+id/btnKeluar"
+                android:layout_width="200dp"
+                android:layout_height="52dp"
+                android:text="🏠 Kembali"
+                android:textSize="15sp"
+                android:textColor="@color/purple_primary"
+                android:background="@drawable/bg_role_selected"
+                android:stateListAnimator="@null"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+
+        <!-- Overlay Menang -->
+        <LinearLayout
+            android:id="@+id/layoutMenang"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="#CC000000"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏆"
+                android:textSize="72sp"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hebat! Kamu Menang!"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#FFD700"
+                android:gravity="center"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/tvSkorMenang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Skor: 0"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/tvBintangMenang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⭐⭐⭐"
+                android:textSize="36sp"
+                android:layout_marginTop="8dp"/>
+
+            <Button
+                android:id="@+id/btnSelesai"
+                android:layout_width="200dp"
+                android:layout_height="52dp"
+                android:text="🏠 Kembali"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_button_primary"
+                android:stateListAnimator="@null"
+                android:layout_marginTop="20dp"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

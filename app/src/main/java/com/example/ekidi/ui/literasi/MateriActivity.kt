@@ -8,6 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.databinding.ActivityMateriBinding
 import com.example.ekidi.R
 import com.example.ekidi.ui.home.HomeActivity
+import com.example.ekidi.ui.game.GameActivity
+import com.example.ekidi.ui.misi.MisiActivity
+import com.example.ekidi.ui.profil.ProfilActivity
 import com.example.ekidi.utils.FirebaseHelper
 import kotlinx.coroutines.launch
 
@@ -165,7 +168,26 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
                     finish()
                     true
                 }
-                R.id.nav_literasi -> { finish(); true }
+                R.id.nav_literasi -> {
+                    startActivity(Intent(this, LiterasiActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_game -> {
+                    startActivity(Intent(this, GameActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_misi -> {
+                    startActivity(Intent(this, MisiActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_profil -> {
+                    startActivity(Intent(this, ProfilActivity::class.java))
+                    finish()
+                    true
+                }
                 else -> false
             }
         }

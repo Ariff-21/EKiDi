@@ -93,6 +93,11 @@ class LoginActivity : AppCompatActivity() {
                         authToken = uid,
                         level = (data["level"] as? Long)?.toInt() ?: 1,
                         points = (data["poin"] as? Long)?.toInt() ?: 0,
+                        avatar = data["avatar"] as? String ?: "🐶",
+                        totalBintang = (data["totalBintang"] as? Long)?.toInt() ?: 0,
+                        totalBadge = (data["totalBadge"] as? Long)?.toInt() ?: 1,
+                        totalPembelajaran = (data["totalPembelajaran"] as? Long)?.toInt() ?: 0,
+                        streak = (data["streak"] as? Long)?.toInt() ?: 0,
                     )
                 }
                 startActivity(Intent(this@LoginActivity, HomeActivity::class.java))

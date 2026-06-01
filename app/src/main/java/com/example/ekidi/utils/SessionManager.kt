@@ -18,6 +18,10 @@ class SessionManager(context: Context) {
         const val KEY_USER_POINTS = "user_points"
         const val KEY_USER_AVATAR = "user_avatar"
         const val KEY_AUTH_TOKEN = "auth_token"
+        const val KEY_TOTAL_BINTANG = "total_bintang"
+        const val KEY_TOTAL_BADGE = "total_badge"
+        const val KEY_TOTAL_PEMBELAJARAN = "total_pembelajaran"
+        const val KEY_STREAK = "streak"
     }
 
     fun saveLoginSession(
@@ -26,7 +30,12 @@ class SessionManager(context: Context) {
         userRole: String,
         authToken: String,
         level: Int = 1,
-        points: Int = 0
+        points: Int = 0,
+        avatar: String = "🐶",
+        totalBintang: Int = 0,
+        totalBadge: Int = 1,
+        totalPembelajaran: Int = 0,
+        streak: Int = 0
     ) {
         prefs.edit().apply {
             putBoolean(KEY_IS_LOGGED_IN, true)
@@ -36,6 +45,11 @@ class SessionManager(context: Context) {
             putString(KEY_AUTH_TOKEN, authToken)
             putInt(KEY_USER_LEVEL, level)
             putInt(KEY_USER_POINTS, points)
+            putString(KEY_USER_AVATAR, avatar)
+            putInt(KEY_TOTAL_BINTANG, totalBintang)
+            putInt(KEY_TOTAL_BADGE, totalBadge)
+            putInt(KEY_TOTAL_PEMBELAJARAN, totalPembelajaran)
+            putInt(KEY_STREAK, streak)
             apply()
         }
     }
@@ -49,7 +63,11 @@ class SessionManager(context: Context) {
     fun getAuthToken(): String = prefs.getString(KEY_AUTH_TOKEN, "") ?: ""
     fun getUserLevel(): Int = prefs.getInt(KEY_USER_LEVEL, 1)
     fun getUserPoints(): Int = prefs.getInt(KEY_USER_POINTS, 0)
-    fun getUserAvatar(): String = prefs.getString(KEY_USER_AVATAR, "avatar_default") ?: "avatar_default"
+    fun getUserAvatar(): String = prefs.getString(KEY_USER_AVATAR, "🐶") ?: "🐶"
+    fun getTotalBintang(): Int = prefs.getInt(KEY_TOTAL_BINTANG, 0)
+    fun getTotalBadge(): Int = prefs.getInt(KEY_TOTAL_BADGE, 1)
+    fun getTotalPembelajaran(): Int = prefs.getInt(KEY_TOTAL_PEMBELAJARAN, 0)
+    fun getStreak(): Int = prefs.getInt(KEY_STREAK, 0)
 
     fun updatePoints(newPoints: Int) { prefs.edit().putInt(KEY_USER_POINTS, newPoints).apply() }
     fun updateLevel(newLevel: Int) { prefs.edit().putInt(KEY_USER_LEVEL, newLevel).apply() }

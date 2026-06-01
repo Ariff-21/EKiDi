@@ -33,18 +33,25 @@ class PencapaianActivity : AppCompatActivity() {
     private fun setupUI() {
         val level = sessionManager.getUserLevel()
         val poin = sessionManager.getUserPoints()
-        val maxPoin = level * 500
-        val progress = ((poin.toFloat() / maxPoin) * 100).toInt()
+        
+        // Hitung progress bar dalam level saat ini
+        val poinAwal = com.example.ekidi.utils.FirebaseHelper.poinAwalLevel(level)
+        val poinTarget = com.example.ekidi.utils.FirebaseHelper.poinUntukLevelBerikutnya(level)
+        val poinDiLevel = poin - poinAwal
+        val totalPoinDiLevel = poinTarget - poinAwal
+        val progress = if (totalPoinDiLevel > 0) {
+            ((poinDiLevel.toFloat() / totalPoinDiLevel) * 100).toInt()
+        } else 100
 
         binding.tvLevelSaatIni.text = "Level $level"
         binding.tvPoinSaatIni.text = "$poin poin"
-        binding.tvPoinTarget.text = "Target: $maxPoin poin"
-        binding.progressLevel.progress = progress
+        binding.tvPoinTarget.text = "Target: $poinTarget poin"
+        binding.progressLevel.progress = progress.coerceIn(0, 100)
 
-        // Stats (sementara 0, nanti dari API)
-        binding.tvTotalBintang.text = "0"
-        binding.tvTotalBadge.text = "1"
-        binding.tvTotalPembelajaran.text = "0"
+        // Stats dari session
+        binding.tvTotalBintang.text = sessionManager.getTotalBintang().toString()
+        binding.tvTotalBadge.text = sessionManager.getTotalBadge().toString()
+        binding.tvTotalPembelajaran.text = sessionManager.getTotalPembelajaran().toString()
     }
 
     private fun setupClickListeners() {
