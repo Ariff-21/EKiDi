@@ -9,10 +9,10 @@
     <LinearLayout
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="220dp"
         android:background="@drawable/bg_splash_gradient"
         android:orientation="vertical"
-        android:padding="20dp"
+        android:padding="24dp"
         android:clipToPadding="false">
 
         <LinearLayout
@@ -23,27 +23,27 @@
 
             <TextView
                 android:id="@+id/tvAvatar"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:text="🐶"
-                android:textSize="36sp"
+                android:textSize="40sp"
                 android:gravity="center"
                 android:background="@drawable/circle_avatar_bg"
-                android:elevation="4dp"/>
+                android:elevation="8dp"/>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginStart="16dp">
+                android:layout_marginStart="20dp">
 
                 <TextView
                     android:id="@+id/tvGreeting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Halo, Pengguna!"
-                    android:textSize="20sp"
+                    android:text="Halo, Teman!"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF"
                     android:shadowColor="#40000000"
@@ -56,22 +56,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="⭐ Level 1"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#FFE4E6"
-                    android:layout_marginTop="2dp"/>
+                    android:layout_marginTop="4dp"/>
 
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/ivSettings"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@android:drawable/ic_menu_preferences"
                 android:background="@drawable/circle_settings_bg"
-                android:padding="10dp"
+                android:padding="12dp"
                 app:tint="#FFFFFF"
-                android:elevation="4dp"/>
+                android:elevation="8dp"/>
 
         </LinearLayout>
 
@@ -79,18 +79,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="✨"
-            android:textSize="24sp"
+            android:text="🌈"
+            android:textSize="32sp"
             android:layout_gravity="end"
-            android:layout_marginTop="10dp"
-            android:alpha="0.6"/>
+            android:layout_marginTop="16dp"
+            android:alpha="0.8"/>
 
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="160dp"
         android:clipToPadding="false"
         android:paddingBottom="100dp">
 
@@ -100,15 +100,15 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Card Progres & Rekomendasi (Stack Vertikal biar lebih lega) -->
+            <!-- Card Progres -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="6dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="8dp"
                 app:cardBackgroundColor="@color/bg_card"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -127,7 +127,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="🚀 Progres Belajarmu"
-                            android:textSize="15sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
@@ -136,12 +136,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Level 1"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textStyle="bold"
                             android:textColor="@color/purple_primary"
                             android:background="@drawable/bg_level_badge"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="5dp"/>
+                            android:paddingHorizontal="14dp"
+                            android:paddingVertical="6dp"/>
 
                     </LinearLayout>
 
@@ -149,7 +149,7 @@
                         android:id="@+id/progressBelajar"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="14dp"
+                        android:layout_height="16dp"
                         android:layout_marginTop="16dp"
                         android:max="100"
                         android:progress="0"
@@ -159,7 +159,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="8dp">
+                        android:layout_marginTop="10dp">
 
                         <TextView
                             android:id="@+id/tvLevelLabel"
@@ -167,16 +167,16 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Pemula"
-                            android:textSize="13sp"
+                            android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="@color/purple_light"/>
+                            android:textColor="@color/soft_purple"/>
 
                         <TextView
                             android:id="@+id/tvPoin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0 / 500 poin"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textColor="@color/text_secondary"/>
 
                     </LinearLayout>
@@ -184,68 +184,94 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Card Rekomendasi -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardRekomendasi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="#FFF1F2"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@color/berry_pink_light"
                 android:layout_marginBottom="24dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:text="💡"
-                        android:textSize="32sp"
-                        android:gravity="center"
-                        android:background="@drawable/circle_menu_yellow"
-                        android:layout_marginEnd="16dp"/>
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tantangan Hari Ini"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="#E11D48"
-                            android:textAllCaps="true"
-                            android:letterSpacing="0.05"/>
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:text="💡"
+                            android:textSize="36sp"
+                            android:gravity="center"
+                            android:background="@drawable/circle_menu_yellow"
+                            android:layout_marginEnd="16dp"
+                            android:elevation="4dp"/>
 
-                        <TextView
-                            android:id="@+id/tvRekomendasiJudul"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Pengenalan Perangkat Digital"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary"
-                            android:layout_marginTop="2dp"/>
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tantangan Seru"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/berry_pink"
+                                android:textAllCaps="true"
+                                android:letterSpacing="0.05"/>
+
+                            <TextView
+                                android:id="@+id/tvRekomendasiJudul"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pengenalan Perangkat"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginTop="2dp"/>
+
+                            <TextView
+                                android:id="@+id/tvRekomendasiDesc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ayo pelajari dasar-dasar digital!"
+                                android:textSize="13sp"
+                                android:textColor="@color/text_secondary"
+                                android:layout_marginTop="2dp"/>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                    <ImageButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnMulaiRekomendasi"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:src="@android:drawable/ic_media_play"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Mulai Petualangan!"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        app:backgroundTint="@null"
                         android:background="@drawable/bg_button_primary"
-                        app:tint="#FFFFFF"
-                        android:padding="8dp"
-                        android:layout_marginStart="8dp"/>
+                        app:cornerRadius="30dp"
+                        app:icon="@android:drawable/ic_media_play"
+                        app:iconGravity="textStart"
+                        app:iconTint="#FFFFFF"
+                        android:elevation="4dp"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -254,8 +280,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ayo Eksplorasi! 🌈"
-                android:textSize="18sp"
+                android:text="Pilih Petualanganmu 🎨"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
                 android:layout_marginBottom="16dp"
@@ -267,15 +293,16 @@
                 android:columnCount="2"
                 android:useDefaultMargins="false">
 
+                <!-- Literasi -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardLiterasi"
                     android:layout_width="0dp"
-                    android:layout_height="160dp"
+                    android:layout_height="170dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="3dp"
-                    app:cardBackgroundColor="@color/card_blue">
+                    app:cardCornerRadius="28dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/sky_blue_light">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -291,37 +318,38 @@
                             android:textSize="36sp"
                             android:gravity="center"
                             android:background="@drawable/circle_menu_blue"
-                            android:elevation="2dp"/>
+                            android:elevation="4dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Literasi"
-                            android:textSize="15sp"
+                            android:text="Belajar"
+                            android:textSize="16sp"
                             android:textStyle="bold"
-                            android:textColor="@color/icon_blue"
+                            android:textColor="@color/sky_blue"
                             android:layout_marginTop="12dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Belajar Seru"
-                            android:textSize="11sp"
+                            android:text="Cerita Seru"
+                            android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp"/>
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
+                <!-- Game -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardGame"
                     android:layout_width="0dp"
-                    android:layout_height="160dp"
+                    android:layout_height="170dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="3dp"
-                    app:cardBackgroundColor="@color/card_green">
+                    app:cardCornerRadius="28dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/leaf_green_light">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -337,37 +365,38 @@
                             android:textSize="36sp"
                             android:gravity="center"
                             android:background="@drawable/circle_menu_green"
-                            android:elevation="2dp"/>
+                            android:elevation="4dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Main Game"
-                            android:textSize="15sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
-                            android:textColor="@color/icon_green"
+                            android:textColor="@color/leaf_green"
                             android:layout_marginTop="12dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Tantangan"
-                            android:textSize="11sp"
+                            android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp"/>
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
+                <!-- Misi -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardMisi"
                     android:layout_width="0dp"
-                    android:layout_height="160dp"
+                    android:layout_height="170dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="3dp"
-                    app:cardBackgroundColor="@color/card_purple">
+                    app:cardCornerRadius="28dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/soft_purple_light">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -383,37 +412,38 @@
                             android:textSize="36sp"
                             android:gravity="center"
                             android:background="@drawable/circle_menu_purple"
-                            android:elevation="2dp"/>
+                            android:elevation="4dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Misi Kita"
-                            android:textSize="15sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
-                            android:textColor="@color/icon_purple"
+                            android:textColor="@color/soft_purple"
                             android:layout_marginTop="12dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cek Tugas"
-                            android:textSize="11sp"
+                            android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp"/>
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
+                <!-- Pencapaian -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardPencapaian"
                     android:layout_width="0dp"
-                    android:layout_height="160dp"
+                    android:layout_height="170dp"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="3dp"
-                    app:cardBackgroundColor="@color/card_yellow">
+                    app:cardCornerRadius="28dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/sunny_yellow_light">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -429,22 +459,22 @@
                             android:textSize="36sp"
                             android:gravity="center"
                             android:background="@drawable/circle_menu_yellow"
-                            android:elevation="2dp"/>
+                            android:elevation="4dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Prestasiku"
-                            android:textSize="15sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
-                            android:textColor="@color/icon_yellow"
+                            android:textColor="@color/sunny_yellow"
                             android:layout_marginTop="12dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Lihat Bintang"
-                            android:textSize="11sp"
+                            android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp"/>
 
@@ -458,8 +488,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="4dp"
                 app:cardBackgroundColor="@color/bg_card">
 
                 <LinearLayout
@@ -480,7 +510,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="🏅"
-                            android:textSize="24sp"/>
+                            android:textSize="28sp"/>
 
                         <TextView
                             android:id="@+id/tvStatBadge"
@@ -495,17 +525,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Badge"
-                            android:textSize="11sp"
+                            android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:gravity="center"/>
 
                     </LinearLayout>
 
                     <View
-                        android:layout_width="1dp"
+                        android:layout_width="2dp"
                         android:layout_height="40dp"
                         android:background="@color/divider"
-                        android:layout_marginHorizontal="8dp"/>
+                        android:layout_marginHorizontal="12dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -518,7 +548,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="⭐"
-                            android:textSize="24sp"/>
+                            android:textSize="28sp"/>
 
                         <TextView
                             android:id="@+id/tvStatBintang"
@@ -533,25 +563,25 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Poin"
-                            android:textSize="11sp"
+                            android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:gravity="center"/>
 
                     </LinearLayout>
 
                     <View
-                        android:layout_width="1dp"
+                        android:layout_width="2dp"
                         android:layout_height="40dp"
                         android:background="@color/divider"
-                        android:layout_marginHorizontal="8dp"/>
+                        android:layout_marginHorizontal="12dp"/>
 
                     <TextView
                         android:id="@+id/tvQuote"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="&quot;Kamu luar biasa! Ayo lanjutkan belajarmu hari ini! 🌟&quot;"
-                        android:textSize="12sp"
+                        android:text="&quot;Kamu anak hebat! Teruslah bereksplorasi! 🌟&quot;"
+                        android:textSize="13sp"
                         android:textStyle="italic"
                         android:textColor="@color/text_secondary"
                         android:gravity="center"
@@ -566,12 +596,13 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="72dp"
         android:layout_gravity="bottom"
         android:background="@color/bg_card"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/bottom_nav_color"
-        app:itemTextColor="@color/bottom_nav_color"
-        app:labelVisibilityMode="labeled"/>
+        app:itemIconTint="@color/sky_blue"
+        app:itemTextColor="@color/text_primary"
+        app:labelVisibilityMode="labeled"
+        android:elevation="16dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

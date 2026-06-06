@@ -12,6 +12,7 @@ import com.example.ekidi.ui.game.GameActivity
 import com.example.ekidi.ui.misi.MisiActivity
 import com.example.ekidi.ui.profil.ProfilActivity
 import com.example.ekidi.utils.FirebaseHelper
+import com.example.ekidi.utils.SessionManager
 import kotlinx.coroutines.launch
 
 class MateriActivity : AppCompatActivity() {
@@ -224,7 +225,7 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
     private fun setupStatusLevel() {
         // Level 1 selalu terbuka
         binding.tvStatusLevel1.text = "Mulai ▶"
-        binding.tvStatusLevel1.setTextColor(getColor(com.example.ekidi.R.color.purple_primary))
+        binding.tvStatusLevel1.setTextColor(getColor(R.color.purple_primary))
         binding.cardLevel1.alpha = 1f
 
         // Level 2
@@ -255,9 +256,29 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
     }
 
     private fun setupClickListeners() {
-        binding.cardLevel1.setOnClickListener { bukaKuis(1) }
-        binding.cardLevel2.setOnClickListener { if (levelTerbuka >= 2) bukaKuis(2) }
-        binding.cardLevel3.setOnClickListener { if (levelTerbuka >= 3) bukaKuis(3) }
+        binding.cardLevel1.setOnClickListener {
+            updateMisiMateri()
+            bukaKuis(1)
+        }
+        binding.cardLevel2.setOnClickListener { 
+            if (levelTerbuka >= 2) {
+                updateMisiMateri()
+                bukaKuis(2)
+            }
+        }
+        binding.cardLevel3.setOnClickListener { 
+            if (levelTerbuka >= 3) {
+                updateMisiMateri()
+                bukaKuis(3)
+            }
+        }
+    }
+
+    private fun updateMisiMateri() {
+        val sessionManager = SessionManager(this)
+        if (sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_1_STATUS) == 0) {
+            sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_1_STATUS, 1)
+        }
     }
 
     private fun bukaKuis(level: Int) {

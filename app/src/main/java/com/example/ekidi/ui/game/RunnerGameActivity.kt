@@ -11,12 +11,14 @@ import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivityRunnerGameBinding
 import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
+import com.example.ekidi.utils.SoundManager
 import kotlinx.coroutines.launch
 
 class RunnerGameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRunnerGameBinding
     private lateinit var sessionManager: SessionManager
+    private lateinit var soundManager: SoundManager
 
     private var level = "MUDAH"
     private var nyawa = 3
@@ -122,6 +124,7 @@ class RunnerGameActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         sessionManager = SessionManager(this)
+        soundManager = SoundManager(this)
         level = intent.getStringExtra("LEVEL") ?: "MUDAH"
 
         rintanganList = when (level) {
@@ -146,12 +149,22 @@ class RunnerGameActivity : AppCompatActivity() {
         updateSkor()
         updateProgressRintangan()
 
+        binding.btnBack.setOnClickListener { finish() }
+
+        binding.gameCanvas.onObstacleReached = {
+            runOnUiThread {
+                updateMisiGame()
+                tampilkanRintangan()
+            }
+        }
+
         // Mulai game
         binding.gameCanvas.startGame()
+        soundManager.startBackgroundMusic("game_bgm")
 
-        // Delay sedikit sebelum rintangan pertama
+        // Spawn rintangan pertama
         binding.gameCanvas.postDelayed({
-            tampilkanRintangan()
+            binding.gameCanvas.spawnBatu()
         }, 1500)
     }
 
@@ -167,9 +180,6 @@ class RunnerGameActivity : AppCompatActivity() {
         }
 
         val rintangan = rintanganList[rintanganIndex]
-
-        // Stop karakter
-        binding.gameCanvas.isStopped = true
 
         // Tampilkan soal
         binding.tvEmojiRintangan.text = rintangan.emoji
@@ -214,6 +224,12 @@ class RunnerGameActivity : AppCompatActivity() {
         startCountDown()
     }
 
+    private fun updateMisiGame() {
+        if (sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_2_STATUS) == 0) {
+            sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_2_STATUS, 1)
+        }
+    }
+
     private fun startCountDown() {
         countDownTimer?.cancel()
         binding.tvTimer.text = waktuJawab.toString()
@@ -248,6 +264,7 @@ class RunnerGameActivity : AppCompatActivity() {
 
         if (jawaban == jawabanBenar) {
             // ✅ BENAR
+            soundManager.playCorrect()
             skor += poin
             updateSkor()
             binding.gameCanvas.doJump()
@@ -264,18 +281,25 @@ class RunnerGameActivity : AppCompatActivity() {
             // Tutup soal dan lanjut setelah animasi lompat
             binding.layoutSoal.postDelayed({
                 binding.layoutSoal.visibility = View.GONE
-                binding.gameCanvas.isStopped = false
+                // isStopped akan diatur ke false setelah jump selesai atau batu lewat
+                // di sini kita hanya perlu spawn batu berikutnya setelah jeda
                 rintanganIndex++
                 updateProgressRintangan()
 
-                // Jeda sebelum rintangan berikutnya
-                binding.gameCanvas.postDelayed({
-                    tampilkanRintangan()
-                }, 1200)
+                if (rintanganIndex < rintanganList.size) {
+                    binding.gameCanvas.postDelayed({
+                        binding.gameCanvas.spawnBatu()
+                    }, 1500)
+                } else {
+                    binding.gameCanvas.postDelayed({
+                        menang()
+                    }, 1000)
+                }
             }, 1000)
 
         } else {
             // ❌ SALAH
+            soundManager.playWrong()
             nyawa--
             updateNyawa()
             binding.gameCanvas.doHurt()
@@ -298,13 +322,18 @@ class RunnerGameActivity : AppCompatActivity() {
                 // Tetap lanjut meski salah
                 binding.layoutSoal.postDelayed({
                     binding.layoutSoal.visibility = View.GONE
-                    binding.gameCanvas.isStopped = false
                     rintanganIndex++
                     updateProgressRintangan()
 
-                    binding.gameCanvas.postDelayed({
-                        tampilkanRintangan()
-                    }, 1200)
+                    if (rintanganIndex < rintanganList.size) {
+                        binding.gameCanvas.postDelayed({
+                            binding.gameCanvas.spawnBatu()
+                        }, 2000)
+                    } else {
+                        binding.gameCanvas.postDelayed({
+                            menang()
+                        }, 1000)
+                    }
                 }, 1500)
             }
         }
@@ -333,6 +362,7 @@ class RunnerGameActivity : AppCompatActivity() {
     private fun gameOver() {
         countDownTimer?.cancel()
         binding.gameCanvas.stopGame()
+        soundManager.stopBackgroundMusic()
         binding.layoutSoal.visibility = View.GONE
 
         binding.tvSkorGameOver.text = "Skor kamu: $skor poin"
@@ -354,6 +384,7 @@ class RunnerGameActivity : AppCompatActivity() {
     private fun menang() {
         countDownTimer?.cancel()
         binding.gameCanvas.stopGame()
+        soundManager.stopBackgroundMusic()
         binding.layoutSoal.visibility = View.GONE
 
         // Hitung bintang
@@ -393,5 +424,6 @@ class RunnerGameActivity : AppCompatActivity() {
         super.onDestroy()
         countDownTimer?.cancel()
         binding.gameCanvas.stopGame()
+        soundManager.release()
     }
 }

@@ -8,20 +8,21 @@
 
     <!-- Header -->
     <LinearLayout
+        android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="100dp"
         android:background="@drawable/bg_splash_gradient"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="20dp"
         android:gravity="center_vertical">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@android:drawable/ic_media_previous"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@android:drawable/ic_menu_revert"
             android:background="@drawable/circle_settings_bg"
-            android:padding="8dp"
+            android:padding="10dp"
             app:tint="#FFFFFF" />
 
         <TextView
@@ -29,20 +30,20 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="👤 Profil Saya"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_marginStart="12dp"/>
+            android:layout_marginStart="16dp"/>
 
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="75dp"
-        android:padding="16dp"
+        android:layout_marginTop="85dp"
+        android:padding="20dp"
         android:clipToPadding="false"
-        android:paddingBottom="100dp">
+        android:paddingBottom="120dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,9 +54,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="3dp"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="32dp"
+                app:cardElevation="8dp"
                 app:cardBackgroundColor="@color/bg_card">
 
                 <LinearLayout
@@ -63,86 +64,186 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center"
-                    android:padding="24dp">
+                    android:padding="32dp">
 
-                    <!-- Avatar -->
                     <TextView
                         android:id="@+id/tvAvatar"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
                         android:text="🐶"
-                        android:textSize="52sp"
+                        android:textSize="72sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_avatar_bg_large"/>
+                        android:background="@drawable/circle_avatar_bg"
+                        android:elevation="8dp"/>
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnGantiAvatar"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:text="Ganti Avatar"
-                        android:textSize="11sp"
-                        android:textColor="@color/purple_primary"
-                        android:background="@drawable/bg_role_selected"
-                        android:stateListAnimator="@null"
-                        android:paddingHorizontal="16dp"
-                        android:layout_marginTop="8dp"/>
+                        android:layout_height="wrap_content"
+                        android:text="Ganti Avatar ✨"
+                        android:textSize="13sp"
+                        android:textAllCaps="false"
+                        android:textColor="@color/soft_purple"
+                        android:layout_marginTop="12dp"/>
 
-                    <!-- Nama -->
                     <TextView
                         android:id="@+id/tvNamaProfil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pengguna"
-                        android:textSize="20sp"
+                        android:text="Nama Pengguna"
+                        android:textSize="24sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary"
-                        android:layout_marginTop="12dp"/>
+                        android:layout_marginTop="8dp"/>
 
-                    <!-- Role Badge -->
                     <TextView
                         android:id="@+id/tvRoleBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="👦 Anak"
-                        android:textSize="12sp"
-                        android:textColor="@color/purple_primary"
+                        android:text="👦 Petualang Cilik"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/soft_purple"
                         android:background="@drawable/bg_level_badge"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="4dp"
-                        android:layout_marginTop="6dp"/>
+                        android:paddingHorizontal="20dp"
+                        android:paddingVertical="6dp"
+                        android:layout_marginTop="8dp"/>
 
-                    <!-- Level & Poin -->
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Statistik -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/sunny_yellow_light">
+
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="16dp">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="⭐" android:textSize="24sp"/>
+                        <TextView android:id="@+id/tvLevelProfil"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Level 1" android:textSize="16sp" android:textStyle="bold"
+                            android:textColor="@color/sunny_yellow" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvLevelInfo"
+                            android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/sky_blue_light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="16dp">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="💰" android:textSize="24sp"/>
+                        <TextView android:id="@+id/tvPoinProfil"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="0 Poin" android:textSize="16sp" android:textStyle="bold"
+                            android:textColor="@color/sky_blue" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/tvTotalPoin"
+                            android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+                        <TextView android:id="@+id/tvUsername"
+                            android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+                        <TextView android:id="@+id/tvPeran"
+                            android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <!-- Informasi Tambahan -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📊 Prestasiku"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="4dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="12dp">
+                        android:paddingVertical="12dp">
+                        <TextView android:layout_width="32dp" android:layout_height="wrap_content" android:text="🔥" android:textSize="20sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="Streak Belajar" android:textSize="15sp" android:textColor="@color/text_secondary"/>
+                        <TextView android:id="@+id/tvStreakProfil" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="0 Hari" android:textStyle="bold" android:textColor="@color/text_primary"/>
+                    </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/tvLevelProfil"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="⭐ Level 1"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/gold"
-                            android:background="@drawable/bg_level_badge"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="4dp"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider"/>
 
-                        <TextView
-                            android:id="@+id/tvPoinProfil"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0 Poin"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_secondary"
-                            android:background="@drawable/bg_role_unselected"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="4dp"
-                            android:layout_marginStart="8dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="12dp">
+                        <TextView android:layout_width="32dp" android:layout_height="wrap_content" android:text="🏅" android:textSize="20sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="Badge Didapat" android:textSize="15sp" android:textColor="@color/text_secondary"/>
+                        <TextView android:id="@+id/tvBadgeProfil" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="0" android:textStyle="bold" android:textColor="@color/text_primary"/>
+                    </LinearLayout>
 
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="12dp">
+                        <TextView android:layout_width="32dp" android:layout_height="wrap_content" android:text="📖" android:textSize="20sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="Materi Selesai" android:textSize="15sp" android:textColor="@color/text_secondary"/>
+                        <TextView android:id="@+id/tvMateriProfil" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="0" android:textStyle="bold" android:textColor="@color/text_primary"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -153,340 +254,76 @@
                 android:id="@+id/cardPilihAvatar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="24dp"
                 android:visibility="gone"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="6dp"
                 app:cardBackgroundColor="@color/bg_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pilih Avatar Kamu"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginBottom="10dp"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center">
-
-                        <TextView android:id="@+id/avatar1"
-                            android:layout_width="52dp" android:layout_height="52dp"
-                            android:text="🐶" android:textSize="30sp"
-                            android:gravity="center" android:layout_margin="6dp"
+                    android:padding="20dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Pilih Teman Barumu 🐾" android:textSize="16sp" android:textStyle="bold"
+                        android:textColor="@color/text_primary" android:layout_marginBottom="16dp"/>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="center">
+                        <TextView android:id="@+id/avatar1" android:layout_width="56dp" android:layout_height="56dp"
+                            android:text="🐶" android:textSize="32sp" android:gravity="center" android:layout_margin="8dp"
                             android:background="@drawable/bg_role_selected"/>
-
-                        <TextView android:id="@+id/avatar2"
-                            android:layout_width="52dp" android:layout_height="52dp"
-                            android:text="🐱" android:textSize="30sp"
-                            android:gravity="center" android:layout_margin="6dp"
+                        <TextView android:id="@+id/avatar2" android:layout_width="56dp" android:layout_height="56dp"
+                            android:text="🐱" android:textSize="32sp" android:gravity="center" android:layout_margin="8dp"
                             android:background="@drawable/bg_role_unselected"/>
-
-                        <TextView android:id="@+id/avatar3"
-                            android:layout_width="52dp" android:layout_height="52dp"
-                            android:text="🐻" android:textSize="30sp"
-                            android:gravity="center" android:layout_margin="6dp"
+                        <TextView android:id="@+id/avatar3" android:layout_width="56dp" android:layout_height="56dp"
+                            android:text="🐻" android:textSize="32sp" android:gravity="center" android:layout_margin="8dp"
                             android:background="@drawable/bg_role_unselected"/>
-
-                        <TextView android:id="@+id/avatar4"
-                            android:layout_width="52dp" android:layout_height="52dp"
-                            android:text="🦊" android:textSize="30sp"
-                            android:gravity="center" android:layout_margin="6dp"
+                        <TextView android:id="@+id/avatar4" android:layout_width="56dp" android:layout_height="56dp"
+                            android:text="🦊" android:textSize="32sp" android:gravity="center" android:layout_margin="8dp"
                             android:background="@drawable/bg_role_unselected"/>
-
-                        <TextView android:id="@+id/avatar5"
-                            android:layout_width="52dp" android:layout_height="52dp"
-                            android:text="🐼" android:textSize="30sp"
-                            android:gravity="center" android:layout_margin="6dp"
+                        <TextView android:id="@+id/avatar5" android:layout_width="56dp" android:layout_height="56dp"
+                            android:text="🐼" android:textSize="32sp" android:gravity="center" android:layout_margin="8dp"
                             android:background="@drawable/bg_role_unselected"/>
-
                     </LinearLayout>
-
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Info Akun -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📋 Informasi Akun"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:layout_marginBottom="10dp"/>
-
+            <!-- Pengaturan Menu -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="4dp"
                 app:cardBackgroundColor="@color/bg_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
-                    <!-- Username -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingVertical="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="👤"
-                            android:textSize="18sp"/>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Username"
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginStart="12dp"/>
-
-                        <TextView
-                            android:id="@+id/tvUsername"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="-"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary"/>
-
+                    <LinearLayout android:id="@+id/menuTentang" android:layout_width="match_parent" android:layout_height="64dp"
+                        android:orientation="horizontal" android:gravity="center_vertical" android:paddingHorizontal="16dp"
+                        android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ℹ️" android:textSize="24sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="Tentang Aplikasi" android:textSize="16sp" android:textStyle="bold"
+                            android:textColor="@color/text_primary" android:layout_marginStart="16dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="➔" android:textSize="18sp" android:textColor="@color/text_hint"/>
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/divider"/>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" android:layout_marginHorizontal="16dp"/>
 
-                    <!-- Peran -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingVertical="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🎭"
-                            android:textSize="18sp"/>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Peran"
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginStart="12dp"/>
-
-                        <TextView
-                            android:id="@+id/tvPeran"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="-"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/divider"/>
-
-                    <!-- Level -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingVertical="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="⭐"
-                            android:textSize="18sp"/>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Level"
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginStart="12dp"/>
-
-                        <TextView
-                            android:id="@+id/tvLevelInfo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="-"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/divider"/>
-
-                    <!-- Total Poin -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingVertical="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="💰"
-                            android:textSize="18sp"/>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Total Poin"
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginStart="12dp"/>
-
-                        <TextView
-                            android:id="@+id/tvTotalPoin"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="-"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Pengaturan -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="⚙️ Pengaturan"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:layout_marginBottom="10dp"/>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/bg_card">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
-
-                    <!-- Tentang Aplikasi -->
-                    <LinearLayout
-                        android:id="@+id/menuTentang"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="ℹ️"
-                            android:textSize="18sp"/>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Tentang Aplikasi"
-                            android:textSize="13sp"
-                            android:textColor="@color/text_primary"
-                            android:layout_marginStart="12dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="▶"
-                            android:textSize="12sp"
-                            android:textColor="@color/text_hint"/>
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/divider"/>
-
-                    <!-- Keluar -->
-                    <LinearLayout
-                        android:id="@+id/menuLogout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🚪"
-                            android:textSize="18sp"/>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Keluar"
-                            android:textSize="13sp"
-                            android:textColor="@color/error"
-                            android:textStyle="bold"
-                            android:layout_marginStart="12dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="▶"
-                            android:textSize="12sp"
-                            android:textColor="@color/error"/>
-
+                    <LinearLayout android:id="@+id/menuLogout" android:layout_width="match_parent" android:layout_height="64dp"
+                        android:orientation="horizontal" android:gravity="center_vertical" android:paddingHorizontal="16dp"
+                        android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🚪" android:textSize="24sp"/>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="Keluar" android:textSize="16sp" android:textStyle="bold"
+                            android:textColor="@color/error" android:layout_marginStart="16dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="➔" android:textSize="18sp" android:textColor="@color/error"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -498,12 +335,13 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="72dp"
         android:layout_gravity="bottom"
         android:background="@color/bg_card"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/bottom_nav_color"
-        app:itemTextColor="@color/bottom_nav_color"
-        app:labelVisibilityMode="labeled"/>
+        app:itemIconTint="@color/sky_blue"
+        app:itemTextColor="@color/text_primary"
+        app:labelVisibilityMode="labeled"
+        android:elevation="16dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

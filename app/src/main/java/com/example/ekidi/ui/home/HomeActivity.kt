@@ -3,20 +3,25 @@ package com.example.ekidi.ui.home
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivityHomeBinding
 import com.example.ekidi.ui.game.GameActivity
 import com.example.ekidi.ui.literasi.LiterasiActivity
+import com.example.ekidi.ui.literasi.MateriActivity
 import com.example.ekidi.ui.misi.MisiActivity
 import com.example.ekidi.ui.pencapaian.PencapaianActivity
 import com.example.ekidi.ui.profil.ProfilActivity
+import com.example.ekidi.utils.DecisionTreeHelper
 import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
+import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var sessionManager: SessionManager
+    private var rekomendasiSaatIni: DecisionTreeHelper.RekomendasiBelajar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,27 +35,25 @@ class HomeActivity : AppCompatActivity() {
         setupClickListeners()
         setupBottomNav()
         listenProgressRealtime()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Navbar otomatis sesuai karena item dipilih
+        loadRekomendasi()
     }
 
     private fun setupUI() {
         val nama = sessionManager.getUserName()
         val level = sessionManager.getUserLevel()
         val poin = sessionManager.getUserPoints()
-
         updateTampilan(poin, level, nama)
     }
 
-    private fun updateTampilan(poin: Int, level: Int, nama: String = sessionManager.getUserName()) {
+    private fun updateTampilan(
+        poin: Int,
+        level: Int,
+        nama: String = sessionManager.getUserName()
+    ) {
         binding.tvGreeting.text = getString(R.string.greeting, nama)
-        binding.tvLevel.text = "⭐ " + getString(R.string.level_format, level)
+        binding.tvLevel.text = getString(R.string.level_star_format, level)
         binding.tvLevelBadge.text = getString(R.string.level_format, level)
 
-        // Hitung progress bar dalam level saat ini
         val poinAwal = FirebaseHelper.poinAwalLevel(level)
         val poinTarget = FirebaseHelper.poinUntukLevelBerikutnya(level)
         val poinDiLevel = poin - poinAwal
@@ -62,48 +65,110 @@ class HomeActivity : AppCompatActivity() {
         binding.tvPoin.text = getString(R.string.poin_format, poin, poinTarget)
         binding.progressBelajar.progress = progress.coerceIn(0, 100)
 
-        val levelLabel = when {
+        binding.tvLevelLabel.text = when {
             level <= 2 -> "Pemula"
             level <= 4 -> "Berkembang"
             level <= 6 -> "Mahir"
             level <= 8 -> "Ahli"
             else -> "Master"
         }
-        binding.tvLevelLabel.text = levelLabel
     }
 
-    // ✅ Listener realtime — otomatis update saat poin bertambah
+    // ✅ Load rekomendasi dari Firebase (hasil Decision Tree)
+    private fun loadRekomendasi() {
+        val uid = FirebaseHelper.getCurrentUid() ?: return
+
+        lifecycleScope.launch {
+            val rekomendasi = FirebaseHelper.getRekomendasiTerakhir(uid)
+
+            runOnUiThread {
+                if (rekomendasi != null) {
+                    rekomendasiSaatIni = rekomendasi
+                    tampilkanRekomendasi(rekomendasi)
+                } else {
+                    // Belum ada data → tampilkan rekomendasi awal
+                    val rekAwal = DecisionTreeHelper.rekomendasiAwal(listOf(1, 2, 3, 4))
+                    rekomendasiSaatIni = rekAwal
+                    tampilkanRekomendasi(rekAwal)
+                }
+            }
+        }
+    }
+
+    private fun tampilkanRekomendasi(rek: DecisionTreeHelper.RekomendasiBelajar) {
+        // Update card rekomendasi di beranda
+        binding.tvRekomendasiJudul.text = rek.judulRekomendasi
+        binding.tvRekomendasiDesc.text = rek.deskripsi
+        binding.btnMulaiRekomendasi.text = "Mulai Sekarang ${rek.emoji}"
+    }
+
     private fun listenProgressRealtime() {
         val uid = FirebaseHelper.getCurrentUid() ?: return
         FirebaseHelper.listenUserData(uid) { poin, level ->
-            // Update session lokal
             sessionManager.updatePoints(poin)
             sessionManager.updateLevel(level)
-            // Update tampilan
-            runOnUiThread {
-                updateTampilan(poin, level)
-            }
+            runOnUiThread { updateTampilan(poin, level) }
         }
     }
 
     private fun setupClickListeners() {
         binding.cardLiterasi.setOnClickListener {
             startActivity(Intent(this, LiterasiActivity::class.java))
+            finish()
         }
         binding.cardGame.setOnClickListener {
             startActivity(Intent(this, GameActivity::class.java))
+            finish()
         }
         binding.cardMisi.setOnClickListener {
             startActivity(Intent(this, MisiActivity::class.java))
+            finish()
         }
         binding.cardPencapaian.setOnClickListener {
             startActivity(Intent(this, PencapaianActivity::class.java))
-        }
-        binding.btnMulaiRekomendasi.setOnClickListener {
-            startActivity(Intent(this, LiterasiActivity::class.java))
+            finish()
         }
         binding.ivSettings.setOnClickListener {
             startActivity(Intent(this, ProfilActivity::class.java))
+            finish()
+        }
+
+        // ✅ Tombol rekomendasi → navigasi sesuai hasil Decision Tree
+        binding.btnMulaiRekomendasi.setOnClickListener {
+            navigasiRekomendasi()
+        }
+    }
+
+    // ✅ Navigasi sesuai aksi rekomendasi dari Decision Tree
+    private fun navigasiRekomendasi() {
+        val rek = rekomendasiSaatIni ?: run {
+            startActivity(Intent(this, LiterasiActivity::class.java))
+            finish()
+            return
+        }
+
+        when (rek.aksi) {
+            DecisionTreeHelper.AksiRekomendasi.NAIK_LEVEL,
+            DecisionTreeHelper.AksiRekomendasi.ULANGI_LEVEL,
+            DecisionTreeHelper.AksiRekomendasi.BACA_MATERI -> {
+                // Buka halaman materi topik yang direkomendasikan
+                val intent = Intent(this, MateriActivity::class.java)
+                intent.putExtra("TOPIK_ID", rek.topikId)
+                startActivity(intent)
+                // Kita tidak finish() di sini karena MateriActivity adalah sub-page
+            }
+            DecisionTreeHelper.AksiRekomendasi.COBA_TOPIK_LAIN -> {
+                startActivity(Intent(this, LiterasiActivity::class.java))
+                finish()
+            }
+            DecisionTreeHelper.AksiRekomendasi.MAIN_GAME -> {
+                startActivity(Intent(this, GameActivity::class.java))
+                finish()
+            }
+            DecisionTreeHelper.AksiRekomendasi.TOPIK_SELESAI -> {
+                startActivity(Intent(this, LiterasiActivity::class.java))
+                finish()
+            }
         }
     }
 

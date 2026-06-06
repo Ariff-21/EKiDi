@@ -1,214 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bg_main">
+    android:background="@color/bg_main"
+    android:padding="20dp">
 
-    <!-- Header -->
-    <LinearLayout
+    <!-- Header Kuis -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/circle_avatar_bg"
+        android:src="@android:drawable/ic_menu_revert"
+        app:tint="@color/purple_primary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvJudulKuis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🎯 Kuis Seru"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        app:layout_constraintTop_toTopOf="@id/btnBack"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/tvSkorKuis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⭐ 0"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/gold"
+        app:layout_constraintTop_toTopOf="@id/btnBack"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/bg_level_badge"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"/>
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressKuis"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:background="@drawable/bg_splash_gradient"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:layout_height="12dp"
+        android:layout_marginTop="24dp"
+        android:progressDrawable="@drawable/bg_progress_drawable"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"/>
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@android:drawable/ic_media_previous"
-            android:background="@drawable/circle_settings_bg"
-            android:padding="8dp"
-            app:tint="#FFFFFF" />
+    <TextView
+        android:id="@+id/tvNomorSoal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Soal 1 dari 5"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/progressKuis"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-        <TextView
-            android:id="@+id/tvJudulKuis"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="🎯 Kuis Level 1"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:layout_marginStart="12dp"/>
-
-        <TextView
-            android:id="@+id/tvSkorKuis"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="⭐ 0"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"/>
-
-    </LinearLayout>
-
-    <ScrollView
+    <!-- Card Soal -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardSoal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvNomorSoal"
+        app:layout_constraintBottom_toTopOf="@id/btnLanjut">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <!-- Progress -->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tvNomorSoal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Soal 1 dari 5"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary"/>
-
-                <ProgressBar
-                    android:id="@+id/progressKuis"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="8dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="12dp"
-                    android:max="100"
-                    android:progress="20"
-                    android:progressDrawable="@drawable/bg_progress_drawable"/>
-
-            </LinearLayout>
-
-            <!-- Banner ortu -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="8dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="#FEF3C7">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="👨‍👧 Ayah/Bunda, bantu bacakan soal ini ya!"
-                    android:textSize="11sp"
-                    android:textColor="@color/icon_yellow"
-                    android:padding="10dp"
-                    android:gravity="center"/>
-
-            </androidx.cardview.widget.CardView>
-
-            <!-- Pertanyaan -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="3dp"
-                app:cardBackgroundColor="@color/bg_card">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/tvEmoji"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💻"
-                        android:textSize="52sp"
-                        android:gravity="center"
-                        android:layout_marginBottom="12dp"/>
-
-                    <TextView
-                        android:id="@+id/tvPertanyaan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pertanyaan muncul di sini"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary"
-                        android:gravity="center"
-                        android:lineSpacingExtra="4dp"/>
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- ✅ Drop Zone — hanya muncul di Level 1 & 2 (Drag & Drop) -->
-            <LinearLayout
-                android:id="@+id/dropZone"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:background="@drawable/bg_drop_zone"
-                android:gravity="center"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="10dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/tvDropHint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="⬇ Seret jawaban ke sini"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_hint"/>
-
-            </LinearLayout>
-
-            <!-- Area Jawaban -->
-            <LinearLayout
-                android:id="@+id/layoutJawaban"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:paddingHorizontal="16dp"
-                android:paddingBottom="20dp"/>
+                android:padding="24dp"
+                android:gravity="center_horizontal">
 
-            <!-- Feedback -->
-            <TextView
-                android:id="@+id/tvFeedback"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:paddingHorizontal="16dp"
-                android:layout_marginTop="12dp"
-                android:lineSpacingExtra="4dp"
-                android:visibility="gone"/>
+                <TextView
+                    android:id="@+id/tvEmoji"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:text="💻"
+                    android:textSize="64sp"
+                    android:gravity="center"
+                    android:background="@drawable/circle_menu_blue"
+                    android:elevation="4dp"/>
 
-            <!-- Tombol Lanjut -->
-            <Button
-                android:id="@+id/btnLanjut"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:text="Lanjut ➡"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/bg_button_primary"
-                android:stateListAnimator="@null"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="24dp"
-                android:visibility="gone"/>
+                <TextView
+                    android:id="@+id/tvPertanyaan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Apakah ini pertanyaan?"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:gravity="center"/>
 
-        </LinearLayout>
-    </ScrollView>
+                <!-- Drop Zone for Drag & Drop -->
+                <FrameLayout
+                    android:id="@+id/dropZone"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/bg_drop_zone"
+                    android:visibility="gone">
 
-</LinearLayout>
+                    <TextView
+                        android:id="@+id/tvDropHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Tarik jawaban ke sini"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"/>
+                </FrameLayout>
+
+                <!-- Layout Jawaban -->
+                <LinearLayout
+                    android:id="@+id/layoutJawaban"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:orientation="vertical"/>
+
+                <TextView
+                    android:id="@+id/tvFeedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Feedback"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
+                    android:gravity="center"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLanjut"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:text="Lanjutkan ➡"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        app:cornerRadius="32dp"
+        app:backgroundTint="@color/purple_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

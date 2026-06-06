@@ -22,6 +22,13 @@ class SessionManager(context: Context) {
         const val KEY_TOTAL_BADGE = "total_badge"
         const val KEY_TOTAL_PEMBELAJARAN = "total_pembelajaran"
         const val KEY_STREAK = "streak"
+        
+        // Mission Keys
+        const val MISI_HARIAN_1_STATUS = "misi_harian_1_status" // 0: belum, 1: selesai, 2: diklaim
+        const val MISI_HARIAN_2_STATUS = "misi_harian_2_status"
+        const val MISI_MINGGUAN_STATUS = "misi_mingguan_status"
+        const val MISI_SPESIAL_STATUS = "misi_spesial_status"
+        const val MISI_MINGGUAN_PROGRESS = "misi_mingguan_progress"
     }
 
     fun saveLoginSession(
@@ -72,6 +79,19 @@ class SessionManager(context: Context) {
     fun updatePoints(newPoints: Int) { prefs.edit().putInt(KEY_USER_POINTS, newPoints).apply() }
     fun updateLevel(newLevel: Int) { prefs.edit().putInt(KEY_USER_LEVEL, newLevel).apply() }
     fun updateAvatar(avatarKey: String) { prefs.edit().putString(KEY_USER_AVATAR, avatarKey).apply() }
+
+    fun setMisiStatus(key: String, status: Int) {
+        prefs.edit().putInt(key, status).apply()
+    }
+
+    fun getMisiStatus(key: String): Int = prefs.getInt(key, 0)
+
+    fun updateMisiMingguanProgress(delta: Int) {
+        val current = prefs.getInt(MISI_MINGGUAN_PROGRESS, 0)
+        prefs.edit().putInt(MISI_MINGGUAN_PROGRESS, current + delta).apply()
+    }
+
+    fun getMisiMingguanProgress(): Int = prefs.getInt(MISI_MINGGUAN_PROGRESS, 0)
 
     fun isChild(): Boolean = getUserRole() == "anak"
     fun isParent(): Boolean = getUserRole() == "orang_tua"

@@ -5,6 +5,7 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.DragEvent
 import android.view.MotionEvent
 import android.view.View
@@ -16,21 +17,30 @@ import com.example.ekidi.R
 import com.example.ekidi.data.model.SoalDatabase
 import com.example.ekidi.data.model.TipeJawaban
 import com.example.ekidi.databinding.ActivityKuisBinding
+import com.example.ekidi.utils.DecisionTreeHelper
 import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
+import com.example.ekidi.utils.SoundManager
 import kotlinx.coroutines.launch
 
 class KuisActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityKuisBinding
     private lateinit var sessionManager: SessionManager
+    private lateinit var soundManager: SoundManager
 
     private var topikId = 1
     private var levelKuis = 1
     private var soalIndex = 0
     private var skor = 0
     private var jumlahBenar = 0
+    private var jumlahKesalahan = 0
     private var sudahJawab = false
+
+    // ✅ Tracking waktu per soal untuk Decision Tree
+    private var waktuMulaiSoal = 0L
+    private var totalWaktuDetik = 0L
+    private val waktuPerSoal = mutableListOf<Long>()
 
     private val soalList by lazy {
         SoalDatabase.getSoal(topikId, levelKuis)
@@ -43,6 +53,7 @@ class KuisActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         sessionManager = SessionManager(this)
+        soundManager = SoundManager(this)
         topikId = intent.getIntExtra("TOPIK_ID", 1)
         levelKuis = intent.getIntExtra("LEVEL_KUIS", 1)
 
@@ -62,45 +73,39 @@ class KuisActivity : AppCompatActivity() {
         sudahJawab = false
         val soal = soalList[soalIndex]
 
+        // ✅ Mulai hitung waktu soal ini
+        waktuMulaiSoal = SystemClock.elapsedRealtime()
+
         // Update progress
         val progress = ((soalIndex.toFloat() / soalList.size) * 100).toInt()
         binding.progressKuis.progress = progress
         binding.tvNomorSoal.text = "Soal ${soalIndex + 1} dari ${soalList.size}"
         binding.tvSkorKuis.text = "⭐ $skor"
 
-        // Tampilkan emoji & pertanyaan
         binding.tvEmoji.text = soal.emoji.ifEmpty {
             when (topikId) { 1 -> "💻"; 2 -> "🌐"; 3 -> "🤝"; else -> "🌍" }
         }
         binding.tvPertanyaan.text = soal.pertanyaan
 
-        // Reset UI
         binding.tvFeedback.visibility = View.GONE
         binding.btnLanjut.visibility = View.GONE
         binding.layoutJawaban.removeAllViews()
 
-        // ✅ Pilih tampilan jawaban berdasarkan tipe soal
         when (soal.tipeJawaban) {
             TipeJawaban.BENAR_SALAH -> {
-                // Level 1: Pakai Drag & Drop
-                binding.dropZone.visibility = View.VISIBLE
-                binding.dropZone.setBackgroundResource(R.drawable.bg_drop_zone)
-                binding.tvDropHint.text = "⬇ Seret jawaban ke kotak di atas"
+                binding.dropZone.visibility = View.GONE
                 binding.layoutJawaban.orientation = LinearLayout.VERTICAL
-                tampilkanJawabanDragDrop(soal)
-                setupDropZone(soal)
+                tampilkanJawabanKlik(soal)
             }
             TipeJawaban.PILIHAN_EMOJI -> {
-                // Level 2: Drag & Drop
                 binding.dropZone.visibility = View.VISIBLE
                 binding.dropZone.setBackgroundResource(R.drawable.bg_drop_zone)
-                binding.tvDropHint.text = "⬇ Seret jawaban ke kotak di atas"
-                binding.layoutJawaban.orientation = LinearLayout.VERTICAL
+                binding.tvDropHint.text = "⬇ Seret jawaban ke sini"
+                binding.layoutJawaban.orientation = LinearLayout.HORIZONTAL
                 tampilkanJawabanDragDrop(soal)
                 setupDropZone(soal)
             }
             TipeJawaban.PILIHAN_TEKS -> {
-                // Level 3: Klik biasa
                 binding.dropZone.visibility = View.GONE
                 binding.layoutJawaban.orientation = LinearLayout.VERTICAL
                 tampilkanJawabanKlik(soal)
@@ -108,7 +113,6 @@ class KuisActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Level 1 & 3: Tap/Klik biasa ────────────────────────────
     private fun tampilkanJawabanKlik(soal: com.example.ekidi.data.model.Soal) {
         val pilihan = soal.pilihanJawaban.shuffled()
         pilihan.forEach { jawaban ->
@@ -117,19 +121,17 @@ class KuisActivity : AppCompatActivity() {
                 textSize = 14f
                 setTextColor(Color.parseColor("#1F2937"))
                 gravity = android.view.Gravity.CENTER
-                
-                val dp24 = (24 * resources.displayMetrics.density).toInt()
-                setPadding(dp24, dp24, dp24, dp24)
-
+                setPadding(24, 24, 24, 24)
                 setBackgroundResource(R.drawable.bg_jawaban_chip)
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply { setMargins(0, 12, 0, 12) }
+                ).apply { setMargins(0, 8, 0, 8) }
 
                 setOnClickListener {
                     if (!sudahJawab) {
                         sudahJawab = true
+                        catatWaktuJawab()
                         periksaJawaban(jawaban, soal.jawabanBenar, soal.penjelasan, this)
                     }
                 }
@@ -138,7 +140,6 @@ class KuisActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Level 2: Drag & Drop ────────────────────────────────────
     private fun tampilkanJawabanDragDrop(soal: com.example.ekidi.data.model.Soal) {
         val pilihan = soal.pilihanJawaban.shuffled()
         pilihan.forEach { jawaban ->
@@ -147,18 +148,13 @@ class KuisActivity : AppCompatActivity() {
                 textSize = 13f
                 setTextColor(getColor(R.color.purple_primary))
                 setBackgroundResource(R.drawable.bg_jawaban_chip)
-                
-                val dp32 = (32 * resources.displayMetrics.density).toInt()
-                val dp20 = (20 * resources.displayMetrics.density).toInt()
-                setPadding(dp32, dp20, dp32, dp20)
-
+                setPadding(32, 20, 32, 20)
                 gravity = android.view.Gravity.CENTER
                 layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply { setMargins(0, 12, 0, 12) }
+                ).apply { setMargins(8, 8, 8, 8) }
 
-                // ✅ Drag aktif saat sentuh pertama
                 setOnTouchListener { v, event ->
                     if (event.action == MotionEvent.ACTION_DOWN && !sudahJawab) {
                         val chipView = v as TextView
@@ -179,42 +175,34 @@ class KuisActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Setup Drop Zone untuk Level 2 ──────────────────────────
     private fun setupDropZone(soal: com.example.ekidi.data.model.Soal) {
         binding.dropZone.setOnDragListener { v, event ->
             when (event.action) {
-                DragEvent.ACTION_DRAG_STARTED -> {
+                DragEvent.ACTION_DRAG_STARTED ->
                     event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
-                }
                 DragEvent.ACTION_DRAG_ENTERED -> {
-                    v.setBackgroundResource(R.drawable.bg_role_selected)
-                    true
+                    v.setBackgroundResource(R.drawable.bg_role_selected); true
                 }
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    v.setBackgroundResource(R.drawable.bg_drop_zone)
-                    true
+                    v.setBackgroundResource(R.drawable.bg_drop_zone); true
                 }
                 DragEvent.ACTION_DROP -> {
                     val jawabanDipilih = event.clipData.getItemAt(0).text.toString()
                     val viewDrag = event.localState as? View
                     if (!sudahJawab) {
                         sudahJawab = true
+                        catatWaktuJawab()
                         viewDrag?.visibility = View.VISIBLE
                         periksaJawaban(
-                            jawabanDipilih,
-                            soal.jawabanBenar,
-                            soal.penjelasan,
-                            viewDrag as? TextView
+                            jawabanDipilih, soal.jawabanBenar,
+                            soal.penjelasan, viewDrag as? TextView
                         )
                     }
                     true
                 }
                 DragEvent.ACTION_DRAG_ENDED -> {
                     val viewDrag = event.localState as? View
-                    // Jika drag tidak sampai drop zone, tampilkan chip lagi
-                    if (!event.result && !sudahJawab) {
-                        viewDrag?.visibility = View.VISIBLE
-                    }
+                    if (!event.result && !sudahJawab) viewDrag?.visibility = View.VISIBLE
                     true
                 }
                 else -> true
@@ -222,7 +210,13 @@ class KuisActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Periksa Jawaban ─────────────────────────────────────────
+    // ✅ Catat waktu pengerjaan soal ini
+    private fun catatWaktuJawab() {
+        val waktuSoalIni = (SystemClock.elapsedRealtime() - waktuMulaiSoal) / 1000
+        waktuPerSoal.add(waktuSoalIni)
+        totalWaktuDetik += waktuSoalIni
+    }
+
     private fun periksaJawaban(
         jawabanDipilih: String,
         jawabanBenar: String,
@@ -232,13 +226,13 @@ class KuisActivity : AppCompatActivity() {
         val poinPerSoal = when (levelKuis) { 1 -> 10; 2 -> 15; else -> 20 }
 
         if (jawabanDipilih == jawabanBenar) {
+            soundManager.playCorrect()
             jumlahBenar++
             skor += poinPerSoal
             binding.tvSkorKuis.text = "⭐ $skor"
             viewDipilih?.setBackgroundResource(R.drawable.bg_jawaban_benar)
             viewDipilih?.setTextColor(Color.parseColor("#065F46"))
 
-            // Update drop zone jika drag & drop
             if (soalList[soalIndex].tipeJawaban == TipeJawaban.PILIHAN_EMOJI) {
                 binding.dropZone.setBackgroundResource(R.drawable.bg_drop_zone_benar)
                 binding.tvDropHint.text = "✅ $jawabanDipilih"
@@ -247,10 +241,13 @@ class KuisActivity : AppCompatActivity() {
             binding.tvFeedback.text = "✅ Benar! $penjelasan"
             binding.tvFeedback.setTextColor(Color.parseColor("#10B981"))
         } else {
+            soundManager.playWrong()
+            // ✅ Catat kesalahan untuk Decision Tree
+            jumlahKesalahan++
+
             viewDipilih?.setBackgroundResource(R.drawable.bg_jawaban_salah)
             viewDipilih?.setTextColor(Color.parseColor("#991B1B"))
 
-            // Update drop zone jika drag & drop
             if (soalList[soalIndex].tipeJawaban == TipeJawaban.PILIHAN_EMOJI) {
                 binding.dropZone.setBackgroundResource(R.drawable.bg_jawaban_salah)
                 binding.tvDropHint.text = "❌ $jawabanDipilih"
@@ -259,7 +256,6 @@ class KuisActivity : AppCompatActivity() {
             binding.tvFeedback.text = "❌ Belum tepat!\n💡 $penjelasan"
             binding.tvFeedback.setTextColor(Color.parseColor("#EF4444"))
 
-            // Highlight jawaban yang benar
             for (i in 0 until binding.layoutJawaban.childCount) {
                 val child = binding.layoutJawaban.getChildAt(i) as? TextView
                 if (child?.text == jawabanBenar) {
@@ -269,7 +265,6 @@ class KuisActivity : AppCompatActivity() {
             }
         }
 
-        // Nonaktifkan semua chip
         for (i in 0 until binding.layoutJawaban.childCount) {
             binding.layoutJawaban.getChildAt(i).setOnTouchListener(null)
             binding.layoutJawaban.getChildAt(i).setOnClickListener(null)
@@ -286,26 +281,11 @@ class KuisActivity : AppCompatActivity() {
         tampilkanSoal()
     }
 
-    // ─── Selesai ─────────────────────────────────────────────────
     private fun selesai() {
         val totalSoal = soalList.size
         val persentase = (jumlahBenar.toFloat() / totalSoal * 100).toInt()
         val lulus = persentase >= 70
-
-        val pesan = when {
-            persentase == 100 -> "Sempurna! Kamu bintang! 🌟"
-            persentase >= 70 -> "Bagus sekali! Kamu lulus! 🎉"
-            else -> "Semangat! Coba lagi ya! 💪"
-        }
-
-        binding.dropZone.visibility = View.GONE
-        binding.tvEmoji.text = if (lulus) "🏆" else "💪"
-        binding.tvPertanyaan.text =
-            "Kuis Selesai!\n\nBenar: $jumlahBenar/$totalSoal ($persentase%)\nSkor: +$skor poin\n\n$pesan"
-        binding.layoutJawaban.removeAllViews()
-        binding.tvFeedback.visibility = View.GONE
-        binding.progressKuis.progress = 100
-        binding.tvNomorSoal.text = "Selesai!"
+        val waktuRataRata = if (totalSoal > 0) totalWaktuDetik.toFloat() / totalSoal else 0f
 
         val levelTerbukaSekarang = intent.getIntExtra("LEVEL_TERBUKA", 1)
         val levelTerbukaBaruValue = if (lulus && levelKuis >= levelTerbukaSekarang) {
@@ -314,10 +294,32 @@ class KuisActivity : AppCompatActivity() {
             levelTerbukaSekarang
         }
 
-        // ✅ Simpan poin & progress ke Firebase
+        binding.dropZone.visibility = View.GONE
+        binding.tvEmoji.text = if (lulus) "🏆" else "💪"
+
+        val pesan = when {
+            persentase == 100 -> "Sempurna! 🌟"
+            persentase >= 70 -> "Kamu Lulus! 🎉"
+            else -> "Semangat Coba Lagi! 💪"
+        }
+
+        binding.tvPertanyaan.text =
+            "Kuis Selesai!\n\nBenar: $jumlahBenar/$totalSoal ($persentase%)\n" +
+                    "Kesalahan: $jumlahKesalahan\n" +
+                    "Waktu rata-rata: ${String.format("%.1f", waktuRataRata)} detik/soal\n" +
+                    "Skor: +$skor poin\n\n$pesan"
+
+        binding.layoutJawaban.removeAllViews()
+        binding.tvFeedback.visibility = View.GONE
+        binding.progressKuis.progress = 100
+        binding.tvNomorSoal.text = "Selesai!"
+        binding.btnLanjut.visibility = View.GONE
+
+        // ✅ Simpan hasil + jalankan Decision Tree
         val uid = FirebaseHelper.getCurrentUid()
         if (uid != null) {
             lifecycleScope.launch {
+                // Update poin
                 if (skor > 0) {
                     FirebaseHelper.updatePoin(uid, skor)
                     val poinBaru = sessionManager.getUserPoints() + skor
@@ -325,25 +327,93 @@ class KuisActivity : AppCompatActivity() {
                     sessionManager.updatePoints(poinBaru)
                     sessionManager.updateLevel(levelBaru)
                 }
+
+                // Simpan progress level jika lulus
                 if (lulus && levelTerbukaBaruValue > levelTerbukaSekarang) {
                     FirebaseHelper.simpanProgressKuis(uid, topikId, levelTerbukaBaruValue)
                     android.util.Log.d("EKIDI_DEBUG",
                         "SIMPAN PROGRESS: topik=$topikId, levelBaru=$levelTerbukaBaruValue")
                 }
+
+                // ✅ Simpan hasil kuis + jalankan Decision Tree + simpan rekomendasi
+                val hasilRekomendasi = FirebaseHelper.simpanHasilKuisAndRekomendasikan(
+                    uid = uid,
+                    topikId = topikId,
+                    levelKuis = levelKuis,
+                    skorPersen = persentase,
+                    jumlahBenar = jumlahBenar,
+                    jumlahKesalahan = jumlahKesalahan,
+                    totalWaktuDetik = totalWaktuDetik,
+                    totalSoal = totalSoal,
+                    levelTerbukaSekarang = levelTerbukaSekarang
+                )
+
+                // Tampilkan hasil rekomendasi di layar
+                hasilRekomendasi.getOrNull()?.let { rek ->
+                    runOnUiThread {
+                        binding.tvFeedback.text =
+                            "🧠 Rekomendasi EKiDi:\n${rek.pesanMotivasi}\n\n➡ ${rek.judulRekomendasi}"
+                        binding.tvFeedback.setTextColor(
+                            when (rek.kategoriPerforma) {
+                                DecisionTreeHelper.KategoriPerforma.SANGAT_BAIK ->
+                                    Color.parseColor("#10B981")
+                                DecisionTreeHelper.KategoriPerforma.BAIK ->
+                                    Color.parseColor("#7C3AED")
+                                DecisionTreeHelper.KategoriPerforma.CUKUP ->
+                                    Color.parseColor("#F59E0B")
+                                DecisionTreeHelper.KategoriPerforma.PERLU_LATIHAN ->
+                                    Color.parseColor("#EF4444")
+                            }
+                        )
+                        binding.tvFeedback.visibility = View.VISIBLE
+
+                        binding.btnLanjut.text = when {
+                            !lulus -> "🔄 Coba Lagi"
+                            levelKuis < 3 -> "🔓 Level ${levelKuis + 1} Terbuka!"
+                            else -> "🏆 Topik Selesai!"
+                        }
+                        binding.btnLanjut.visibility = View.VISIBLE
+                        binding.btnLanjut.setOnClickListener {
+                            val resultIntent = Intent()
+                            resultIntent.putExtra("LEVEL_TERBUKA_BARU", levelTerbukaBaruValue)
+                            setResult(RESULT_OK, resultIntent)
+                            finish()
+                        }
+                    }
+                } ?: run {
+                    // Fallback jika Decision Tree gagal
+                    runOnUiThread {
+                        binding.btnLanjut.text = when {
+                            !lulus -> "🔄 Coba Lagi"
+                            levelKuis < 3 -> "🔓 Level ${levelKuis + 1} Terbuka!"
+                            else -> "🏆 Topik Selesai!"
+                        }
+                        binding.btnLanjut.visibility = View.VISIBLE
+                        binding.btnLanjut.setOnClickListener {
+                            val resultIntent = Intent()
+                            resultIntent.putExtra("LEVEL_TERBUKA_BARU", levelTerbukaBaruValue)
+                            setResult(RESULT_OK, resultIntent)
+                            finish()
+                        }
+                    }
+                }
+            }
+        } else {
+            binding.btnLanjut.text = if (lulus) "Selesai 🏠" else "🔄 Coba Lagi"
+            binding.btnLanjut.visibility = View.VISIBLE
+            binding.btnLanjut.setOnClickListener {
+                val resultIntent = Intent()
+                resultIntent.putExtra("LEVEL_TERBUKA_BARU", levelTerbukaBaruValue)
+                setResult(RESULT_OK, resultIntent)
+                finish()
             }
         }
+    }
 
-        binding.btnLanjut.text = when {
-            !lulus -> "🔄 Coba Lagi"
-            levelKuis < 3 -> "🔓 Level ${levelKuis + 1} Terbuka!"
-            else -> "🏆 Topik Selesai!"
-        }
-        binding.btnLanjut.visibility = View.VISIBLE
-        binding.btnLanjut.setOnClickListener {
-            val resultIntent = Intent()
-            resultIntent.putExtra("LEVEL_TERBUKA_BARU", levelTerbukaBaruValue)
-            setResult(RESULT_OK, resultIntent)
-            finish()
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::soundManager.isInitialized) {
+            soundManager.release()
         }
     }
 }

@@ -8,48 +8,52 @@
 
     <!-- Header -->
     <LinearLayout
+        android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="100dp"
         android:background="@drawable/bg_splash_gradient"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="20dp"
         android:gravity="center_vertical">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@android:drawable/ic_media_previous"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@android:drawable/ic_menu_revert"
             android:background="@drawable/circle_settings_bg"
-            android:padding="8dp"
-            android:tint="#FFFFFF"/>
+            android:padding="10dp"
+            app:tint="#FFFFFF" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="🧭 Jelajahi Misi"
-            android:textSize="18sp"
+            android:text="🧭 Petualangan Misi"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_marginStart="12dp"/>
+            android:layout_marginStart="16dp"/>
 
         <TextView
             android:id="@+id/tvStreak"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="🔥 0 Hari"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"/>
+            android:textColor="#FFFFFF"
+            android:background="@drawable/bg_level_badge"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"/>
 
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="75dp"
-        android:padding="16dp"
+        android:layout_marginTop="85dp"
+        android:padding="20dp"
         android:clipToPadding="false"
         android:paddingBottom="100dp">
 
@@ -62,10 +66,81 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="@color/sunny_yellow_light">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔥"
+                        android:textSize="44sp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Semangat Belajar!"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/sunny_yellow"/>
+
+                        <TextView
+                            android:id="@+id/tvStreakDesc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ayo selesaikan misi hari ini!"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginTop="4dp"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvStreakAngka"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/sunny_yellow"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Misi Harian -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📅 Misi Hari Ini"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="3dp"
-                app:cardBackgroundColor="#FEF3C7">
+                android:layout_marginStart="4dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardMisiHarian1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/bg_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -75,95 +150,26 @@
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔥"
-                        android:textSize="36sp"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Streak Harian"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/icon_yellow"/>
-
-                        <TextView
-                            android:id="@+id/tvStreakDesc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Selesaikan misi hari ini untuk jaga streakmu!"
-                            android:textSize="11sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="2dp"/>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tvStreakAngka"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="28sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/icon_yellow"/>
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Misi Harian -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📅 Misi Harian"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:layout_marginBottom="10dp"/>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardMisiHarian1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/bg_card">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="14dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         android:text="📖"
-                        android:textSize="26sp"
+                        android:textSize="28sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_menu_blue"/>
+                        android:background="@drawable/circle_menu_blue"
+                        android:elevation="4dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Baca 1 Materi Literasi"
-                            android:textSize="13sp"
+                            android:text="Baca 1 Materi"
+                            android:textSize="15sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
@@ -171,23 +177,36 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Hadiah: +20 poin ⭐"
-                            android:textSize="11sp"
-                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textColor="@color/sky_blue"
+                            android:textStyle="bold"
                             android:layout_marginTop="2dp"/>
 
                     </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnClaimHarian1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:text="Klaim"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        app:cornerRadius="24dp"
+                        android:backgroundTint="@color/sky_blue"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/tvStatusMisiHarian1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Mulai"
-                        android:textSize="11sp"
+                        android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
                         android:background="@drawable/bg_button_primary"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="6dp"/>
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -196,38 +215,39 @@
                 android:id="@+id/cardMisiHarian2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
                 app:cardBackgroundColor="@color/bg_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="14dp"
+                    android:padding="16dp"
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         android:text="🎮"
-                        android:textSize="26sp"
+                        android:textSize="28sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_menu_green"/>
+                        android:background="@drawable/circle_menu_green"
+                        android:elevation="4dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Main Game 1 Kali"
-                            android:textSize="13sp"
+                            android:text="Main Game"
+                            android:textSize="15sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
@@ -235,23 +255,36 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Hadiah: +15 poin ⭐"
-                            android:textSize="11sp"
-                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textColor="@color/leaf_green"
+                            android:textStyle="bold"
                             android:layout_marginTop="2dp"/>
 
                     </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnClaimHarian2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:text="Klaim"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        app:cornerRadius="24dp"
+                        android:backgroundTint="@color/leaf_green"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/tvStatusMisiHarian2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Mulai"
-                        android:textSize="11sp"
+                        android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
                         android:background="@drawable/bg_button_primary"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="6dp"/>
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -261,66 +294,69 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📆 Misi Mingguan"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="4dp"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardMisiMingguan1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
                 app:cardBackgroundColor="@color/bg_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="14dp"
+                    android:padding="16dp"
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         android:text="🏆"
-                        android:textSize="26sp"
+                        android:textSize="28sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_menu_yellow"/>
+                        android:background="@drawable/circle_menu_yellow"
+                        android:elevation="4dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Selesaikan 5 Misi Harian"
-                            android:textSize="13sp"
+                            android:text="Misi Mingguan"
+                            android:textSize="15sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Hadiah: +100 poin + Badge 🏅"
-                            android:textSize="11sp"
-                            android:textColor="@color/text_secondary"
+                            android:text="Hadiah: +100 poin 🌟"
+                            android:textSize="12sp"
+                            android:textColor="@color/sunny_yellow"
+                            android:textStyle="bold"
                             android:layout_marginTop="2dp"/>
 
-                        <!-- Progress bar misi mingguan -->
+                        <!-- Progress bar -->
                         <ProgressBar
                             android:id="@+id/progressMisiMingguan"
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="6dp"
-                            android:layout_marginTop="6dp"
+                            android:layout_height="10dp"
+                            android:layout_marginTop="8dp"
                             android:max="5"
                             android:progress="0"
                             android:progressDrawable="@drawable/bg_progress_drawable"/>
@@ -330,11 +366,23 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0/5 misi selesai"
-                            android:textSize="10sp"
+                            android:textSize="11sp"
                             android:textColor="@color/text_hint"
-                            android:layout_marginTop="3dp"/>
+                            android:layout_marginTop="4dp"/>
 
                     </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnClaimMingguan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:text="Klaim"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        app:cornerRadius="24dp"
+                        android:backgroundTint="@color/sunny_yellow"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -344,76 +392,91 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="🌟 Misi Spesial"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="4dp"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardMisiSpesial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="3dp"
-                app:cardBackgroundColor="@color/card_purple">
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="@color/soft_purple_light">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="14dp"
+                    android:padding="20dp"
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         android:text="🌟"
-                        android:textSize="26sp"
+                        android:textSize="32sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_menu_purple"/>
+                        android:background="@drawable/circle_menu_purple"
+                        android:elevation="4dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Juara Game Minggu Ini!"
-                            android:textSize="13sp"
+                            android:text="Juara Digital!"
+                            android:textSize="16sp"
                             android:textStyle="bold"
-                            android:textColor="@color/icon_purple"/>
+                            android:textColor="@color/soft_purple"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Capai skor 50+ di semua level game"
-                            android:textSize="11sp"
+                            android:text="Selesaikan semua kuis!"
+                            android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Hadiah: +200 poin + Badge Spesial 🏅"
-                            android:textSize="11sp"
-                            android:textColor="@color/icon_purple"
+                            android:text="Hadiah: +200 poin 🏅"
+                            android:textSize="12sp"
+                            android:textColor="@color/soft_purple"
                             android:textStyle="bold"
                             android:layout_marginTop="4dp"/>
 
                     </LinearLayout>
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnClaimSpesial"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:text="Klaim"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        app:cornerRadius="24dp"
+                        android:backgroundTint="@color/soft_purple"
+                        android:visibility="gone"/>
+
                     <TextView
+                        android:id="@+id/tvIconSpesial"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="▶"
-                        android:textSize="16sp"
-                        android:textColor="@color/icon_purple"/>
+                        android:textSize="20sp"
+                        android:textColor="@color/soft_purple"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -424,12 +487,13 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="72dp"
         android:layout_gravity="bottom"
         android:background="@color/bg_card"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/bottom_nav_color"
-        app:itemTextColor="@color/bottom_nav_color"
-        app:labelVisibilityMode="labeled"/>
+        app:itemIconTint="@color/sky_blue"
+        app:itemTextColor="@color/text_primary"
+        app:labelVisibilityMode="labeled"
+        android:elevation="16dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

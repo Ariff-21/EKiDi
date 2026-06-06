@@ -2,19 +2,26 @@ package com.example.ekidi.ui.misi
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivityMisiBinding
 import com.example.ekidi.ui.home.HomeActivity
 import com.example.ekidi.ui.game.GameActivity
 import com.example.ekidi.ui.literasi.LiterasiActivity
 import com.example.ekidi.ui.profil.ProfilActivity
+import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
+import com.example.ekidi.utils.SoundManager
+import kotlinx.coroutines.launch
 
 class MisiActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMisiBinding
     private lateinit var sessionManager: SessionManager
+    private lateinit var soundManager: SoundManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +30,7 @@ class MisiActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         sessionManager = SessionManager(this)
+        soundManager = SoundManager(this)
 
         setupUI()
         setupClickListeners()
@@ -32,34 +40,121 @@ class MisiActivity : AppCompatActivity() {
     private fun setupUI() {
         val streak = sessionManager.getStreak()
         binding.tvStreak.text = "🔥 $streak Hari"
-        binding.tvStreakAngka.text = "$streak"
+        binding.tvStreakAngka.text = streak.toString()
         binding.tvStreakDesc.text = if (streak == 0)
-            "Selesaikan misi hari ini untuk mulai streak!"
+            "Mulai petualanganmu hari ini!"
         else
-            "Keren! Pertahankan streakmu!"
+            "Hebat! Pertahankan semangatmu!"
+
+        updateMisiViews()
+    }
+
+    private fun updateMisiViews() {
+        // Misi Harian 1
+        val statusH1 = sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_1_STATUS)
+        updateSingleMisiUI(statusH1, binding.tvStatusMisiHarian1, binding.btnClaimHarian1)
+
+        // Misi Harian 2
+        val statusH2 = sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_2_STATUS)
+        updateSingleMisiUI(statusH2, binding.tvStatusMisiHarian2, binding.btnClaimHarian2)
+
+        // Misi Mingguan
+        val progressMingguan = sessionManager.getMisiMingguanProgress()
+        binding.progressMisiMingguan.progress = progressMingguan
+        binding.tvProgressMisiMingguan.text = "$progressMingguan/5 misi selesai"
+        
+        val statusM = sessionManager.getMisiStatus(SessionManager.MISI_MINGGUAN_STATUS)
+        if (statusM == 1) {
+            binding.btnClaimMingguan.visibility = View.VISIBLE
+        } else if (statusM == 2) {
+            binding.btnClaimMingguan.visibility = View.GONE
+            // Optional: show "Selesai" label
+        }
+
+        // Misi Spesial
+        val statusS = sessionManager.getMisiStatus(SessionManager.MISI_SPESIAL_STATUS)
+        if (statusS == 1) {
+            binding.btnClaimSpesial.visibility = View.VISIBLE
+            binding.tvIconSpesial.visibility = View.GONE
+        } else if (statusS == 2) {
+            binding.btnClaimSpesial.visibility = View.GONE
+            binding.tvIconSpesial.text = "✅"
+            binding.tvIconSpesial.visibility = View.VISIBLE
+        }
+    }
+
+    private fun updateSingleMisiUI(status: Int, statusTv: View, claimBtn: View) {
+        when (status) {
+            0 -> { // Belum
+                statusTv.visibility = View.VISIBLE
+                if (statusTv is android.widget.TextView) statusTv.text = "Mulai"
+                claimBtn.visibility = View.GONE
+            }
+            1 -> { // Selesai, belum klaim
+                statusTv.visibility = View.GONE
+                claimBtn.visibility = View.VISIBLE
+            }
+            2 -> { // Sudah klaim
+                statusTv.visibility = View.VISIBLE
+                if (statusTv is android.widget.TextView) {
+                    statusTv.text = "Selesai ✅"
+                    statusTv.setBackgroundResource(R.drawable.bg_level_badge)
+                    statusTv.setTextColor(getColor(R.color.sky_blue))
+                }
+                claimBtn.visibility = View.GONE
+            }
+        }
     }
 
     private fun setupClickListeners() {
         binding.btnBack.setOnClickListener { finish() }
 
-        // Misi Harian 1 — Baca Materi
         binding.cardMisiHarian1.setOnClickListener {
-            startActivity(Intent(this, LiterasiActivity::class.java))
+            if (sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_1_STATUS) == 0) {
+                startActivity(Intent(this, LiterasiActivity::class.java))
+            }
         }
 
-        // Misi Harian 2 — Main Game
         binding.cardMisiHarian2.setOnClickListener {
-            startActivity(Intent(this, GameActivity::class.java))
+            if (sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_2_STATUS) == 0) {
+                startActivity(Intent(this, GameActivity::class.java))
+            }
         }
 
-        // Misi Mingguan
-        binding.cardMisiMingguan1.setOnClickListener {
-            // Info saja, progress otomatis dari aktivitas user
-        }
+        binding.btnClaimHarian1.setOnClickListener { claimReward(SessionManager.MISI_HARIAN_1_STATUS, 20) }
+        binding.btnClaimHarian2.setOnClickListener { claimReward(SessionManager.MISI_HARIAN_2_STATUS, 15) }
+        binding.btnClaimMingguan.setOnClickListener { claimReward(SessionManager.MISI_MINGGUAN_STATUS, 100) }
+        binding.btnClaimSpesial.setOnClickListener { claimReward(SessionManager.MISI_SPESIAL_STATUS, 200) }
+    }
 
-        // Misi Spesial
-        binding.cardMisiSpesial.setOnClickListener {
-            startActivity(Intent(this, GameActivity::class.java))
+    private fun claimReward(misiKey: String, points: Int) {
+        soundManager.playCorrect()
+        sessionManager.setMisiStatus(misiKey, 2)
+        
+        val uid = FirebaseHelper.getCurrentUid()
+        if (uid != null) {
+            lifecycleScope.launch {
+                FirebaseHelper.updatePoin(uid, points)
+                val newPoints = sessionManager.getUserPoints() + points
+                sessionManager.updatePoints(newPoints)
+                sessionManager.updateLevel(FirebaseHelper.hitungLevel(newPoints))
+                
+                runOnUiThread {
+                    Toast.makeText(this@MisiActivity, "Selamat! Kamu dapat $points poin! ⭐", Toast.LENGTH_SHORT).show()
+                    updateMisiViews()
+                }
+            }
+        }
+        
+        // Update mingguan progress if harian claimed
+        if (misiKey == SessionManager.MISI_HARIAN_1_STATUS || misiKey == SessionManager.MISI_HARIAN_2_STATUS) {
+            val currentProgress = sessionManager.getMisiMingguanProgress()
+            if (currentProgress < 5) {
+                sessionManager.updateMisiMingguanProgress(1)
+                if (sessionManager.getMisiMingguanProgress() >= 5) {
+                    sessionManager.setMisiStatus(SessionManager.MISI_MINGGUAN_STATUS, 1)
+                }
+            }
         }
     }
 
@@ -91,5 +186,10 @@ class MisiActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        soundManager.release()
     }
 }

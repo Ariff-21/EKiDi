@@ -43,9 +43,9 @@ class PencapaianActivity : AppCompatActivity() {
             ((poinDiLevel.toFloat() / totalPoinDiLevel) * 100).toInt()
         } else 100
 
-        binding.tvLevelSaatIni.text = "Level $level"
-        binding.tvPoinSaatIni.text = "$poin poin"
-        binding.tvPoinTarget.text = "Target: $poinTarget poin"
+        binding.tvLevelSaatIni.text = getString(R.string.level_format, level)
+        binding.tvPoinSaatIni.text = getString(R.string.skor_format, poin)
+        binding.tvPoinTarget.text = "Target: " + getString(R.string.skor_format, poinTarget)
         binding.progressLevel.progress = progress.coerceIn(0, 100)
 
         // Stats dari session

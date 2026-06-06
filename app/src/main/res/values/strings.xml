@@ -7,6 +7,8 @@
     <string name="register">Daftar</string>
     <string name="greeting">Halo, %s!</string>
     <string name="level_format">Level %d</string>
+    <string name="level_star_format">⭐ Level %d</string>
+    <string name="streak_format">🔥 %d Hari</string>
     <string name="poin_format">%d poin dari %d poin</string>
     <string name="menu_literasi">Literasi Digital</string>
     <string name="menu_game">Game Edukatif</string>

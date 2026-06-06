@@ -44,10 +44,14 @@ class ProfilActivity : AppCompatActivity() {
 
         binding.tvNamaProfil.text = nama
         binding.tvUsername.text = nama
-        binding.tvLevelProfil.text = "⭐ Level $level"
-        binding.tvPoinProfil.text = "$poin Poin"
-        binding.tvLevelInfo.text = "Level $level"
-        binding.tvTotalPoin.text = "$poin poin"
+        binding.tvLevelProfil.text = getString(R.string.level_star_format, level)
+        binding.tvPoinProfil.text = getString(R.string.skor_format, poin)
+        binding.tvLevelInfo.text = getString(R.string.level_format, level)
+        binding.tvTotalPoin.text = getString(R.string.skor_format, poin)
+        
+        binding.tvStreakProfil.text = getString(R.string.streak_format, sessionManager.getStreak())
+        binding.tvBadgeProfil.text = sessionManager.getTotalBadge().toString()
+        binding.tvMateriProfil.text = sessionManager.getTotalPembelajaran().toString()
 
         val roleLabel = when (role) {
             "anak" -> "👦 Anak"
@@ -62,10 +66,8 @@ class ProfilActivity : AppCompatActivity() {
     private fun setupClickListeners() {
         binding.btnBack.setOnClickListener { finish() }
 
-        // Ganti Avatar
         binding.btnGantiAvatar.setOnClickListener {
-            val isVisible = binding.cardPilihAvatar.visibility == View.VISIBLE
-            binding.cardPilihAvatar.visibility = if (isVisible) View.GONE else View.VISIBLE
+            binding.cardPilihAvatar.visibility = if (binding.cardPilihAvatar.visibility == View.VISIBLE) View.GONE else View.VISIBLE
         }
 
         // Pilihan avatar

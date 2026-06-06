@@ -10,30 +10,30 @@
     <LinearLayout
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="100dp"
         android:background="@drawable/bg_splash_gradient"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="20dp"
         android:gravity="center_vertical">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@android:drawable/ic_media_previous"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@android:drawable/ic_menu_revert"
             android:background="@drawable/circle_settings_bg"
-            android:padding="8dp"
+            android:padding="10dp"
             app:tint="#FFFFFF" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="📖 Literasi Digital"
-            android:textSize="18sp"
+            android:text="📖 Belajar Seru"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_marginStart="12dp"/>
+            android:layout_marginStart="16dp"/>
 
     </LinearLayout>
 
@@ -41,10 +41,10 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="75dp"
-        android:padding="16dp"
+        android:layout_marginTop="85dp"
+        android:padding="20dp"
         android:clipToPadding="false"
-        android:paddingBottom="100dp">
+        android:paddingBottom="120dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,46 +55,46 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="#EDE9FE">
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="@color/soft_purple_light">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp"
+                    android:padding="20dp"
                     android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="💡"
-                        android:textSize="32sp"/>
+                        android:textSize="40sp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ayo Belajar Literasi Digital!"
-                            android:textSize="14sp"
+                            android:text="Ayo Jadi Pintar Digital!"
+                            android:textSize="16sp"
                             android:textStyle="bold"
-                            android:textColor="@color/purple_primary"/>
+                            android:textColor="@color/soft_purple"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Pilih topik yang ingin kamu pelajari"
-                            android:textSize="12sp"
+                            android:text="Pilih petualangan belajarmu di bawah ini"
+                            android:textSize="13sp"
                             android:textColor="@color/text_secondary"
-                            android:layout_marginTop="2dp"/>
+                            android:layout_marginTop="4dp"/>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -104,57 +104,59 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Topik Pembelajaran"
-                android:textSize="14sp"
+                android:text="Topik Petualangan 🗺️"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="4dp"/>
 
             <!-- Topik 1 -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardTopik1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="4dp"
                 app:cardBackgroundColor="@color/bg_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="14dp"
+                    android:padding="16dp"
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         android:text="💻"
-                        android:textSize="28sp"
+                        android:textSize="32sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_menu_blue"/>
+                        android:background="@drawable/circle_menu_blue"
+                        android:elevation="4dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Pengenalan Perangkat Digital"
-                            android:textSize="13sp"
+                            android:text="Kenal Perangkat Digital"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Belajar mengenal komputer, tablet, dan HP"
-                            android:textSize="11sp"
+                            android:text="Komputer, Tablet, dan HP"
+                            android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp"/>
 
@@ -162,25 +164,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:layout_marginTop="6dp">
+                            android:layout_marginTop="8dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="⭐ Pemula"
-                                android:textSize="10sp"
-                                android:textColor="@color/gold"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/sky_blue"
                                 android:background="@drawable/bg_level_badge"
-                                android:paddingHorizontal="8dp"
-                                android:paddingVertical="2dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="• 5 Materi"
-                                android:textSize="10sp"
-                                android:textColor="@color/text_hint"
-                                android:layout_marginStart="8dp"/>
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="3dp"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -188,9 +183,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="▶"
-                        android:textSize="16sp"
-                        android:textColor="@color/purple_primary"/>
+                        android:text="➔"
+                        android:textSize="24sp"
+                        android:textColor="@color/sky_blue"
+                        android:layout_marginEnd="8dp"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -200,46 +196,47 @@
                 android:id="@+id/cardTopik2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="4dp"
                 app:cardBackgroundColor="@color/bg_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="14dp"
+                    android:padding="16dp"
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         android:text="🌐"
-                        android:textSize="28sp"
+                        android:textSize="32sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_menu_green"/>
+                        android:background="@drawable/circle_menu_green"
+                        android:elevation="4dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Keamanan Internet"
-                            android:textSize="13sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Cara aman berinternet dan melindungi diri"
-                            android:textSize="11sp"
+                            android:text="Ayo Aman di Internet"
+                            android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp"/>
 
@@ -247,25 +244,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:layout_marginTop="6dp">
+                            android:layout_marginTop="8dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="⭐ Pemula"
-                                android:textSize="10sp"
-                                android:textColor="@color/gold"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/leaf_green"
                                 android:background="@drawable/bg_level_badge"
-                                android:paddingHorizontal="8dp"
-                                android:paddingVertical="2dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="• 4 Materi"
-                                android:textSize="10sp"
-                                android:textColor="@color/text_hint"
-                                android:layout_marginStart="8dp"/>
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="3dp"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -273,9 +263,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="▶"
-                        android:textSize="16sp"
-                        android:textColor="@color/purple_primary"/>
+                        android:text="➔"
+                        android:textSize="24sp"
+                        android:textColor="@color/leaf_green"
+                        android:layout_marginEnd="8dp"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -285,46 +276,47 @@
                 android:id="@+id/cardTopik3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="4dp"
                 app:cardBackgroundColor="@color/bg_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="14dp"
+                    android:padding="16dp"
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         android:text="🤝"
-                        android:textSize="28sp"
+                        android:textSize="32sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_menu_purple"/>
+                        android:background="@drawable/circle_menu_purple"
+                        android:elevation="4dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Etika Digital"
-                            android:textSize="13sp"
+                            android:text="Sopan di Internet"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Sopan santun dan etika di dunia digital"
-                            android:textSize="11sp"
+                            android:text="Etika &amp; Sopan Santun"
+                            android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp"/>
 
@@ -332,25 +324,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:layout_marginTop="6dp">
+                            android:layout_marginTop="8dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="⭐⭐ Menengah"
-                                android:textSize="10sp"
-                                android:textColor="@color/gold"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/soft_purple"
                                 android:background="@drawable/bg_level_badge"
-                                android:paddingHorizontal="8dp"
-                                android:paddingVertical="2dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="• 4 Materi"
-                                android:textSize="10sp"
-                                android:textColor="@color/text_hint"
-                                android:layout_marginStart="8dp"/>
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="3dp"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -358,9 +343,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="▶"
-                        android:textSize="16sp"
-                        android:textColor="@color/purple_primary"/>
+                        android:text="➔"
+                        android:textSize="24sp"
+                        android:textColor="@color/soft_purple"
+                        android:layout_marginEnd="8dp"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -370,46 +356,47 @@
                 android:id="@+id/cardTopik4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="4dp"
                 app:cardBackgroundColor="@color/bg_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="14dp"
+                    android:padding="16dp"
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         android:text="🌍"
-                        android:textSize="28sp"
+                        android:textSize="32sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_menu_yellow"/>
+                        android:background="@drawable/circle_menu_yellow"
+                        android:elevation="4dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Dunia Online"
-                            android:textSize="13sp"
+                            android:text="Jelajahi Dunia Online"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Mengenal dunia online dan media sosial"
-                            android:textSize="11sp"
+                            android:text="Mengenal Media Sosial"
+                            android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp"/>
 
@@ -417,25 +404,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:layout_marginTop="6dp">
+                            android:layout_marginTop="8dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="⭐⭐ Menengah"
-                                android:textSize="10sp"
-                                android:textColor="@color/gold"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/sunny_yellow"
                                 android:background="@drawable/bg_level_badge"
-                                android:paddingHorizontal="8dp"
-                                android:paddingVertical="2dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="• 5 Materi"
-                                android:textSize="10sp"
-                                android:textColor="@color/text_hint"
-                                android:layout_marginStart="8dp"/>
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="3dp"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -443,9 +423,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="▶"
-                        android:textSize="16sp"
-                        android:textColor="@color/purple_primary"/>
+                        android:text="➔"
+                        android:textSize="24sp"
+                        android:textColor="@color/sunny_yellow"
+                        android:layout_marginEnd="8dp"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -457,12 +438,13 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="72dp"
         android:layout_gravity="bottom"
         android:background="@color/bg_card"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/bottom_nav_color"
-        app:itemTextColor="@color/bottom_nav_color"
-        app:labelVisibilityMode="labeled"/>
+        app:itemIconTint="@color/sky_blue"
+        app:itemTextColor="@color/text_primary"
+        app:labelVisibilityMode="labeled"
+        android:elevation="16dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

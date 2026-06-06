@@ -2,12 +2,17 @@ package com.example.ekidi.utils
 
 import android.content.Context
 import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.media.SoundPool
-import com.example.ekidi.R
 
-class SoundManager(context: Context) {
-    private var soundPool: SoundPool
-    private var soundMap: MutableMap<Int, Int> = mutableMapOf()
+class SoundManager(private val context: Context) {
+
+    private var soundPool: SoundPool? = null
+    private var soundCorrect: Int = 0
+    private var soundWrong: Int = 0
+    private var soundClick: Int = 0
+    
+    private var mediaPlayer: MediaPlayer? = null
 
     init {
         val audioAttributes = AudioAttributes.Builder()
@@ -20,36 +25,63 @@ class SoundManager(context: Context) {
             .setAudioAttributes(audioAttributes)
             .build()
 
-        // Load sounds - assumes files exist in res/raw
-        // I will use try-catch or checks if resources exist to avoid crashes if files are missing
-        loadSound(context, SOUND_CLICK, "click")
-        loadSound(context, SOUND_CORRECT, "correct")
-        loadSound(context, SOUND_WRONG, "wrong")
-        loadSound(context, SOUND_SUCCESS, "success_level")
+        loadSounds()
     }
 
-    private fun loadSound(context: Context, key: Int, name: String) {
-        val resId = context.resources.getIdentifier(name, "raw", context.packageName)
-        if (resId != 0) {
-            soundMap[key] = soundPool.load(context, resId, 1)
+    private fun loadSounds() {
+        soundCorrect = loadRawResource("correct_sound")
+        soundWrong = loadRawResource("wrong_sound")
+        soundClick = loadRawResource("click_sound")
+    }
+
+    private fun loadRawResource(name: String): Int {
+        val id = context.resources.getIdentifier(name, "raw", context.packageName)
+        return if (id != 0) {
+            soundPool?.load(context, id, 1) ?: 0
+        } else 0
+    }
+
+    fun playCorrect() {
+        if (soundCorrect != 0) soundPool?.play(soundCorrect, 1f, 1f, 0, 0, 1f)
+    }
+
+    fun playWrong() {
+        if (soundWrong != 0) soundPool?.play(soundWrong, 1f, 1f, 0, 0, 1f)
+    }
+
+    fun playClick() {
+        if (soundClick != 0) soundPool?.play(soundClick, 1f, 1f, 0, 0, 1f)
+    }
+
+    fun startBackgroundMusic(name: String) {
+        val id = context.resources.getIdentifier(name, "raw", context.packageName)
+        if (id != 0) {
+            startBackgroundMusic(id)
         }
     }
 
-    fun playSound(soundKey: Int) {
-        val soundId = soundMap[soundKey]
-        if (soundId != null) {
-            soundPool.play(soundId, 1.0f, 1.0f, 1, 0, 1.0f)
+    private fun startBackgroundMusic(resId: Int) {
+        stopBackgroundMusic()
+        try {
+            mediaPlayer = MediaPlayer.create(context, resId).apply {
+                isLooping = true
+                setVolume(0.4f, 0.4f)
+                start()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+    }
+
+    fun stopBackgroundMusic() {
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 
     fun release() {
-        soundPool.release()
-    }
-
-    companion object {
-        const val SOUND_CLICK = 1
-        const val SOUND_CORRECT = 2
-        const val SOUND_WRONG = 3
-        const val SOUND_SUCCESS = 4
+        soundPool?.release()
+        soundPool = null
+        stopBackgroundMusic()
     }
 }

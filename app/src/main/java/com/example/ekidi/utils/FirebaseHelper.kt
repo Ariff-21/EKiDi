@@ -11,6 +11,7 @@ object FirebaseHelper {
 
     private const val COL_USERS = "users"
     private const val COL_PROGRESS = "progress"
+    private const val COL_HASIL_KUIS = "hasil_kuis"
     private const val COL_HASIL_GAME = "hasil_game"
 
     // ─── Auth: Register ──────────────────────────────────────────
@@ -37,7 +38,13 @@ object FirebaseHelper {
                 "totalPembelajaran" to 0,
                 "streak" to 0,
                 "avatar" to "🐶",
-                "createdAt" to System.currentTimeMillis()
+                "createdAt" to System.currentTimeMillis(),
+                // ✅ Data rekomendasi terakhir
+                "rekomendasiTopikId" to 1,
+                "rekomendasiLevel" to 1,
+                "rekomendasiJudul" to "Mulai Belajar! 🎯",
+                "rekomendasiDesc" to "Ayo mulai petualangan belajar literasi digitalmu!",
+                "rekomendasiEmoji" to "🎯"
             )
             db.collection(COL_USERS).document(uid).set(userData).await()
             Result.success(uid)
@@ -123,7 +130,106 @@ object FirebaseHelper {
         }
     }
 
-    // ─── Ambil Data User Realtime (untuk Beranda) ────────────────
+    // ─── ✅ Simpan Hasil Kuis + Jalankan Decision Tree ───────────
+    suspend fun simpanHasilKuisAndRekomendasikan(
+        uid: String,
+        topikId: Int,
+        levelKuis: Int,
+        skorPersen: Int,
+        jumlahBenar: Int,
+        jumlahKesalahan: Int,
+        totalWaktuDetik: Long,
+        totalSoal: Int,
+        levelTerbukaSekarang: Int
+    ): Result<DecisionTreeHelper.RekomendasiBelajar> {
+        return try {
+            val waktuRataRata = if (totalSoal > 0)
+                totalWaktuDetik.toFloat() / totalSoal
+            else 0f
+
+            // Simpan hasil kuis ke Firestore
+            val hasilKuis = hashMapOf(
+                "uid" to uid,
+                "topikId" to topikId,
+                "levelKuis" to levelKuis,
+                "skorPersen" to skorPersen,
+                "jumlahBenar" to jumlahBenar,
+                "jumlahKesalahan" to jumlahKesalahan,
+                "waktuRataRata" to waktuRataRata,
+                "totalSoal" to totalSoal,
+                "timestamp" to System.currentTimeMillis()
+            )
+            db.collection(COL_USERS)
+                .document(uid)
+                .collection(COL_HASIL_KUIS)
+                .add(hasilKuis)
+                .await()
+
+            // ✅ Jalankan Decision Tree
+            val rekomendasi = DecisionTreeHelper.rekomendasikan(
+                topikId = topikId,
+                levelKuis = levelKuis,
+                skorPersen = skorPersen,
+                jumlahKesalahan = jumlahKesalahan,
+                waktuRataRata = waktuRataRata,
+                levelTerbukaSekarang = levelTerbukaSekarang
+            )
+
+            // ✅ Simpan rekomendasi ke dokumen user (untuk ditampilkan di Beranda)
+            db.collection(COL_USERS).document(uid).update(
+                mapOf(
+                    "rekomendasiTopikId" to rekomendasi.topikId,
+                    "rekomendasiLevel" to rekomendasi.levelRekomendasi,
+                    "rekomendasiJudul" to rekomendasi.judulRekomendasi,
+                    "rekomendasiDesc" to rekomendasi.deskripsi,
+                    "rekomendasiEmoji" to rekomendasi.emoji,
+                    "rekomendasiAksi" to rekomendasi.aksi.name,
+                    "rekomendasiKategori" to rekomendasi.kategoriPerforma.name,
+                    "rekomendasiPesan" to rekomendasi.pesanMotivasi,
+                    "rekomendasiUpdatedAt" to System.currentTimeMillis()
+                )
+            ).await()
+
+            Result.success(rekomendasi)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // ─── Ambil Rekomendasi Terakhir dari Firestore ───────────────
+    suspend fun getRekomendasiTerakhir(uid: String): DecisionTreeHelper.RekomendasiBelajar? {
+        return try {
+            val doc = db.collection(COL_USERS).document(uid).get().await()
+            if (doc.exists() && doc.contains("rekomendasiJudul")) {
+                DecisionTreeHelper.RekomendasiBelajar(
+                    judulRekomendasi = doc.getString("rekomendasiJudul") ?: "Mulai Belajar! 🎯",
+                    deskripsi = doc.getString("rekomendasiDesc") ?: "Ayo mulai belajar!",
+                    emoji = doc.getString("rekomendasiEmoji") ?: "🎯",
+                    aksi = try {
+                        DecisionTreeHelper.AksiRekomendasi.valueOf(
+                            doc.getString("rekomendasiAksi") ?: "BACA_MATERI"
+                        )
+                    } catch (e: Exception) {
+                        DecisionTreeHelper.AksiRekomendasi.BACA_MATERI
+                    },
+                    topikId = (doc.getLong("rekomendasiTopikId") ?: 1).toInt(),
+                    levelRekomendasi = (doc.getLong("rekomendasiLevel") ?: 1).toInt(),
+                    kategoriPerforma = try {
+                        DecisionTreeHelper.KategoriPerforma.valueOf(
+                            doc.getString("rekomendasiKategori") ?: "CUKUP"
+                        )
+                    } catch (e: Exception) {
+                        DecisionTreeHelper.KategoriPerforma.CUKUP
+                    },
+                    pesanMotivasi = doc.getString("rekomendasiPesan") ?: "Semangat belajar! 🌟"
+                )
+            } else null
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    // ─── Ambil Data User Realtime ────────────────────────────────
     fun listenUserData(uid: String, onUpdate: (poin: Int, level: Int) -> Unit) {
         db.collection(COL_USERS).document(uid)
             .addSnapshotListener { snapshot, _ ->
@@ -171,10 +277,10 @@ object FirebaseHelper {
     // ─── Logout ──────────────────────────────────────────────────
     fun logout() { auth.signOut() }
 
-    // ─── Helper ──────────────────────────────────────────────────
     fun isLoggedIn(): Boolean = auth.currentUser != null
     fun getCurrentUid(): String? = auth.currentUser?.uid
 
+    // ─── Hitung Level dari Poin ──────────────────────────────────
     fun hitungLevel(poin: Int): Int = when {
         poin < 100 -> 1
         poin < 300 -> 2
