@@ -225,33 +225,34 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
     private fun setupStatusLevel() {
         // Level 1 selalu terbuka
         binding.tvStatusLevel1.text = "Mulai ▶"
-        binding.tvStatusLevel1.setTextColor(getColor(R.color.purple_primary))
+        binding.tvStatusLevel1.setBackgroundResource(R.drawable.bg_level_badge)
+        binding.tvStatusLevel1.setTextColor(getColor(R.color.leaf_green))
         binding.cardLevel1.alpha = 1f
 
         // Level 2
         if (levelTerbuka >= 2) {
             binding.tvStatusLevel2.text = "Mulai ▶"
-            binding.tvStatusLevel2.setBackgroundResource(com.example.ekidi.R.drawable.bg_button_primary)
-            binding.tvStatusLevel2.setTextColor(getColor(android.R.color.white))
+            binding.tvStatusLevel2.setBackgroundResource(R.drawable.bg_level_badge)
+            binding.tvStatusLevel2.setTextColor(getColor(R.color.leaf_green))
             binding.cardLevel2.alpha = 1f
         } else {
-            binding.tvStatusLevel2.text = "🔒 Selesaikan Level 1 dulu"
+            binding.tvStatusLevel2.text = "Terkunci 🔒"
             binding.tvStatusLevel2.setBackgroundResource(0)
-            binding.tvStatusLevel2.setTextColor(getColor(com.example.ekidi.R.color.text_hint))
-            binding.cardLevel2.alpha = 0.6f
+            binding.tvStatusLevel2.setTextColor(getColor(R.color.text_hint))
+            binding.cardLevel2.alpha = 0.5f
         }
 
         // Level 3
         if (levelTerbuka >= 3) {
             binding.tvStatusLevel3.text = "Mulai ▶"
-            binding.tvStatusLevel3.setBackgroundResource(com.example.ekidi.R.drawable.bg_button_primary)
-            binding.tvStatusLevel3.setTextColor(getColor(android.R.color.white))
+            binding.tvStatusLevel3.setBackgroundResource(R.drawable.bg_level_badge)
+            binding.tvStatusLevel3.setTextColor(getColor(R.color.leaf_green))
             binding.cardLevel3.alpha = 1f
         } else {
-            binding.tvStatusLevel3.text = "🔒 Selesaikan Level 2 dulu"
+            binding.tvStatusLevel3.text = "Terkunci 🔒"
             binding.tvStatusLevel3.setBackgroundResource(0)
-            binding.tvStatusLevel3.setTextColor(getColor(com.example.ekidi.R.color.text_hint))
-            binding.cardLevel3.alpha = 0.6f
+            binding.tvStatusLevel3.setTextColor(getColor(R.color.text_hint))
+            binding.cardLevel3.alpha = 0.5f
         }
     }
 
@@ -278,6 +279,13 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
         val sessionManager = SessionManager(this)
         if (sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_1_STATUS) == 0) {
             sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_1_STATUS, 1)
+            // ✅ Simpan ke Firebase
+            val uid = FirebaseHelper.getCurrentUid()
+            if (uid != null) {
+                lifecycleScope.launch {
+                    FirebaseHelper.updateMisiStatus(uid, SessionManager.MISI_HARIAN_1_STATUS, 1)
+                }
+            }
         }
     }
 

@@ -202,47 +202,54 @@
                 android:id="@+id/cardLevel1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/card_green">
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/bg_card">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="14dp"
-                    android:gravity="center_vertical">
+                    android:padding="16dp">
 
                     <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:id="@+id/tvIconLevel1"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
                         android:text="😊"
                         android:textSize="26sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_menu_green"/>
+                        android:background="@drawable/circle_menu_green"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintStart_toEndOf="@id/tvIconLevel1"
+                        app:layout_constraintEnd_toStartOf="@id/tvStatusLevel1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Level 1 — Benar atau Salah"
-                            android:textSize="13sp"
+                            android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="@color/icon_green"/>
+                            android:textColor="@color/text_primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="5 soal • +10 poin per soal benar"
-                            android:textSize="11sp"
-                            android:textColor="@color/text_secondary"/>
+                            android:text="5 soal • +10 poin per soal"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginTop="2dp"/>
 
                     </LinearLayout>
 
@@ -250,15 +257,18 @@
                         android:id="@+id/tvStatusLevel1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mulai"
-                        android:textSize="11sp"
+                        android:text="Mulai ▶"
+                        android:textSize="12sp"
                         android:textStyle="bold"
-                        android:textColor="#FFFFFF"
-                        android:background="@drawable/bg_button_primary"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="6dp"/>
+                        android:textColor="@color/leaf_green"
+                        android:background="@drawable/bg_level_badge"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- Level 2 -->
@@ -266,47 +276,54 @@
                 android:id="@+id/cardLevel2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/card_blue">
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/bg_card">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="14dp"
-                    android:gravity="center_vertical">
+                    android:padding="16dp">
 
                     <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:id="@+id/tvIconLevel2"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
                         android:text="🤔"
                         android:textSize="26sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_menu_blue"/>
+                        android:background="@drawable/circle_menu_blue"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintStart_toEndOf="@id/tvIconLevel2"
+                        app:layout_constraintEnd_toStartOf="@id/tvStatusLevel2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Level 2 — 4 Pilihan Gambar"
-                            android:textSize="13sp"
+                            android:text="Level 2 — Pilihan Gambar"
+                            android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="@color/icon_blue"/>
+                            android:textColor="@color/text_primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="5 soal • +15 poin per soal benar"
-                            android:textSize="11sp"
-                            android:textColor="@color/text_secondary"/>
+                            android:text="5 soal • +15 poin per soal"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginTop="2dp"/>
 
                     </LinearLayout>
 
@@ -315,11 +332,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="🔒"
-                        android:textSize="18sp"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
                         android:textColor="@color/text_hint"
-                        android:paddingHorizontal="12dp"/>
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- Level 3 -->
@@ -327,47 +349,54 @@
                 android:id="@+id/cardLevel3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/card_purple">
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/bg_card">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="14dp"
-                    android:gravity="center_vertical">
+                    android:padding="16dp">
 
                     <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:id="@+id/tvIconLevel3"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
                         android:text="🧠"
                         android:textSize="26sp"
                         android:gravity="center"
-                        android:background="@drawable/circle_menu_purple"/>
+                        android:background="@drawable/circle_menu_purple"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintStart_toEndOf="@id/tvIconLevel3"
+                        app:layout_constraintEnd_toStartOf="@id/tvStatusLevel3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Level 3 — 4 Pilihan Teks"
-                            android:textSize="13sp"
+                            android:text="Level 3 — Pilihan Teks"
+                            android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="@color/icon_purple"/>
+                            android:textColor="@color/text_primary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="5 soal • +20 poin per soal benar"
-                            android:textSize="11sp"
-                            android:textColor="@color/text_secondary"/>
+                            android:text="5 soal • +20 poin per soal"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginTop="2dp"/>
 
                     </LinearLayout>
 
@@ -376,11 +405,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="🔒"
-                        android:textSize="18sp"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
                         android:textColor="@color/text_hint"
-                        android:paddingHorizontal="12dp"/>
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>

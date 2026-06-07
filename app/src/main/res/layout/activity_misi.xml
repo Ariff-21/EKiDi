@@ -124,6 +124,7 @@
 
             <!-- Misi Harian -->
             <TextView
+                android:id="@+id/tvMisiHariIni"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📅 Misi Hari Ini"
@@ -276,6 +277,84 @@
 
                     <TextView
                         android:id="@+id/tvStatusMisiHarian2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mulai"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_button_primary"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardMisiHarian3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:text="📝"
+                        android:textSize="28sp"
+                        android:gravity="center"
+                        android:background="@drawable/circle_menu_purple"
+                        android:elevation="4dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Selesaikan 1 Kuis"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Hadiah: +25 poin ⭐"
+                            android:textSize="12sp"
+                            android:textColor="@color/soft_purple"
+                            android:textStyle="bold"
+                            android:layout_marginTop="2dp"/>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnClaimHarian3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:text="Klaim"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        app:cornerRadius="24dp"
+                        android:backgroundTint="@color/soft_purple"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tvStatusMisiHarian3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Mulai"

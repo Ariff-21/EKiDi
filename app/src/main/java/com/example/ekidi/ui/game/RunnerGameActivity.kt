@@ -227,6 +227,13 @@ class RunnerGameActivity : AppCompatActivity() {
     private fun updateMisiGame() {
         if (sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_2_STATUS) == 0) {
             sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_2_STATUS, 1)
+            // ✅ Simpan ke Firebase
+            val uid = FirebaseHelper.getCurrentUid()
+            if (uid != null) {
+                lifecycleScope.launch {
+                    FirebaseHelper.updateMisiStatus(uid, SessionManager.MISI_HARIAN_2_STATUS, 1)
+                }
+            }
         }
     }
 

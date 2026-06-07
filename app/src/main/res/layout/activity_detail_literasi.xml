@@ -22,7 +22,7 @@
             android:src="@android:drawable/ic_media_previous"
             android:background="@drawable/circle_settings_bg"
             android:padding="8dp"
-            android:tint="#FFFFFF"/>
+            app:tint="#FFFFFF" />
 
         <TextView
             android:id="@+id/tvJudulTopik"

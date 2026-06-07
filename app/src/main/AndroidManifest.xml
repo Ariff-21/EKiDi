@@ -29,6 +29,7 @@
         <activity android:name=".ui.game.GameActivity"/>
         <activity android:name=".ui.misi.MisiActivity"/>
         <activity android:name=".ui.pencapaian.PencapaianActivity"/>
+        <activity android:name=".ui.pencapaian.LeaderboardActivity"/>
         <activity android:name=".ui.profil.ProfilActivity"/>
         <activity android:name=".ui.literasi.MateriActivity"/>
         <activity android:name=".ui.literasi.KuisActivity"/>

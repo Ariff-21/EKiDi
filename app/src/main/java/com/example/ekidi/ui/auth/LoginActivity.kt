@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
                 val currentUser = FirebaseHelper.auth.currentUser
 
                 // ✅ Cek apakah email sudah diverifikasi
-                if (currentUser != null && !currentUser.isEmailVerified) {
+                if ((currentUser != null) && !currentUser.isEmailVerified) {
                     // Email belum diverifikasi
                     FirebaseHelper.logout()
                     runOnUiThread {
@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
                             .setNegativeButton("Tutup", null)
                             .show()
                     }
-                    setLoading(false)
+                    setLoading(isLoading = false)
                     return@launch
                 }
 
@@ -89,7 +89,6 @@ class LoginActivity : AppCompatActivity() {
                     sessionManager.saveLoginSession(
                         userId = uid.hashCode(),
                         userName = data["nama"] as? String ?: "Pengguna",
-                        userRole = data["role"] as? String ?: "anak",
                         authToken = uid,
                         level = (data["level"] as? Long)?.toInt() ?: 1,
                         points = (data["poin"] as? Long)?.toInt() ?: 0,
@@ -99,6 +98,17 @@ class LoginActivity : AppCompatActivity() {
                         totalPembelajaran = (data["totalPembelajaran"] as? Long)?.toInt() ?: 0,
                         streak = (data["streak"] as? Long)?.toInt() ?: 0,
                     )
+
+                    // ✅ Sinkronisasi status misi dari Cloud ke Session
+                    val m1 = (data["misi_harian_1_status"] as? Long)?.toInt() ?: 0
+                    val m2 = (data["misi_harian_2_status"] as? Long)?.toInt() ?: 0
+                    val m3 = (data["misi_harian_3_status"] as? Long)?.toInt() ?: 0
+                    val lastReset = data["last_reset_date"] as? String ?: ""
+
+                    sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_1_STATUS, m1)
+                    sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_2_STATUS, m2)
+                    sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_3_STATUS, m3)
+                    sessionManager.saveLastResetDate(lastReset)
                 }
                 startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
                 finish()

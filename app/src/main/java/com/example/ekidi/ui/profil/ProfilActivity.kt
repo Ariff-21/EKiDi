@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.R
 import com.example.ekidi.databinding.ActivityProfilBinding
@@ -38,7 +39,6 @@ class ProfilActivity : AppCompatActivity() {
 
     private fun setupUI() {
         val nama = sessionManager.getUserName()
-        val role = sessionManager.getUserRole()
         val level = sessionManager.getUserLevel()
         val poin = sessionManager.getUserPoints()
 
@@ -52,22 +52,19 @@ class ProfilActivity : AppCompatActivity() {
         binding.tvStreakProfil.text = getString(R.string.streak_format, sessionManager.getStreak())
         binding.tvBadgeProfil.text = sessionManager.getTotalBadge().toString()
         binding.tvMateriProfil.text = sessionManager.getTotalPembelajaran().toString()
-
-        val roleLabel = when (role) {
-            "anak" -> "👦 Anak"
-            "orang_tua" -> "👨 Orang Tua"
-            "guru" -> "👩‍🏫 Guru"
-            else -> "👦 Anak"
-        }
-        binding.tvPeran.text = roleLabel
-        binding.tvRoleBadge.text = roleLabel
     }
 
     private fun setupClickListeners() {
         binding.btnBack.setOnClickListener { finish() }
 
         binding.btnGantiAvatar.setOnClickListener {
-            binding.cardPilihAvatar.visibility = if (binding.cardPilihAvatar.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            binding.cardPilihAvatar.isVisible = !binding.cardPilihAvatar.isVisible
+            if (binding.cardPilihAvatar.isVisible) {
+                binding.root.post {
+                    val scroll = findViewById<androidx.core.widget.NestedScrollView>(R.id.profilScroll)
+                    scroll?.smoothScrollTo(0, binding.cardPilihAvatar.top)
+                }
+            }
         }
 
         // Pilihan avatar
@@ -76,7 +73,10 @@ class ProfilActivity : AppCompatActivity() {
             binding.avatar2 to "🐱",
             binding.avatar3 to "🐻",
             binding.avatar4 to "🦊",
-            binding.avatar5 to "🐼"
+            binding.avatar5 to "🐼",
+            binding.avatar6 to "🐷",
+            binding.avatar7 to "🐸",
+            binding.avatar8 to "🦁",
         )
 
         avatarMap.forEach { (view, emoji) ->

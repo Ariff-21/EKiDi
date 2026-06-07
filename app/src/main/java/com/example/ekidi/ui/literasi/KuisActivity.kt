@@ -22,6 +22,7 @@ import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
 import com.example.ekidi.utils.SoundManager
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class KuisActivity : AppCompatActivity() {
 
@@ -306,7 +307,7 @@ class KuisActivity : AppCompatActivity() {
         binding.tvPertanyaan.text =
             "Kuis Selesai!\n\nBenar: $jumlahBenar/$totalSoal ($persentase%)\n" +
                     "Kesalahan: $jumlahKesalahan\n" +
-                    "Waktu rata-rata: ${String.format("%.1f", waktuRataRata)} detik/soal\n" +
+                    "Waktu rata-rata: ${String.format(Locale.getDefault(), "%.1f", waktuRataRata)} detik/soal\n" +
                     "Skor: +$skor poin\n\n$pesan"
 
         binding.layoutJawaban.removeAllViews()
@@ -314,6 +315,18 @@ class KuisActivity : AppCompatActivity() {
         binding.progressKuis.progress = 100
         binding.tvNomorSoal.text = "Selesai!"
         binding.btnLanjut.visibility = View.GONE
+
+        // ✅ Update Misi Harian 3 (Selesaikan 1 Kuis)
+        if (sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_3_STATUS) == 0) {
+            sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_3_STATUS, 1)
+            // ✅ Simpan ke Firebase
+            val currentUid = FirebaseHelper.getCurrentUid()
+            if (currentUid != null) {
+                lifecycleScope.launch {
+                    FirebaseHelper.updateMisiStatus(currentUid, SessionManager.MISI_HARIAN_3_STATUS, 1)
+                }
+            }
+        }
 
         // ✅ Simpan hasil + jalankan Decision Tree
         val uid = FirebaseHelper.getCurrentUid()

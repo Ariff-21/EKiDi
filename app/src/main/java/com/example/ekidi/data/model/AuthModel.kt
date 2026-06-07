@@ -9,7 +9,6 @@ data class RegisterRequest(
     val nama: String,
     val username: String,
     val password: String,
-    val role: String,
     val umur: Int? = null
 )
 
@@ -23,7 +22,6 @@ data class UserData(
     val id: Int,
     val nama: String,
     val username: String,
-    val role: String,
     val level: Int,
     val poin: Int,
     val token: String

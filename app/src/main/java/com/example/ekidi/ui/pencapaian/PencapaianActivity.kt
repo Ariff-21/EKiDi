@@ -56,6 +56,9 @@ class PencapaianActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.btnBack.setOnClickListener { finish() }
+        binding.btnLeaderboard.setOnClickListener {
+            startActivity(Intent(this, LeaderboardActivity::class.java))
+        }
     }
 
     private fun setupBottomNav() {

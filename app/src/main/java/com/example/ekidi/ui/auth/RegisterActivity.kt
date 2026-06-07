@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.databinding.ActivityRegisterBinding
 import kotlinx.coroutines.tasks.await
-import com.example.ekidi.ui.home.HomeActivity
 import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
 import kotlinx.coroutines.launch
@@ -15,7 +14,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var sessionManager: SessionManager
-    private var selectedRole = "anak"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,39 +23,8 @@ class RegisterActivity : AppCompatActivity() {
 
         sessionManager = SessionManager(this)
 
-        setupRoleSelector()
         binding.btnRegister.setOnClickListener { doRegister() }
         binding.tvGoToLogin.setOnClickListener { finish() }
-    }
-
-    private fun setupRoleSelector() {
-        binding.btnRoleAnak.setOnClickListener { selectRole("anak") }
-        binding.btnRoleOrtu.setOnClickListener { selectRole("orang_tua") }
-        binding.btnRoleGuru.setOnClickListener { selectRole("guru") }
-    }
-
-    private fun selectRole(role: String) {
-        selectedRole = role
-
-        binding.btnRoleAnak.setBackgroundResource(com.example.ekidi.R.drawable.bg_role_unselected)
-        binding.btnRoleOrtu.setBackgroundResource(com.example.ekidi.R.drawable.bg_role_unselected)
-        binding.btnRoleGuru.setBackgroundResource(com.example.ekidi.R.drawable.bg_role_unselected)
-        binding.btnRoleAnak.setTextColor(getColor(com.example.ekidi.R.color.text_secondary))
-        binding.btnRoleOrtu.setTextColor(getColor(com.example.ekidi.R.color.text_secondary))
-        binding.btnRoleGuru.setTextColor(getColor(com.example.ekidi.R.color.text_secondary))
-
-        val selectedView = when (role) {
-            "anak" -> binding.btnRoleAnak
-            "orang_tua" -> binding.btnRoleOrtu
-            else -> binding.btnRoleGuru
-        }
-        selectedView.setBackgroundResource(com.example.ekidi.R.drawable.bg_role_selected)
-        selectedView.setTextColor(getColor(com.example.ekidi.R.color.purple_primary))
-
-        val umurVisibility = if (role == "anak") View.VISIBLE else View.GONE
-        binding.labelUmur.visibility = umurVisibility
-        binding.etUmur.visibility = umurVisibility
-        binding.spaceUmur.visibility = umurVisibility
     }
 
     private fun doRegister() {
@@ -73,9 +40,9 @@ class RegisterActivity : AppCompatActivity() {
         if (password.isEmpty()) { showError("Password tidak boleh kosong"); return }
         if (password.length < 6) { showError("Password minimal 6 karakter"); return }
         if (password != confirmPassword) { showError("Konfirmasi password tidak cocok"); return }
-        if (selectedRole == "anak" && umurStr.isEmpty()) { showError("Umur tidak boleh kosong"); return }
+        if (umurStr.isEmpty()) { showError("Umur tidak boleh kosong"); return }
 
-        val umur = if (selectedRole == "anak") umurStr.toIntOrNull() else null
+        val umur = umurStr.toIntOrNull()
 
         setLoading(isLoading = true)
 
@@ -84,7 +51,6 @@ class RegisterActivity : AppCompatActivity() {
                 email = email,
                 password = password,
                 nama = nama,
-                role = selectedRole,
                 umur = umur,
             )
 

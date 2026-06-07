@@ -19,7 +19,6 @@ object FirebaseHelper {
         email: String,
         password: String,
         nama: String,
-        role: String,
         umur: Int? = null
     ): Result<String> {
         return try {
@@ -29,7 +28,6 @@ object FirebaseHelper {
                 "uid" to uid,
                 "nama" to nama,
                 "email" to email,
-                "role" to role,
                 "umur" to (umur ?: 0),
                 "level" to 1,
                 "poin" to 0,
@@ -245,6 +243,32 @@ object FirebaseHelper {
     suspend fun updateAvatar(uid: String, avatar: String): Result<Unit> {
         return try {
             db.collection(COL_USERS).document(uid).update("avatar", avatar).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // ─── Simpan Status Misi ───────────────────────────────────────
+    suspend fun updateMisiStatus(uid: String, misiKey: String, status: Int): Result<Unit> {
+        return try {
+            db.collection(COL_USERS).document(uid).update(misiKey, status).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun resetMisiHarian(uid: String, todayDate: String): Result<Unit> {
+        return try {
+            db.collection(COL_USERS).document(uid).update(
+                mapOf(
+                    "misi_harian_1_status" to 0,
+                    "misi_harian_2_status" to 0,
+                    "misi_harian_3_status" to 0,
+                    "last_reset_date" to todayDate
+                )
+            ).await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

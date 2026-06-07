@@ -16,6 +16,9 @@ import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
 import com.example.ekidi.utils.SoundManager
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MisiActivity : AppCompatActivity() {
 
@@ -32,12 +35,49 @@ class MisiActivity : AppCompatActivity() {
         sessionManager = SessionManager(this)
         soundManager = SoundManager(this)
 
+        checkDailyReset()
         setupUI()
         setupClickListeners()
         setupBottomNav()
     }
 
+    private fun checkDailyReset() {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.forLanguageTag("id-ID"))
+        val today = sdf.format(Date())
+        val lastReset = sessionManager.getLastResetDate()
+
+        if (today != lastReset) {
+            val uid = FirebaseHelper.getCurrentUid()
+            if (uid != null) {
+                lifecycleScope.launch {
+                    // Reset di Cloud
+                    FirebaseHelper.resetMisiHarian(uid, today)
+                    
+                    // Reset di Lokal
+                    sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_1_STATUS, 0)
+                    sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_2_STATUS, 0)
+                    sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_3_STATUS, 0)
+                    sessionManager.saveLastResetDate(today)
+                    
+                    runOnUiThread { updateMisiViews() }
+                }
+            } else {
+                // User belum login (guest?), reset lokal saja
+                sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_1_STATUS, 0)
+                sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_2_STATUS, 0)
+                sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_3_STATUS, 0)
+                sessionManager.saveLastResetDate(today)
+                updateMisiViews()
+            }
+        }
+    }
+
     private fun setupUI() {
+        // Tampilkan tanggal hari ini
+        val sdf = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.forLanguageTag("id-ID"))
+        val tanggalSekarang = sdf.format(Date())
+        binding.tvMisiHariIni.text = "📅 $tanggalSekarang"
+
         val streak = sessionManager.getStreak()
         binding.tvStreak.text = "🔥 $streak Hari"
         binding.tvStreakAngka.text = streak.toString()
@@ -57,6 +97,10 @@ class MisiActivity : AppCompatActivity() {
         // Misi Harian 2
         val statusH2 = sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_2_STATUS)
         updateSingleMisiUI(statusH2, binding.tvStatusMisiHarian2, binding.btnClaimHarian2)
+
+        // Misi Harian 3
+        val statusH3 = sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_3_STATUS)
+        updateSingleMisiUI(statusH3, binding.tvStatusMisiHarian3, binding.btnClaimHarian3)
 
         // Misi Mingguan
         val progressMingguan = sessionManager.getMisiMingguanProgress()
@@ -87,7 +131,7 @@ class MisiActivity : AppCompatActivity() {
         when (status) {
             0 -> { // Belum
                 statusTv.visibility = View.VISIBLE
-                if (statusTv is android.widget.TextView) statusTv.text = "Mulai"
+                (statusTv as? android.widget.TextView)?.text = "Mulai"
                 claimBtn.visibility = View.GONE
             }
             1 -> { // Selesai, belum klaim
@@ -121,8 +165,15 @@ class MisiActivity : AppCompatActivity() {
             }
         }
 
+        binding.cardMisiHarian3.setOnClickListener {
+            if (sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_3_STATUS) == 0) {
+                startActivity(Intent(this, LiterasiActivity::class.java))
+            }
+        }
+
         binding.btnClaimHarian1.setOnClickListener { claimReward(SessionManager.MISI_HARIAN_1_STATUS, 20) }
         binding.btnClaimHarian2.setOnClickListener { claimReward(SessionManager.MISI_HARIAN_2_STATUS, 15) }
+        binding.btnClaimHarian3.setOnClickListener { claimReward(SessionManager.MISI_HARIAN_3_STATUS, 25) }
         binding.btnClaimMingguan.setOnClickListener { claimReward(SessionManager.MISI_MINGGUAN_STATUS, 100) }
         binding.btnClaimSpesial.setOnClickListener { claimReward(SessionManager.MISI_SPESIAL_STATUS, 200) }
     }
@@ -134,6 +185,9 @@ class MisiActivity : AppCompatActivity() {
         val uid = FirebaseHelper.getCurrentUid()
         if (uid != null) {
             lifecycleScope.launch {
+                // ✅ Simpan status klaim ke Firebase agar permanen
+                FirebaseHelper.updateMisiStatus(uid, misiKey, 2)
+
                 FirebaseHelper.updatePoin(uid, points)
                 val newPoints = sessionManager.getUserPoints() + points
                 sessionManager.updatePoints(newPoints)
@@ -147,7 +201,9 @@ class MisiActivity : AppCompatActivity() {
         }
         
         // Update mingguan progress if harian claimed
-        if (misiKey == SessionManager.MISI_HARIAN_1_STATUS || misiKey == SessionManager.MISI_HARIAN_2_STATUS) {
+        if ((misiKey == SessionManager.MISI_HARIAN_1_STATUS) || 
+            (misiKey == SessionManager.MISI_HARIAN_2_STATUS) ||
+            (misiKey == SessionManager.MISI_HARIAN_3_STATUS)) {
             val currentProgress = sessionManager.getMisiMingguanProgress()
             if (currentProgress < 5) {
                 sessionManager.updateMisiMingguanProgress(1)

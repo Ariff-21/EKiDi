@@ -16,6 +16,9 @@ import com.example.ekidi.utils.DecisionTreeHelper
 import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeActivity : AppCompatActivity() {
 
@@ -30,12 +33,37 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         sessionManager = SessionManager(this)
+        checkDailyReset()
 
         setupUI()
         setupClickListeners()
         setupBottomNav()
         listenProgressRealtime()
         loadRekomendasi()
+    }
+
+    private fun checkDailyReset() {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.forLanguageTag("id-ID"))
+        val today = sdf.format(Date())
+        val lastReset = sessionManager.getLastResetDate()
+
+        if (today != lastReset) {
+            val uid = FirebaseHelper.getCurrentUid()
+            if (uid != null) {
+                lifecycleScope.launch {
+                    FirebaseHelper.resetMisiHarian(uid, today)
+                    sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_1_STATUS, 0)
+                    sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_2_STATUS, 0)
+                    sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_3_STATUS, 0)
+                    sessionManager.saveLastResetDate(today)
+                }
+            } else {
+                sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_1_STATUS, 0)
+                sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_2_STATUS, 0)
+                sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_3_STATUS, 0)
+                sessionManager.saveLastResetDate(today)
+            }
+        }
     }
 
     private fun setupUI() {
@@ -136,6 +164,10 @@ class HomeActivity : AppCompatActivity() {
         // ✅ Tombol rekomendasi → navigasi sesuai hasil Decision Tree
         binding.btnMulaiRekomendasi.setOnClickListener {
             navigasiRekomendasi()
+        }
+        // Bisa akses leaderboard dari stat badge di beranda
+        binding.tvStatBadge.setOnClickListener {
+            startActivity(Intent(this, com.example.ekidi.ui.pencapaian.LeaderboardActivity::class.java))
         }
     }
 
