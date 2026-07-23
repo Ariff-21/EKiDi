@@ -2,6 +2,7 @@ package com.example.ekidi.ui.literasi
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.ekidi.R
@@ -11,11 +12,13 @@ import com.example.ekidi.ui.game.GameActivity
 import com.example.ekidi.ui.misi.MisiActivity
 import com.example.ekidi.ui.profil.ProfilActivity
 import com.example.ekidi.utils.FirebaseHelper
+import com.example.ekidi.utils.SoundManager
 import kotlinx.coroutines.launch
 
 class DetailLiterasiActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailLiterasiBinding
+    private lateinit var soundManager: SoundManager
     private var topikId = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +26,8 @@ class DetailLiterasiActivity : AppCompatActivity() {
         binding = ActivityDetailLiterasiBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
+
+        soundManager = SoundManager(this)
 
         val judul = intent.getStringExtra("JUDUL_TOPIK") ?: "Materi"
         val ikon = intent.getStringExtra("IKON_TOPIK") ?: "📖"
@@ -32,10 +37,23 @@ class DetailLiterasiActivity : AppCompatActivity() {
         binding.tvNamaTopik.text = judul
         binding.tvIkonTopik.text = ikon
 
-        binding.btnBack.setOnClickListener { finish() }
+        binding.btnBack.setOnClickListener {
+            soundManager.playClick()
+            finish()
+        }
+
+        // ✅ Klik kartu materi juga buka MateriActivity
+        val bukaMateriListener = View.OnClickListener {
+            soundManager.playClick()
+            bukaMateriDenganProgress()
+        }
+        binding.cardMateri1.setOnClickListener(bukaMateriListener)
+        binding.cardMateri2.setOnClickListener(bukaMateriListener)
+        binding.cardMateri3.setOnClickListener(bukaMateriListener)
 
         // ✅ Load progress dari Firebase dulu baru buka MateriActivity
         binding.btnMulaiKuis.setOnClickListener {
+            soundManager.playClick()
             bukaMateriDenganProgress()
         }
 
@@ -45,11 +63,12 @@ class DetailLiterasiActivity : AppCompatActivity() {
     private fun bukaMateriDenganProgress() {
         val uid = FirebaseHelper.getCurrentUid()
 
-        if (uid != null) {
-            // Tampilkan loading sementara
-            binding.btnMulaiKuis.isEnabled = false
-            binding.btnMulaiKuis.text = "Memuat..."
+        // Tampilkan loading sementara
+        binding.btnMulaiKuis.isEnabled = false
+        val originalText = binding.btnMulaiKuis.text
+        binding.btnMulaiKuis.text = "Memuat..."
 
+        if (uid != null) {
             lifecycleScope.launch {
                 // ✅ Ambil progress dari Firebase
                 val levelTerbuka = FirebaseHelper.getProgressKuis(uid, topikId)
@@ -62,7 +81,7 @@ class DetailLiterasiActivity : AppCompatActivity() {
 
                 // Reset tombol
                 binding.btnMulaiKuis.isEnabled = true
-                binding.btnMulaiKuis.text = "🎯 Mulai Kuis Topik Ini"
+                binding.btnMulaiKuis.text = originalText
             }
         } else {
             // Tidak ada uid, buka dengan level 1
@@ -70,6 +89,9 @@ class DetailLiterasiActivity : AppCompatActivity() {
             intent.putExtra("TOPIK_ID", topikId)
             intent.putExtra("LEVEL_TERBUKA", 1)
             startActivity(intent)
+            
+            binding.btnMulaiKuis.isEnabled = true
+            binding.btnMulaiKuis.text = originalText
         }
     }
 
@@ -78,32 +100,36 @@ class DetailLiterasiActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_literasi -> {
                     startActivity(Intent(this, LiterasiActivity::class.java))
-                    finish()
                     true
                 }
                 R.id.nav_game -> {
                     startActivity(Intent(this, GameActivity::class.java))
-                    finish()
                     true
                 }
                 R.id.nav_misi -> {
                     startActivity(Intent(this, MisiActivity::class.java))
-                    finish()
                     true
                 }
                 R.id.nav_profil -> {
                     startActivity(Intent(this, ProfilActivity::class.java))
-                    finish()
                     true
                 }
                 else -> false
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::soundManager.isInitialized) {
+            soundManager.release()
         }
     }
 }

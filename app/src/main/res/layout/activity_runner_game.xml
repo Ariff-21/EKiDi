@@ -156,21 +156,21 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="24dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="20dp"
                 app:cardBackgroundColor="#FFFFFF"
-                app:cardElevation="8dp">
+                app:cardElevation="6dp">
 
                 <TextView
                     android:id="@+id/tvPertanyaanGame"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Pertanyaan muncul di sini"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#1F2937"
                     android:gravity="center"
-                    android:padding="24dp"
+                    android:padding="16dp"
                     android:lineSpacingExtra="4dp"/>
 
             </androidx.cardview.widget.CardView>

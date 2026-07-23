@@ -16,6 +16,7 @@ import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
 import com.example.ekidi.utils.SoundManager
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -36,9 +37,42 @@ class MisiActivity : AppCompatActivity() {
         soundManager = SoundManager(this)
 
         checkDailyReset()
+        checkWeeklyReset()
         setupUI()
         setupClickListeners()
         setupBottomNav()
+    }
+
+    private fun checkWeeklyReset() {
+        val now = System.currentTimeMillis()
+        val lastReset = sessionManager.getLastWeeklyReset()
+        val oneWeekMillis = 7 * 24 * 60 * 60 * 1000L
+
+        if (now - lastReset >= oneWeekMillis) {
+            val uid = FirebaseHelper.getCurrentUid()
+            if (uid != null) {
+                lifecycleScope.launch {
+                    // Reset di Firestore
+                    FirebaseHelper.db.collection("users").document(uid).update(
+                        SessionManager.MISI_MINGGUAN_STATUS, 0,
+                        SessionManager.MISI_MINGGUAN_PROGRESS, 0,
+                        "lastWeeklyReset", now
+                    ).await()
+                    
+                    // Reset Lokal
+                    sessionManager.setMisiStatus(SessionManager.MISI_MINGGUAN_STATUS, 0)
+                    sessionManager.setMisiMingguanProgress(0)
+                    sessionManager.saveLastWeeklyReset(now)
+                    
+                    runOnUiThread { updateMisiViews() }
+                }
+            } else {
+                sessionManager.setMisiStatus(SessionManager.MISI_MINGGUAN_STATUS, 0)
+                sessionManager.setMisiMingguanProgress(0)
+                sessionManager.saveLastWeeklyReset(now)
+                updateMisiViews()
+            }
+        }
     }
 
     private fun checkDailyReset() {
@@ -105,25 +139,31 @@ class MisiActivity : AppCompatActivity() {
         // Misi Mingguan
         val progressMingguan = sessionManager.getMisiMingguanProgress()
         binding.progressMisiMingguan.progress = progressMingguan
-        binding.tvProgressMisiMingguan.text = "$progressMingguan/5 misi selesai"
+        binding.tvProgressMisiMingguan.text = "$progressMingguan/5 misi harian selesai"
         
         val statusM = sessionManager.getMisiStatus(SessionManager.MISI_MINGGUAN_STATUS)
         if (statusM == 1) {
             binding.btnClaimMingguan.visibility = View.VISIBLE
         } else if (statusM == 2) {
             binding.btnClaimMingguan.visibility = View.GONE
-            // Optional: show "Selesai" label
+            binding.tvProgressMisiMingguan.text = "Selesai ✅"
+        } else {
+            binding.btnClaimMingguan.visibility = View.GONE
         }
 
         // Misi Spesial
         val statusS = sessionManager.getMisiStatus(SessionManager.MISI_SPESIAL_STATUS)
         if (statusS == 1) {
             binding.btnClaimSpesial.visibility = View.VISIBLE
-            binding.tvIconSpesial.visibility = View.GONE
+            binding.tvStatusSpesial.visibility = View.GONE
         } else if (statusS == 2) {
             binding.btnClaimSpesial.visibility = View.GONE
-            binding.tvIconSpesial.text = "✅"
-            binding.tvIconSpesial.visibility = View.VISIBLE
+            binding.tvStatusSpesial.text = "Selesai ✅"
+            binding.tvStatusSpesial.visibility = View.VISIBLE
+        } else {
+            binding.btnClaimSpesial.visibility = View.GONE
+            binding.tvStatusSpesial.text = "Lvl 3 & 3 Badge"
+            binding.tvStatusSpesial.visibility = View.VISIBLE
         }
     }
 
@@ -151,22 +191,28 @@ class MisiActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-        binding.btnBack.setOnClickListener { finish() }
+        binding.btnBack.setOnClickListener {
+            soundManager.playClick()
+            finish()
+        }
 
         binding.cardMisiHarian1.setOnClickListener {
             if (sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_1_STATUS) == 0) {
+                soundManager.playClick()
                 startActivity(Intent(this, LiterasiActivity::class.java))
             }
         }
 
         binding.cardMisiHarian2.setOnClickListener {
             if (sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_2_STATUS) == 0) {
+                soundManager.playClick()
                 startActivity(Intent(this, GameActivity::class.java))
             }
         }
 
         binding.cardMisiHarian3.setOnClickListener {
             if (sessionManager.getMisiStatus(SessionManager.MISI_HARIAN_3_STATUS) == 0) {
+                soundManager.playClick()
                 startActivity(Intent(this, LiterasiActivity::class.java))
             }
         }
@@ -204,11 +250,56 @@ class MisiActivity : AppCompatActivity() {
         if ((misiKey == SessionManager.MISI_HARIAN_1_STATUS) || 
             (misiKey == SessionManager.MISI_HARIAN_2_STATUS) ||
             (misiKey == SessionManager.MISI_HARIAN_3_STATUS)) {
+            
+            // ✅ Cek Badge 4 (Misi Master) - Klaim 10 misi
+            sessionManager.incrementMissionClaimCount()
+            if (sessionManager.getMissionClaimCount() >= 10 && !sessionManager.getBadgeStatus(SessionManager.KEY_BADGE_4)) {
+                sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_4, true)
+                if (uid != null) {
+                    lifecycleScope.launch {
+                        FirebaseHelper.updateBadgeStatus(uid, SessionManager.KEY_BADGE_4, true, sessionManager.getTotalBadge())
+                    }
+                }
+            }
+
             val currentProgress = sessionManager.getMisiMingguanProgress()
             if (currentProgress < 5) {
-                sessionManager.updateMisiMingguanProgress(1)
-                if (sessionManager.getMisiMingguanProgress() >= 5) {
+                val newProgress = currentProgress + 1
+                sessionManager.setMisiMingguanProgress(newProgress)
+                
+                if (uid != null) {
+                    lifecycleScope.launch {
+                        FirebaseHelper.db.collection("users").document(uid)
+                            .update(SessionManager.MISI_MINGGUAN_PROGRESS, newProgress)
+                            .await()
+                        
+                        if (newProgress >= 5) {
+                            sessionManager.setMisiStatus(SessionManager.MISI_MINGGUAN_STATUS, 1)
+                            FirebaseHelper.updateMisiStatus(uid, SessionManager.MISI_MINGGUAN_STATUS, 1)
+                        }
+                    }
+                } else if (newProgress >= 5) {
                     sessionManager.setMisiStatus(SessionManager.MISI_MINGGUAN_STATUS, 1)
+                }
+            }
+        }
+
+        // ✅ Cek apakah misi Spesial terpenuhi saat klaim misi apa pun
+        checkSpecialMissionTrigger()
+    }
+
+    private fun checkSpecialMissionTrigger() {
+        val uid = FirebaseHelper.getCurrentUid() ?: return
+        val currentLevel = sessionManager.getUserLevel()
+        val totalBadge = sessionManager.getTotalBadge()
+        
+        // Syarat Misi Spesial: Capai Level 3 DAN punya minimal 3 Badge
+        if (sessionManager.getMisiStatus(SessionManager.MISI_SPESIAL_STATUS) == 0) {
+            if (currentLevel >= 3 && totalBadge >= 3) {
+                sessionManager.setMisiStatus(SessionManager.MISI_SPESIAL_STATUS, 1)
+                lifecycleScope.launch {
+                    FirebaseHelper.updateMisiStatus(uid, SessionManager.MISI_SPESIAL_STATUS, 1)
+                    runOnUiThread { updateMisiViews() }
                 }
             }
         }
@@ -219,24 +310,25 @@ class MisiActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_literasi -> {
-                    startActivity(Intent(this, LiterasiActivity::class.java))
-                    finish()
+                    val intent = Intent(this, LiterasiActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_game -> {
-                    startActivity(Intent(this, GameActivity::class.java))
-                    finish()
+                    val intent = Intent(this, GameActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_misi -> true
                 R.id.nav_profil -> {
-                    startActivity(Intent(this, ProfilActivity::class.java))
-                    finish()
+                    val intent = Intent(this, ProfilActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 else -> false
@@ -246,6 +338,8 @@ class MisiActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        soundManager.release()
+        if (::soundManager.isInitialized) {
+            soundManager.release()
+        }
     }
 }

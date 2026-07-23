@@ -19,6 +19,7 @@ import com.example.ekidi.ui.literasi.LiterasiActivity
 import com.example.ekidi.ui.misi.MisiActivity
 import com.example.ekidi.ui.profil.ProfilActivity
 import com.example.ekidi.utils.FirebaseHelper
+import com.example.ekidi.utils.SoundManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.firestore.Query
@@ -26,6 +27,7 @@ import com.google.firebase.firestore.Query
 class LeaderboardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLeaderboardBinding
+    private lateinit var soundManager: SoundManager
 
     data class UserLeaderboard(
         val uid: String,
@@ -41,7 +43,12 @@ class LeaderboardActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        binding.btnBack.setOnClickListener { finish() }
+        soundManager = SoundManager(this)
+
+        binding.btnBack.setOnClickListener {
+            soundManager.playClick()
+            finish()
+        }
         setupBottomNav()
         loadLeaderboard()
     }
@@ -259,32 +266,36 @@ class LeaderboardActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_literasi -> {
                     startActivity(Intent(this, LiterasiActivity::class.java))
-                    finish()
                     true
                 }
                 R.id.nav_game -> {
                     startActivity(Intent(this, GameActivity::class.java))
-                    finish()
                     true
                 }
                 R.id.nav_misi -> {
                     startActivity(Intent(this, MisiActivity::class.java))
-                    finish()
                     true
                 }
                 R.id.nav_profil -> {
                     startActivity(Intent(this, ProfilActivity::class.java))
-                    finish()
                     true
                 }
                 else -> false
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::soundManager.isInitialized) {
+            soundManager.release()
         }
     }
 }

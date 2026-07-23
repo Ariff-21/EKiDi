@@ -10,12 +10,14 @@ import kotlinx.coroutines.tasks.await
 import com.example.ekidi.ui.home.HomeActivity
 import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
+import com.example.ekidi.utils.SoundManager
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var sessionManager: SessionManager
+    private lateinit var soundManager: SoundManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         sessionManager = SessionManager(this)
+        soundManager = SoundManager(this)
 
         // Cek jika sudah login
         if (FirebaseHelper.isLoggedIn()) {
@@ -32,8 +35,12 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        binding.btnLogin.setOnClickListener { doLogin() }
+        binding.btnLogin.setOnClickListener {
+            soundManager.playClick()
+            doLogin()
+        }
         binding.tvGoToRegister.setOnClickListener {
+            soundManager.playClick()
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
@@ -109,6 +116,31 @@ class LoginActivity : AppCompatActivity() {
                     sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_2_STATUS, m2)
                     sessionManager.setMisiStatus(SessionManager.MISI_HARIAN_3_STATUS, m3)
                     sessionManager.saveLastResetDate(lastReset)
+
+                    // ✅ Sinkronisasi Misi Mingguan & Spesial
+                    val mwStatus = (data[SessionManager.MISI_MINGGUAN_STATUS] as? Long)?.toInt() ?: 0
+                    val mwProgress = (data[SessionManager.MISI_MINGGUAN_PROGRESS] as? Long)?.toInt() ?: 0
+                    val msStatus = (data[SessionManager.MISI_SPESIAL_STATUS] as? Long)?.toInt() ?: 0
+                    val lastWeekly = (data["lastWeeklyReset"] as? Long) ?: System.currentTimeMillis()
+
+                    sessionManager.setMisiStatus(SessionManager.MISI_MINGGUAN_STATUS, mwStatus)
+                    sessionManager.setMisiMingguanProgress(mwProgress)
+                    sessionManager.setMisiStatus(SessionManager.MISI_SPESIAL_STATUS, msStatus)
+                    sessionManager.saveLastWeeklyReset(lastWeekly)
+
+                    // ✅ Sinkronisasi status badge
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_1, data[SessionManager.KEY_BADGE_1] as? Boolean ?: true)
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_2, data[SessionManager.KEY_BADGE_2] as? Boolean ?: false)
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_3, data[SessionManager.KEY_BADGE_3] as? Boolean ?: false)
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_4, data[SessionManager.KEY_BADGE_4] as? Boolean ?: false)
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_5, data[SessionManager.KEY_BADGE_5] as? Boolean ?: false)
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_6, data[SessionManager.KEY_BADGE_6] as? Boolean ?: false)
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_7, data[SessionManager.KEY_BADGE_7] as? Boolean ?: false)
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_8, data[SessionManager.KEY_BADGE_8] as? Boolean ?: false)
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_9, data[SessionManager.KEY_BADGE_9] as? Boolean ?: false)
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_10, data[SessionManager.KEY_BADGE_10] as? Boolean ?: false)
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_11, data[SessionManager.KEY_BADGE_11] as? Boolean ?: false)
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_12, data[SessionManager.KEY_BADGE_12] as? Boolean ?: false)
                 }
                 startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
                 finish()
@@ -128,5 +160,12 @@ class LoginActivity : AppCompatActivity() {
     private fun showError(message: String) {
         binding.tvError.text = message
         binding.tvError.visibility = View.VISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::soundManager.isInitialized) {
+            soundManager.release()
+        }
     }
 }

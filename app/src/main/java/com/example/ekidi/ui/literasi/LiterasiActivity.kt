@@ -9,10 +9,12 @@ import com.example.ekidi.ui.home.HomeActivity
 import com.example.ekidi.ui.game.GameActivity
 import com.example.ekidi.ui.misi.MisiActivity
 import com.example.ekidi.ui.profil.ProfilActivity
+import com.example.ekidi.utils.SoundManager
 
 class LiterasiActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLiterasiBinding
+    private lateinit var soundManager: SoundManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,23 +22,31 @@ class LiterasiActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        soundManager = SoundManager(this)
         setupClickListeners()
         setupBottomNav()
     }
 
     private fun setupClickListeners() {
-        binding.btnBack.setOnClickListener { finish() }
+        binding.btnBack.setOnClickListener {
+            soundManager.playClick()
+            finish()
+        }
 
         binding.cardTopik1.setOnClickListener {
+            soundManager.playClick()
             bukaDetailTopik("Pengenalan Perangkat Digital", "💻", 1)
         }
         binding.cardTopik2.setOnClickListener {
+            soundManager.playClick()
             bukaDetailTopik("Keamanan Internet", "🌐", 2)
         }
         binding.cardTopik3.setOnClickListener {
+            soundManager.playClick()
             bukaDetailTopik("Etika Digital", "🤝", 3)
         }
         binding.cardTopik4.setOnClickListener {
+            soundManager.playClick()
             bukaDetailTopik("Dunia Online", "🌍", 4)
         }
     }
@@ -54,28 +64,33 @@ class LiterasiActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_literasi -> true
                 R.id.nav_game -> {
                     startActivity(Intent(this, GameActivity::class.java))
-                    finish()
                     true
                 }
                 R.id.nav_misi -> {
                     startActivity(Intent(this, MisiActivity::class.java))
-                    finish()
                     true
                 }
                 R.id.nav_profil -> {
                     startActivity(Intent(this, ProfilActivity::class.java))
-                    finish()
                     true
                 }
                 else -> false
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::soundManager.isInitialized) {
+            soundManager.release()
         }
     }
 }

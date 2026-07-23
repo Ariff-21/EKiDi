@@ -37,12 +37,29 @@ object FirebaseHelper {
                 "streak" to 0,
                 "avatar" to "🐶",
                 "createdAt" to System.currentTimeMillis(),
+                SessionManager.KEY_BADGE_1 to true,
+                SessionManager.KEY_BADGE_2 to false,
+                SessionManager.KEY_BADGE_3 to false,
+                SessionManager.KEY_BADGE_4 to false,
+                SessionManager.KEY_BADGE_5 to false,
+                SessionManager.KEY_BADGE_6 to false,
+                SessionManager.KEY_BADGE_7 to false,
+                SessionManager.KEY_BADGE_8 to false,
+                SessionManager.KEY_BADGE_9 to false,
+                SessionManager.KEY_BADGE_10 to false,
+                SessionManager.KEY_BADGE_11 to false,
+                SessionManager.KEY_BADGE_12 to false,
                 // ✅ Data rekomendasi terakhir
                 "rekomendasiTopikId" to 1,
                 "rekomendasiLevel" to 1,
                 "rekomendasiJudul" to "Mulai Belajar! 🎯",
                 "rekomendasiDesc" to "Ayo mulai petualangan belajar literasi digitalmu!",
-                "rekomendasiEmoji" to "🎯"
+                "rekomendasiEmoji" to "🎯",
+                // ✅ Status Misi Mingguan & Spesial
+                SessionManager.MISI_MINGGUAN_STATUS to 0,
+                SessionManager.MISI_MINGGUAN_PROGRESS to 0,
+                SessionManager.MISI_SPESIAL_STATUS to 0,
+                "lastWeeklyReset" to System.currentTimeMillis()
             )
             db.collection(COL_USERS).document(uid).set(userData).await()
             Result.success(uid)
@@ -253,6 +270,18 @@ object FirebaseHelper {
     suspend fun updateMisiStatus(uid: String, misiKey: String, status: Int): Result<Unit> {
         return try {
             db.collection(COL_USERS).document(uid).update(misiKey, status).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateBadgeStatus(uid: String, key: String, isEarned: Boolean, totalBadge: Int): Result<Unit> {
+        return try {
+            db.collection(COL_USERS).document(uid).update(
+                key, isEarned,
+                "totalBadge", totalBadge
+            ).await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

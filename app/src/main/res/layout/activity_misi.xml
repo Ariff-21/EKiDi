@@ -55,7 +55,7 @@
         android:layout_marginTop="85dp"
         android:padding="20dp"
         android:clipToPadding="false"
-        android:paddingBottom="100dp">
+        android:paddingBottom="110dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -107,7 +107,6 @@
                             android:textSize="13sp"
                             android:textColor="@color/text_secondary"
                             android:layout_marginTop="4dp"/>
-
                     </LinearLayout>
 
                     <TextView
@@ -182,7 +181,6 @@
                             android:textColor="@color/sky_blue"
                             android:textStyle="bold"
                             android:layout_marginTop="2dp"/>
-
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -260,7 +258,6 @@
                             android:textColor="@color/leaf_green"
                             android:textStyle="bold"
                             android:layout_marginTop="2dp"/>
-
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -338,7 +335,6 @@
                             android:textColor="@color/soft_purple"
                             android:textStyle="bold"
                             android:layout_marginTop="2dp"/>
-
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -448,7 +444,6 @@
                             android:textSize="11sp"
                             android:textColor="@color/text_hint"
                             android:layout_marginTop="4dp"/>
-
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -535,6 +530,14 @@
                             android:textStyle="bold"
                             android:layout_marginTop="4dp"/>
 
+                        <TextView
+                            android:id="@+id/tvStatusSpesial"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Lvl 3 &amp; 3 Badge"
+                            android:textSize="11sp"
+                            android:textColor="@color/text_hint"
+                            android:layout_marginTop="4dp"/>
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton

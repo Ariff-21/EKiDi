@@ -9,6 +9,7 @@ import android.os.SystemClock
 import android.view.DragEvent
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -95,20 +96,17 @@ class KuisActivity : AppCompatActivity() {
         when (soal.tipeJawaban) {
             TipeJawaban.BENAR_SALAH -> {
                 binding.dropZone.visibility = View.GONE
-                binding.layoutJawaban.orientation = LinearLayout.VERTICAL
                 tampilkanJawabanKlik(soal)
             }
             TipeJawaban.PILIHAN_EMOJI -> {
                 binding.dropZone.visibility = View.VISIBLE
                 binding.dropZone.setBackgroundResource(R.drawable.bg_drop_zone)
                 binding.tvDropHint.text = "⬇ Seret jawaban ke sini"
-                binding.layoutJawaban.orientation = LinearLayout.HORIZONTAL
                 tampilkanJawabanDragDrop(soal)
                 setupDropZone(soal)
             }
             TipeJawaban.PILIHAN_TEKS -> {
                 binding.dropZone.visibility = View.GONE
-                binding.layoutJawaban.orientation = LinearLayout.VERTICAL
                 tampilkanJawabanKlik(soal)
             }
         }
@@ -124,9 +122,10 @@ class KuisActivity : AppCompatActivity() {
                 gravity = android.view.Gravity.CENTER
                 setPadding(24, 24, 24, 24)
                 setBackgroundResource(R.drawable.bg_jawaban_chip)
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                // Gunakan MarginLayoutParams agar kompatibel dengan ChipGroup
+                layoutParams = ViewGroup.MarginLayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
                 ).apply { setMargins(0, 8, 0, 8) }
 
                 setOnClickListener {
@@ -151,9 +150,9 @@ class KuisActivity : AppCompatActivity() {
                 setBackgroundResource(R.drawable.bg_jawaban_chip)
                 setPadding(32, 20, 32, 20)
                 gravity = android.view.Gravity.CENTER
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                layoutParams = ViewGroup.MarginLayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
                 ).apply { setMargins(8, 8, 8, 8) }
 
                 setOnTouchListener { v, event ->
@@ -346,6 +345,36 @@ class KuisActivity : AppCompatActivity() {
                     FirebaseHelper.simpanProgressKuis(uid, topikId, levelTerbukaBaruValue)
                     android.util.Log.d("EKIDI_DEBUG",
                         "SIMPAN PROGRESS: topik=$topikId, levelBaru=$levelTerbukaBaruValue")
+                    
+                    // ✅ Cek Badge 2 (Penjelajah) - Selesaikan level 3 (topik selesai)
+                    if (levelKuis >= 3 && !sessionManager.getBadgeStatus(SessionManager.KEY_BADGE_2)) {
+                        sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_2, true)
+                        FirebaseHelper.updateBadgeStatus(uid, SessionManager.KEY_BADGE_2, true, sessionManager.getTotalBadge())
+                    }
+                }
+
+                // ✅ Cek Badge 7 (Sniper) - Skor 100% di Level 3
+                if (persentase == 100 && levelKuis >= 3 && !sessionManager.getBadgeStatus(SessionManager.KEY_BADGE_7)) {
+                    sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_7, true)
+                    FirebaseHelper.updateBadgeStatus(uid, SessionManager.KEY_BADGE_7, true, sessionManager.getTotalBadge())
+                }
+
+                // ✅ Cek Badge 11 (Jenius) - 3 kuis beruntun tanpa salah
+                if (persentase == 100) {
+                    sessionManager.incrementPerfectQuizCount()
+                    if (sessionManager.getPerfectQuizCount() >= 3 && !sessionManager.getBadgeStatus(SessionManager.KEY_BADGE_11)) {
+                        sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_11, true)
+                        FirebaseHelper.updateBadgeStatus(uid, SessionManager.KEY_BADGE_11, true, sessionManager.getTotalBadge())
+                    }
+                }
+
+                // ✅ Cek Badge 5 (Literasi Pro) - Selesaikan SEMUA topik materi (4 topik)
+                if (lulus && levelKuis >= 3) {
+                    sessionManager.markTopicCompleted(topikId)
+                    if (sessionManager.getCompletedTopicsCount() >= 4 && !sessionManager.getBadgeStatus(SessionManager.KEY_BADGE_5)) {
+                        sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_5, true)
+                        FirebaseHelper.updateBadgeStatus(uid, SessionManager.KEY_BADGE_5, true, sessionManager.getTotalBadge())
+                    }
                 }
 
                 // ✅ Simpan hasil kuis + jalankan Decision Tree + simpan rekomendasi

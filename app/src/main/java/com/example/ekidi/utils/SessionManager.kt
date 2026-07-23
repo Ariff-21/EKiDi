@@ -26,6 +26,26 @@ class SessionManager(context: Context) {
         const val KEY_STREAK = "streak"
         const val KEY_LAST_RESET_DATE = "last_reset_date"
         
+        // Badge Keys
+        const val KEY_BADGE_1 = "badge_1" // Pemula
+        const val KEY_BADGE_2 = "badge_2" // Penjelajah
+        const val KEY_BADGE_3 = "badge_3" // Juara Game
+        const val KEY_BADGE_4 = "badge_4" // Misi Master
+        const val KEY_BADGE_5 = "badge_5" // Literasi Pro
+        const val KEY_BADGE_6 = "badge_6" // Bintang EKiDi
+        const val KEY_BADGE_7 = "badge_7" // Sniper Jawaban
+        const val KEY_BADGE_8 = "badge_8" // Pejuang Streak
+        const val KEY_BADGE_9 = "badge_9" // Master Runner
+        const val KEY_BADGE_10 = "badge_10" // Kolektor Bintang
+        const val KEY_BADGE_11 = "badge_11" // Jenius Digital
+        const val KEY_BADGE_12 = "badge_12" // Legenda EKiDi
+        
+        // Counter Keys for Badges
+        const val KEY_GAME_PLAY_COUNT = "game_play_count"
+        const val KEY_MISSION_CLAIM_COUNT = "mission_claim_count"
+        const val KEY_PERFECT_QUIZ_COUNT = "perfect_quiz_count"
+        const val KEY_COMPLETED_TOPICS = "completed_topics" // Format: "1,2,3"
+        
         // Mission Keys
         const val MISI_HARIAN_1_STATUS = "misi_harian_1_status" // 0: belum, 1: selesai, 2: diklaim
         const val MISI_HARIAN_2_STATUS = "misi_harian_2_status"
@@ -33,6 +53,8 @@ class SessionManager(context: Context) {
         const val MISI_MINGGUAN_STATUS = "misi_mingguan_status"
         const val MISI_SPESIAL_STATUS = "misi_spesial_status"
         const val MISI_MINGGUAN_PROGRESS = "misi_mingguan_progress"
+        const val KEY_LAST_WEEKLY_RESET = "last_weekly_reset"
+        const val MISI_SPESIAL_PROGRESS = "misi_spesial_progress"
     }
 
     fun saveLoginSession(
@@ -98,6 +120,61 @@ class SessionManager(context: Context) {
     fun updateLevel(newLevel: Int) { prefs.edit().putInt(KEY_USER_LEVEL, newLevel).apply() }
     fun updateAvatar(avatarKey: String) { prefs.edit().putString(KEY_USER_AVATAR, avatarKey).apply() }
 
+    fun setBadgeStatus(key: String, isEarned: Boolean) {
+        prefs.edit().putBoolean(key, isEarned).apply()
+        updateTotalBadgeCount()
+    }
+
+    fun getBadgeStatus(key: String): Boolean = prefs.getBoolean(key, false)
+
+    private fun updateTotalBadgeCount() {
+        var count = 0
+        if (getBadgeStatus(KEY_BADGE_1)) count++
+        if (getBadgeStatus(KEY_BADGE_2)) count++
+        if (getBadgeStatus(KEY_BADGE_3)) count++
+        if (getBadgeStatus(KEY_BADGE_4)) count++
+        if (getBadgeStatus(KEY_BADGE_5)) count++
+        if (getBadgeStatus(KEY_BADGE_6)) count++
+        if (getBadgeStatus(KEY_BADGE_7)) count++
+        if (getBadgeStatus(KEY_BADGE_8)) count++
+        if (getBadgeStatus(KEY_BADGE_9)) count++
+        if (getBadgeStatus(KEY_BADGE_10)) count++
+        if (getBadgeStatus(KEY_BADGE_11)) count++
+        if (getBadgeStatus(KEY_BADGE_12)) count++
+        prefs.edit().putInt(KEY_TOTAL_BADGE, count).apply()
+    }
+
+    // Incremental badge progress
+    fun incrementGamePlayCount() {
+        val current = prefs.getInt(KEY_GAME_PLAY_COUNT, 0)
+        prefs.edit().putInt(KEY_GAME_PLAY_COUNT, current + 1).apply()
+    }
+    fun getGamePlayCount(): Int = prefs.getInt(KEY_GAME_PLAY_COUNT, 0)
+
+    fun incrementMissionClaimCount() {
+        val current = prefs.getInt(KEY_MISSION_CLAIM_COUNT, 0)
+        prefs.edit().putInt(KEY_MISSION_CLAIM_COUNT, current + 1).apply()
+    }
+    fun getMissionClaimCount(): Int = prefs.getInt(KEY_MISSION_CLAIM_COUNT, 0)
+
+    fun incrementPerfectQuizCount() {
+        val current = prefs.getInt(KEY_PERFECT_QUIZ_COUNT, 0)
+        prefs.edit().putInt(KEY_PERFECT_QUIZ_COUNT, current + 1).apply()
+    }
+    fun getPerfectQuizCount(): Int = prefs.getInt(KEY_PERFECT_QUIZ_COUNT, 0)
+
+    fun markTopicCompleted(topikId: Int) {
+        val completed = prefs.getString(KEY_COMPLETED_TOPICS, "") ?: ""
+        if (!completed.contains(topikId.toString())) {
+            val newList = if (completed.isEmpty()) topikId.toString() else "$completed,$topikId"
+            prefs.edit().putString(KEY_COMPLETED_TOPICS, newList).apply()
+        }
+    }
+    fun getCompletedTopicsCount(): Int {
+        val completed = prefs.getString(KEY_COMPLETED_TOPICS, "") ?: ""
+        return if (completed.isEmpty()) 0 else completed.split(",").size
+    }
+
     fun setMisiStatus(key: String, status: Int) {
         prefs.edit().putInt(key, status).apply()
     }
@@ -110,4 +187,16 @@ class SessionManager(context: Context) {
     }
 
     fun getMisiMingguanProgress(): Int = prefs.getInt(MISI_MINGGUAN_PROGRESS, 0)
+
+    fun getLastWeeklyReset(): Long = prefs.getLong(KEY_LAST_WEEKLY_RESET, 0L)
+    fun saveLastWeeklyReset(timestamp: Long) { prefs.edit().putLong(KEY_LAST_WEEKLY_RESET, timestamp).apply() }
+
+    fun setMisiMingguanProgress(progress: Int) {
+        prefs.edit().putInt(MISI_MINGGUAN_PROGRESS, progress).apply()
+    }
+
+    fun setMisiSpesialProgress(progress: Int) {
+        prefs.edit().putInt(MISI_SPESIAL_PROGRESS, progress).apply()
+    }
+    fun getMisiSpesialProgress(): Int = prefs.getInt(MISI_SPESIAL_PROGRESS, 0)
 }

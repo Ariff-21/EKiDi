@@ -8,12 +8,14 @@ import com.example.ekidi.databinding.ActivityRegisterBinding
 import kotlinx.coroutines.tasks.await
 import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
+import com.example.ekidi.utils.SoundManager
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var sessionManager: SessionManager
+    private lateinit var soundManager: SoundManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,9 +24,16 @@ class RegisterActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         sessionManager = SessionManager(this)
+        soundManager = SoundManager(this)
 
-        binding.btnRegister.setOnClickListener { doRegister() }
-        binding.tvGoToLogin.setOnClickListener { finish() }
+        binding.btnRegister.setOnClickListener {
+            soundManager.playClick()
+            doRegister()
+        }
+        binding.tvGoToLogin.setOnClickListener {
+            soundManager.playClick()
+            finish()
+        }
     }
 
     private fun doRegister() {
@@ -96,5 +105,12 @@ class RegisterActivity : AppCompatActivity() {
     private fun showError(message: String) {
         binding.tvError.text = message
         binding.tvError.visibility = View.VISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::soundManager.isInitialized) {
+            soundManager.release()
+        }
     }
 }

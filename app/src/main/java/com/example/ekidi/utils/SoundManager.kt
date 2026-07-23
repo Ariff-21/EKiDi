@@ -25,6 +25,14 @@ class SoundManager(private val context: Context) {
             .setAudioAttributes(audioAttributes)
             .build()
 
+        soundPool?.setOnLoadCompleteListener { _, sampleId, status ->
+            if (status != 0) {
+                android.util.Log.e("SoundManager", "Gagal memuat sound ID: $sampleId, status: $status")
+            } else {
+                android.util.Log.d("SoundManager", "Berhasil memuat sound ID: $sampleId")
+            }
+        }
+
         loadSounds()
     }
 
@@ -32,13 +40,20 @@ class SoundManager(private val context: Context) {
         soundCorrect = loadRawResource("correct_sound")
         soundWrong = loadRawResource("wrong_sound")
         soundClick = loadRawResource("click_sound")
+        
+        android.util.Log.d("SoundManager", "IDs dimuat: correct=$soundCorrect, wrong=$soundWrong, click=$soundClick")
     }
 
     private fun loadRawResource(name: String): Int {
         val id = context.resources.getIdentifier(name, "raw", context.packageName)
         return if (id != 0) {
-            soundPool?.load(context, id, 1) ?: 0
-        } else 0
+            val soundId = soundPool?.load(context, id, 1) ?: 0
+            android.util.Log.d("SoundManager", "Ditemukan resource raw/$name (ID: $id), SoundPool ID: $soundId")
+            soundId
+        } else {
+            android.util.Log.e("SoundManager", "Resource raw/$name TIDAK ditemukan!")
+            0
+        }
     }
 
     fun playCorrect() {
@@ -56,7 +71,10 @@ class SoundManager(private val context: Context) {
     fun startBackgroundMusic(name: String) {
         val id = context.resources.getIdentifier(name, "raw", context.packageName)
         if (id != 0) {
+            android.util.Log.d("SoundManager", "Memulai musik latar: $name (ID: $id)")
             startBackgroundMusic(id)
+        } else {
+            android.util.Log.e("SoundManager", "Musik latar raw/$name TIDAK ditemukan!")
         }
     }
 

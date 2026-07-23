@@ -235,6 +235,18 @@ class RunnerGameActivity : AppCompatActivity() {
                 }
             }
         }
+        
+        // ✅ Cek Badge 3 (Gamers) - Main 5 kali
+        sessionManager.incrementGamePlayCount()
+        if (sessionManager.getGamePlayCount() >= 5 && !sessionManager.getBadgeStatus(SessionManager.KEY_BADGE_3)) {
+            sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_3, true)
+            val uid = FirebaseHelper.getCurrentUid()
+            if (uid != null) {
+                lifecycleScope.launch {
+                    FirebaseHelper.updateBadgeStatus(uid, SessionManager.KEY_BADGE_3, true, sessionManager.getTotalBadge())
+                }
+            }
+        }
     }
 
     private fun startCountDown() {
@@ -393,6 +405,17 @@ class RunnerGameActivity : AppCompatActivity() {
         binding.gameCanvas.stopGame()
         soundManager.stopBackgroundMusic()
         binding.layoutSoal.visibility = View.GONE
+
+        // ✅ Cek Badge 9 (Master Run) - Skor 500
+        if (skor >= 500 && !sessionManager.getBadgeStatus(SessionManager.KEY_BADGE_9)) {
+            sessionManager.setBadgeStatus(SessionManager.KEY_BADGE_9, true)
+            val uid = FirebaseHelper.getCurrentUid()
+            if (uid != null) {
+                lifecycleScope.launch {
+                    FirebaseHelper.updateBadgeStatus(uid, SessionManager.KEY_BADGE_9, true, sessionManager.getTotalBadge())
+                }
+            }
+        }
 
         // Hitung bintang
         val totalPoin = rintanganList.size * when (level) {

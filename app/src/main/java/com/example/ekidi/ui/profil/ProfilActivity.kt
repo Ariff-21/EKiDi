@@ -16,12 +16,14 @@ import com.example.ekidi.ui.literasi.LiterasiActivity
 import com.example.ekidi.ui.misi.MisiActivity
 import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
+import com.example.ekidi.utils.SoundManager
 import kotlinx.coroutines.launch
 
 class ProfilActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfilBinding
     private lateinit var sessionManager: SessionManager
+    private lateinit var soundManager: SoundManager
     private var avatarDipilih = "🐶"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,7 @@ class ProfilActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         sessionManager = SessionManager(this)
+        soundManager = SoundManager(this)
 
         setupUI()
         setupClickListeners()
@@ -42,6 +45,7 @@ class ProfilActivity : AppCompatActivity() {
         val level = sessionManager.getUserLevel()
         val poin = sessionManager.getUserPoints()
 
+        binding.tvAvatar.text = sessionManager.getUserAvatar()
         binding.tvNamaProfil.text = nama
         binding.tvUsername.text = nama
         binding.tvLevelProfil.text = getString(R.string.level_star_format, level)
@@ -55,9 +59,13 @@ class ProfilActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-        binding.btnBack.setOnClickListener { finish() }
+        binding.btnBack.setOnClickListener {
+            soundManager.playClick()
+            finish()
+        }
 
         binding.btnGantiAvatar.setOnClickListener {
+            soundManager.playClick()
             binding.cardPilihAvatar.isVisible = !binding.cardPilihAvatar.isVisible
             if (binding.cardPilihAvatar.isVisible) {
                 binding.root.post {
@@ -81,6 +89,7 @@ class ProfilActivity : AppCompatActivity() {
 
         avatarMap.forEach { (view, emoji) ->
             view.setOnClickListener {
+                soundManager.playClick()
                 avatarDipilih = emoji
                 binding.tvAvatar.text = emoji
                 avatarMap.keys.forEach { v ->
@@ -103,6 +112,7 @@ class ProfilActivity : AppCompatActivity() {
 
         // Tentang Aplikasi
         binding.menuTentang.setOnClickListener {
+            soundManager.playClick()
             AlertDialog.Builder(this)
                 .setTitle("EKiDi")
                 .setMessage("EKiDi — Edukasi Literasi Digital\nVersi 1.0.0\n\nAplikasi pembelajaran literasi digital untuk anak usia 5–8 tahun yang menyenangkan dan interaktif.")
@@ -112,6 +122,7 @@ class ProfilActivity : AppCompatActivity() {
 
         // Logout
         binding.menuLogout.setOnClickListener {
+            soundManager.playClick()
             AlertDialog.Builder(this)
                 .setTitle("Keluar")
                 .setMessage("Apakah kamu yakin ingin keluar?")
@@ -133,28 +144,36 @@ class ProfilActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_literasi -> {
-                    startActivity(Intent(this, LiterasiActivity::class.java))
-                    finish()
+                    val intent = Intent(this, LiterasiActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_game -> {
-                    startActivity(Intent(this, GameActivity::class.java))
-                    finish()
+                    val intent = Intent(this, GameActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_misi -> {
-                    startActivity(Intent(this, MisiActivity::class.java))
-                    finish()
+                    val intent = Intent(this, MisiActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_profil -> true
                 else -> false
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::soundManager.isInitialized) {
+            soundManager.release()
         }
     }
 }

@@ -13,11 +13,13 @@ import com.example.ekidi.ui.misi.MisiActivity
 import com.example.ekidi.ui.profil.ProfilActivity
 import com.example.ekidi.utils.FirebaseHelper
 import com.example.ekidi.utils.SessionManager
+import com.example.ekidi.utils.SoundManager
 import kotlinx.coroutines.launch
 
 class MateriActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMateriBinding
+    private lateinit var soundManager: SoundManager
     private var topikId = 1
     private var levelTerbuka = 1
 
@@ -151,8 +153,12 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        soundManager = SoundManager(this)
         topikId = intent.getIntExtra("TOPIK_ID", 1)
-        binding.btnBack.setOnClickListener { finish() }
+        binding.btnBack.setOnClickListener {
+            soundManager.playClick()
+            finish()
+        }
 
         // ✅ Load dari Firebase HANYA saat pertama buka (onCreate)
         // Tidak di onResume agar tidak override hasil kuis
@@ -165,28 +171,25 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
                     true
                 }
-                R.id.nav_literasi -> {
-                    startActivity(Intent(this, LiterasiActivity::class.java))
-                    finish()
-                    true
-                }
+                R.id.nav_literasi -> true
                 R.id.nav_game -> {
-                    startActivity(Intent(this, GameActivity::class.java))
-                    finish()
+                    val intent = Intent(this, GameActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_misi -> {
-                    startActivity(Intent(this, MisiActivity::class.java))
-                    finish()
+                    val intent = Intent(this, MisiActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_profil -> {
-                    startActivity(Intent(this, ProfilActivity::class.java))
-                    finish()
+                    val intent = Intent(this, ProfilActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 else -> false
@@ -258,17 +261,20 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
 
     private fun setupClickListeners() {
         binding.cardLevel1.setOnClickListener {
+            soundManager.playClick()
             updateMisiMateri()
             bukaKuis(1)
         }
         binding.cardLevel2.setOnClickListener { 
             if (levelTerbuka >= 2) {
+                soundManager.playClick()
                 updateMisiMateri()
                 bukaKuis(2)
             }
         }
         binding.cardLevel3.setOnClickListener { 
             if (levelTerbuka >= 3) {
+                soundManager.playClick()
                 updateMisiMateri()
                 bukaKuis(3)
             }
@@ -297,5 +303,10 @@ Internet itu luas. Ayah dan Bunda ada untuk memastikan kamu aman dan mendapat ko
         kuisLauncher.launch(intent)
     }
 
-    // ✅ onResume DIHAPUS TOTAL — tidak perlu reload Firebase di sini
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::soundManager.isInitialized) {
+            soundManager.release()
+        }
+    }
 }
